@@ -1,0 +1,51 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.ijrobotics.ijschoolmanageradministrationservice",
+      "nativeLanguage": "es"
+    },
+    "jhipsterVersion": "6.7.0",
+    "applicationType": "microservice",
+    "baseName": "IJSchoolManagerAdministrationService",
+    "packageName": "com.ijrobotics.ijschoolmanageradministrationservice",
+    "packageFolder": "com/ijrobotics/ijschoolmanageradministrationservice",
+    "serverPort": "8081",
+    "authenticationType": "oauth2",
+    "cacheProvider": "hazelcast",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": "kafka",
+    "serviceDiscoveryType": "eureka",
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "OTVkOGY4MmY0ZDg3OWFlZGY1ZjljYWNlMTRhODc0MzY5MzczMDBkYTk4ZTgyZjBkODZkOWViZjViYzYzYTI0Y2E3MWFmY2IzYTU3NTZhN2MyNmUyZDAxN2YzMTRkYjkwN2NjNzIxZTQ1YTU0ODYwMjI1MGE3NGNlNDcyNmY0NjA=",
+    "embeddableLaunchScript": false,
+    "creationTimestamp": 1581632738223,
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-vuejs",
+        "version": "1.5.0"
+      }
+    ],
+    "enableTranslation": true,
+    "clientPackageManager": "npm",
+    "nativeLanguage": "es",
+    "languages": ["es", "en"],
+    "blueprints": [
+      {
+        "name": "generator-jhipster-vuejs",
+        "version": "1.5.0"
+      }
+    ],
+    "skipClient": true,
+    "skipUserManagement": true
+  }
+}
