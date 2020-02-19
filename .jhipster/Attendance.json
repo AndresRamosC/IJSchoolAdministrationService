@@ -1,0 +1,36 @@
+{
+    "name": "Attendance",
+    "fields": [
+        {
+            "fieldName": "creationDate",
+            "fieldType": "ZonedDateTime"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "student",
+            "otherEntityRelationshipName": "attendance",
+            "relationshipName": "student",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "classGroup",
+            "otherEntityRelationshipName": "attendance",
+            "relationshipName": "classGroup",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200219162900",
+    "entityTableName": "attendance",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "IJSchoolManagerAdministrationService",
+    "applications": "*",
+    "microserviceName": "IJSchoolManagerAdministrationService"
+}

@@ -1,0 +1,50 @@
+{
+    "name": "Guardian",
+    "fields": [
+        {
+            "fieldName": "creationDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "educationLevel",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "occupation",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "workAdress",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "person",
+            "otherEntityRelationshipName": "guardian",
+            "relationshipName": "person",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "student",
+            "otherEntityRelationshipName": "guardian",
+            "relationshipName": "student",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20200219162300",
+    "entityTableName": "guardian",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "IJSchoolManagerAdministrationService",
+    "applications": "*",
+    "microserviceName": "IJSchoolManagerAdministrationService"
+}

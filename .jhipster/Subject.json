@@ -1,0 +1,48 @@
+{
+    "name": "Subject",
+    "fields": [
+        {
+            "fieldName": "creationDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "courseName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "courseCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "department",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "colorCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "iconCode",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "classGroup",
+            "otherEntityRelationshipName": "subject",
+            "relationshipName": "classGroup"
+        }
+    ],
+    "changelogDate": "20200219162700",
+    "entityTableName": "subject",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "IJSchoolManagerAdministrationService",
+    "applications": "*",
+    "microserviceName": "IJSchoolManagerAdministrationService"
+}

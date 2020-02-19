@@ -1,0 +1,76 @@
+{
+    "name": "ClassGroup",
+    "fields": [
+        {
+            "fieldName": "creationDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "groupCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "startHour",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "endHour",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "classRoom",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "size",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "attendance",
+            "otherEntityRelationshipName": "classGroup",
+            "relationshipName": "attendance"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "grade",
+            "otherEntityRelationshipName": "classGroup",
+            "relationshipName": "grade",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "assignment",
+            "otherEntityRelationshipName": "classGroup",
+            "relationshipName": "assignment",
+            "ownerSide": false
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "subject",
+            "otherEntityRelationshipName": "classGroup",
+            "relationshipName": "subject",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "teacher",
+            "otherEntityRelationshipName": "classGroup",
+            "relationshipName": "teacher",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200219162800",
+    "entityTableName": "class_group",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "IJSchoolManagerAdministrationService",
+    "applications": "*",
+    "microserviceName": "IJSchoolManagerAdministrationService"
+}

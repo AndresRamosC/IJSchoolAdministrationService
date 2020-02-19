@@ -1,0 +1,61 @@
+{
+    "name": "Employee",
+    "fields": [
+        {
+            "fieldName": "creationDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "educationLevel",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "department",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "controlNumber",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "employmentType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "employedSince",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "employedUntil",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "person",
+            "otherEntityRelationshipName": "employee",
+            "relationshipName": "person",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "teacher",
+            "otherEntityRelationshipName": "employee",
+            "relationshipName": "teacher",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20200219162500",
+    "entityTableName": "employee",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "IJSchoolManagerAdministrationService",
+    "applications": "*",
+    "microserviceName": "IJSchoolManagerAdministrationService"
+}

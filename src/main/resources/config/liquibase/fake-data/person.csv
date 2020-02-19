@@ -1,0 +1,11 @@
+id;creation_date;first_name;last_name;gender;blood_group;date_of_birth;photograph;photograph_content_type;assigned
+1;2020-02-19T13:58:53;Kelli;Balistreri;FEMALE;APLUS;2020-02-19;../fake-data/blob/hipster.png;image/png;false
+2;2020-02-19T06:41:31;Maximillian;Grant;MALE;BMINUS;2020-02-18;../fake-data/blob/hipster.png;image/png;true
+3;2020-02-18T21:54:01;Angelica;Runte;MALE;ABPLUS;2020-02-18;../fake-data/blob/hipster.png;image/png;false
+4;2020-02-18T21:52:25;Jacky;O'Conner;FEMALE;OMINUS;2020-02-18;../fake-data/blob/hipster.png;image/png;true
+5;2020-02-19T04:51:43;Carey;Marks;FEMALE;BMINUS;2020-02-18;../fake-data/blob/hipster.png;image/png;true
+6;2020-02-19T01:46:52;Daisy;Torp;FEMALE;ABPLUS;2020-02-19;../fake-data/blob/hipster.png;image/png;false
+7;2020-02-19T11:07:48;Shad;Durgan;MALE;ABPLUS;2020-02-19;../fake-data/blob/hipster.png;image/png;false
+8;2020-02-19T10:22:30;Petra;Reichel;FEMALE;BMINUS;2020-02-19;../fake-data/blob/hipster.png;image/png;true
+9;2020-02-18T16:53:54;Jayne;Runolfsdottir;MALE;APLUS;2020-02-19;../fake-data/blob/hipster.png;image/png;true
+10;2020-02-19T06:03:29;Adam;Kiehn;FEMALE;AMINUS;2020-02-19;../fake-data/blob/hipster.png;image/png;false

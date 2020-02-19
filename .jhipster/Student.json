@@ -1,0 +1,68 @@
+{
+    "name": "Student",
+    "fields": [
+        {
+            "fieldName": "creationDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "admissinDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "academicYear",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "controlNumber",
+            "fieldType": "Long"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "person",
+            "otherEntityRelationshipName": "student",
+            "relationshipName": "person",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "attendance",
+            "otherEntityRelationshipName": "student",
+            "relationshipName": "attendance"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "grade",
+            "otherEntityRelationshipName": "student",
+            "relationshipName": "grade"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "assignment",
+            "otherEntityRelationshipName": "student",
+            "relationshipName": "assignment"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "guardian",
+            "otherEntityRelationshipName": "student",
+            "relationshipName": "guardian",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20200219162400",
+    "entityTableName": "student",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "IJSchoolManagerAdministrationService",
+    "applications": "*",
+    "microserviceName": "IJSchoolManagerAdministrationService"
+}

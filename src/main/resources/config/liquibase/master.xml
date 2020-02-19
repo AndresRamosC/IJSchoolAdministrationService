@@ -14,6 +14,29 @@
     <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219161900_added_entity_UserExtend.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162000_added_entity_Person.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162100_added_entity_Contact.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162200_added_entity_Company.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162300_added_entity_Guardian.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162400_added_entity_Student.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162500_added_entity_Employee.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162600_added_entity_Teacher.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162700_added_entity_Subject.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162800_added_entity_ClassGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162900_added_entity_Attendance.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219163000_added_entity_Grade.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219163100_added_entity_Assignment.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20200219162000_added_entity_constraints_Person.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162200_added_entity_constraints_Company.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162300_added_entity_constraints_Guardian.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162400_added_entity_constraints_Student.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162500_added_entity_constraints_Employee.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162600_added_entity_constraints_Teacher.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162800_added_entity_constraints_ClassGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219162900_added_entity_constraints_Attendance.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219163000_added_entity_constraints_Grade.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200219163100_added_entity_constraints_Assignment.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

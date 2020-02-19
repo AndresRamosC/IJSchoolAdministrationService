@@ -1,0 +1,165 @@
+@dto(mapstruct)
+@service(serviceClass)
+@paginate(infinite-scroll)
+entity UserExtend{
+	creationDate ZonedDateTime,
+    userName String,
+    password String,
+    enabled Boolean,
+    type UserType
+}
+enum UserType{
+GUARDIAN,EMPLOYEE,STUDENT
+}
+
+enum Genders{
+MALE,FEMALE
+}
+enum BlodTypes{
+APLUS,AMINUS,BPLUS,BMINUS,ABPLUS,ABMINUS,OPLUS,OMINUS
+}
+
+@dto(mapstruct)
+@service(serviceClass)
+entity Person{
+creationDate ZonedDateTime,
+firstName String,
+lastName String,
+gender Genders,
+bloodGroup BlodTypes,
+dateOfBirth LocalDate,
+photograph ImageBlob,
+assigned Boolean
+}
+
+@dto(mapstruct)
+@service(serviceClass)
+entity Contact{
+creationDate ZonedDateTime,
+eMail String,
+state String,
+city String,
+zipCode Long,
+address String,
+phoneNumber String
+}
+
+@dto(mapstruct)
+@service(serviceClass)
+entity Company{
+creationDate ZonedDateTime,
+name String,
+bussinessField String,
+webPage String,
+description String
+}
+
+@dto(mapstruct)
+@service(serviceClass)
+entity Guardian{
+creationDate ZonedDateTime,
+educationLevel String,
+occupation String,
+workAdress String
+}
+
+@dto(mapstruct)
+@service(serviceClass)
+entity Student{
+creationDate ZonedDateTime,
+admissinDate LocalDate,
+academicYear Integer,
+controlNumber Long
+}
+
+@dto(mapstruct)
+@service(serviceClass)
+entity Employee{
+creationDate ZonedDateTime,
+educationLevel String,
+department String,
+controlNumber Long,
+employmentType String,
+employedSince LocalDate,
+employedUntil LocalDate
+}
+
+@dto(mapstruct)
+@service(serviceClass)
+entity Teacher{
+creationDate ZonedDateTime,
+}
+
+@dto(mapstruct)
+@service(serviceClass)
+entity Subject{
+creationDate ZonedDateTime,
+courseName String,
+courseCode String,
+department String,
+colorCode String,
+iconCode String
+}
+
+@dto(mapstruct)
+@service(serviceClass)
+entity ClassGroup{
+creationDate ZonedDateTime,
+groupCode String,
+startHour ZonedDateTime,
+endHour ZonedDateTime,
+classRoom String,
+size Integer
+}
+
+@dto(mapstruct)
+@service(serviceClass)
+entity Attendance{
+creationDate ZonedDateTime,
+}
+
+@dto(mapstruct)
+@service(serviceClass)
+entity Grade{
+creationDate ZonedDateTime,
+semester Integer,
+grade Float
+}
+
+@dto(mapstruct)
+@service(serviceClass)
+entity Assignment{
+creationDate ZonedDateTime,
+title String,
+description String,
+dueDate ZonedDateTime,
+done Boolean,
+grade Float,
+attachment Blob
+}
+
+relationship OneToOne{
+ Person to UserExtend,
+ Guardian to Person,
+ Student to Person,
+ Employee to Person,
+ Teacher to Employee,
+ Grade to ClassGroup,
+ Assignment to ClassGroup
+}
+
+relationship ManyToMany{
+ Student to Guardian,
+ Company to Contact,
+ Person to Contact
+}
+relationship OneToMany{
+ Subject to ClassGroup,
+ Teacher to ClassGroup,
+ Student to Attendance,
+ ClassGroup to Attendance,
+ Student to Grade,
+ Student to Assignment
+}
+
+
