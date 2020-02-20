@@ -6,8 +6,8 @@
     <!--
         Added the constraints for entity Person.
     -->
-    <changeSet id="20200219162000-2" author="jhipster">
-        
+    <changeSet id="20200219162000-2" author="jhipster" context="faker">
+
         <addForeignKeyConstraint baseColumnNames="user_extend_id"
                                  baseTableName="person"
                                  constraintName="fk_person_user_extend_id"
@@ -25,6 +25,14 @@
                                  constraintName="fk_person_contact_contact_id"
                                  referencedColumnNames="id"
                                  referencedTableName="contact"/>
-        
+        <loadData
+            file="config/liquibase/fake-data/person_contact.csv"
+            separator=";"
+            tableName="person_contact">
+            <column name="person_id" type="numeric"/>
+            <column name="contact_id" type="numeric"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
+        </loadData>
+
     </changeSet>
 </databaseChangeLog>
