@@ -65,15 +65,24 @@ public class AttendanceResource {
      * or with status {@code 500 (Internal Server Error)} if the attendanceDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/attendances")
-    public ResponseEntity<AttendanceDTO> updateAttendance(@RequestBody AttendanceDTO attendanceDTO) throws URISyntaxException {
+    @PutMapping("/attendances/{id}")
+    public ResponseEntity<AttendanceDTO> updateAttendance(@RequestBody AttendanceDTO attendanceDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update Attendance : {}", attendanceDTO);
-        if (attendanceDTO.getId() == null) {
+        Optional<AttendanceDTO> attendanceDTOUpdate = attendanceService.findOne(id);
+        if (!attendanceDTOUpdate.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AttendanceDTO result = attendanceService.save(attendanceDTO);
+
+        if (attendanceDTO.getStudentId()!=null){
+            attendanceDTOUpdate.get().setStudentId(attendanceDTO.getStudentId());
+        }
+        if (attendanceDTO.getClassGroupId()!=null){
+            attendanceDTOUpdate.get().setClassGroupId(attendanceDTO.getClassGroupId());
+        }
+
+        AttendanceDTO result = attendanceService.save(attendanceDTOUpdate.get());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, attendanceDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, attendanceDTOUpdate.get().getId().toString()))
             .body(result);
     }
 

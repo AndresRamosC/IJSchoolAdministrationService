@@ -66,15 +66,37 @@ public class EmployeeResource {
      * or with status {@code 500 (Internal Server Error)} if the employeeDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/employees")
-    public ResponseEntity<EmployeeDTO> updateEmployee(@RequestBody EmployeeDTO employeeDTO) throws URISyntaxException {
+    @PutMapping("/employees/{id}")
+    public ResponseEntity<EmployeeDTO> updateEmployee(@RequestBody EmployeeDTO employeeDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update Employee : {}", employeeDTO);
-        if (employeeDTO.getId() == null) {
+        Optional<EmployeeDTO> employeeDTOUpdate = employeeService.findOne(id);
+        if ( !employeeDTOUpdate.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        EmployeeDTO result = employeeService.save(employeeDTO);
+        if (employeeDTO.getEducationLevel()!=null){
+            employeeDTOUpdate.get().setEducationLevel(employeeDTO.getEducationLevel());
+        }
+        if (employeeDTO.getDepartment()!=null){
+            employeeDTOUpdate.get().setDepartment(employeeDTO.getDepartment());
+        }
+        if (employeeDTO.getControlNumber()!=null){
+            employeeDTOUpdate.get().setControlNumber(employeeDTO.getControlNumber());
+        }
+        if (employeeDTO.getEmploymentType()!=null){
+            employeeDTOUpdate.get().setEmploymentType(employeeDTO.getEmploymentType());
+        }
+        if (employeeDTO.getEmployedSince()!=null){
+            employeeDTOUpdate.get().setEmployedSince(employeeDTO.getEmployedSince());
+        }
+        if (employeeDTO.getEmployedUntil()!=null){
+            employeeDTOUpdate.get().setEmployedUntil(employeeDTO.getEmployedUntil());
+        }
+        if (employeeDTO.getPersonId()!=null){
+            employeeDTOUpdate.get().setPersonId(employeeDTO.getPersonId());
+        }
+        EmployeeDTO result = employeeService.save(employeeDTOUpdate.get());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, employeeDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, employeeDTOUpdate.get().getId().toString()))
             .body(result);
     }
 

@@ -65,15 +65,31 @@ public class SubjectResource {
      * or with status {@code 500 (Internal Server Error)} if the subjectDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/subjects")
-    public ResponseEntity<SubjectDTO> updateSubject(@RequestBody SubjectDTO subjectDTO) throws URISyntaxException {
+    @PutMapping("/subjects/{id}")
+    public ResponseEntity<SubjectDTO> updateSubject(@RequestBody SubjectDTO subjectDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update Subject : {}", subjectDTO);
-        if (subjectDTO.getId() == null) {
+        Optional<SubjectDTO> subjectDTOUpdate = subjectService.findOne(id);
+        if ( !subjectDTOUpdate.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        SubjectDTO result = subjectService.save(subjectDTO);
+        if (subjectDTO.getCourseName()!=null){
+            subjectDTOUpdate.get().setCourseName(subjectDTO.getCourseName());
+        }
+        if (subjectDTO.getCourseCode()!=null){
+            subjectDTOUpdate.get().setCourseCode(subjectDTO.getCourseCode());
+        }
+        if (subjectDTO.getDepartment()!=null){
+            subjectDTOUpdate.get().setDepartment(subjectDTO.getDepartment());
+        }
+        if (subjectDTO.getColorCode()!=null){
+            subjectDTOUpdate.get().setColorCode(subjectDTO.getColorCode());
+        }
+        if (subjectDTO.getIconCode()!=null){
+            subjectDTOUpdate.get().setIconCode(subjectDTO.getIconCode());
+        }
+        SubjectDTO result = subjectService.save(subjectDTOUpdate.get());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, subjectDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, subjectDTOUpdate.get().getId().toString()))
             .body(result);
     }
 

@@ -72,15 +72,29 @@ public class UserExtendResource {
      * or with status {@code 500 (Internal Server Error)} if the userExtendDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/user-extends")
-    public ResponseEntity<UserExtendDTO> updateUserExtend(@RequestBody UserExtendDTO userExtendDTO) throws URISyntaxException {
+    @PutMapping("/user-extends/{id}")
+    public ResponseEntity<UserExtendDTO> updateUserExtend(@RequestBody UserExtendDTO userExtendDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update UserExtend : {}", userExtendDTO);
-        if (userExtendDTO.getId() == null) {
+        Optional<UserExtendDTO> userExtendDTOUpdate = userExtendService.findOne(id);
+        if (!userExtendDTOUpdate.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        UserExtendDTO result = userExtendService.save(userExtendDTO);
+        if (userExtendDTO.getUserName()!=null){
+            userExtendDTOUpdate.get().setUserName(userExtendDTO.getUserName());
+        }
+        if (userExtendDTO.getPassword()!=null){
+            userExtendDTOUpdate.get().setPassword(userExtendDTO.getPassword());
+        }
+        if (userExtendDTO.isEnabled()!=null){
+            userExtendDTOUpdate.get().setEnabled(userExtendDTO.isEnabled());
+        }
+        if (userExtendDTO.getType()!=null){
+            userExtendDTOUpdate.get().setType(userExtendDTO.getType());
+        }
+
+        UserExtendDTO result = userExtendService.save(userExtendDTOUpdate.get());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userExtendDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, userExtendDTOUpdate.get().getId().toString()))
             .body(result);
     }
 

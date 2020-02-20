@@ -65,15 +65,19 @@ public class TeacherResource {
      * or with status {@code 500 (Internal Server Error)} if the teacherDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/teachers")
-    public ResponseEntity<TeacherDTO> updateTeacher(@RequestBody TeacherDTO teacherDTO) throws URISyntaxException {
+    @PutMapping("/teachers/{id}")
+    public ResponseEntity<TeacherDTO> updateTeacher(@RequestBody TeacherDTO teacherDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update Teacher : {}", teacherDTO);
-        if (teacherDTO.getId() == null) {
+        Optional<TeacherDTO> teacherDTOUpdate = teacherService.findOne(id);
+        if (!teacherDTOUpdate.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        TeacherDTO result = teacherService.save(teacherDTO);
+        if (teacherDTO.getEmployeeId()!=null){
+            teacherDTOUpdate.get().setEmployeeId(teacherDTO.getEmployeeId());
+        }
+        TeacherDTO result = teacherService.save(teacherDTOUpdate.get());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, teacherDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, teacherDTOUpdate.get().getId().toString()))
             .body(result);
     }
 

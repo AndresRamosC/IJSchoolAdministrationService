@@ -65,15 +65,34 @@ public class ContactResource {
      * or with status {@code 500 (Internal Server Error)} if the contactDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/contacts")
-    public ResponseEntity<ContactDTO> updateContact(@RequestBody ContactDTO contactDTO) throws URISyntaxException {
+    @PutMapping("/contacts/{id}")
+    public ResponseEntity<ContactDTO> updateContact(@RequestBody ContactDTO contactDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update Contact : {}", contactDTO);
-        if (contactDTO.getId() == null) {
+        Optional<ContactDTO> contactDTOUpdate = contactService.findOne(id);
+        if ( !contactDTOUpdate.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        ContactDTO result = contactService.save(contactDTO);
+        if (contactDTO.geteMail()!=null){
+            contactDTOUpdate.get().seteMail(contactDTO.geteMail());
+        }
+        if (contactDTO.getState()!=null){
+            contactDTOUpdate.get().setState(contactDTO.getState());
+        }
+        if (contactDTO.getCity()!=null){
+            contactDTOUpdate.get().setCity(contactDTO.getCity());
+        }
+        if (contactDTO.getZipCode()!=null){
+            contactDTOUpdate.get().setZipCode(contactDTO.getZipCode());
+        }
+        if (contactDTO.getAddress()!=null){
+            contactDTOUpdate.get().setAddress(contactDTO.getAddress());
+        }
+        if (contactDTO.getPhoneNumber()!=null){
+            contactDTOUpdate.get().setPhoneNumber(contactDTO.getPhoneNumber());
+        }
+        ContactDTO result = contactService.save(contactDTOUpdate.get());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, contactDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, contactDTOUpdate.get().getId().toString()))
             .body(result);
     }
 

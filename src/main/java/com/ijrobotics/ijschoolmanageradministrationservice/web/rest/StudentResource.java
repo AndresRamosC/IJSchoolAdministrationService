@@ -65,15 +65,31 @@ public class StudentResource {
      * or with status {@code 500 (Internal Server Error)} if the studentDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/students")
-    public ResponseEntity<StudentDTO> updateStudent(@RequestBody StudentDTO studentDTO) throws URISyntaxException {
+    @PutMapping("/students/{id}")
+    public ResponseEntity<StudentDTO> updateStudent(@RequestBody StudentDTO studentDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update Student : {}", studentDTO);
-        if (studentDTO.getId() == null) {
+        Optional<StudentDTO> studentDTOUpdate = studentService.findOne(id);
+        if ( !studentDTOUpdate.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        StudentDTO result = studentService.save(studentDTO);
+        if (studentDTO.getAdmissinDate()!=null){
+            studentDTOUpdate.get().setAdmissinDate(studentDTO.getAdmissinDate());
+        }
+        if (studentDTO.getAcademicYear()!=null){
+            studentDTOUpdate.get().setAcademicYear(studentDTO.getAcademicYear());
+        }
+        if (studentDTO.getControlNumber()!=null){
+            studentDTOUpdate.get().setControlNumber(studentDTO.getControlNumber());
+        }
+        if (studentDTO.getPersonId()!=null){
+            studentDTOUpdate.get().setPersonId(studentDTO.getPersonId());
+        }
+        if (studentDTO.getGuardians()!=null){
+            studentDTOUpdate.get().setGuardians(studentDTO.getGuardians());
+        }
+        StudentDTO result = studentService.save(studentDTOUpdate.get());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, studentDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, studentDTOUpdate.get().getId().toString()))
             .body(result);
     }
 

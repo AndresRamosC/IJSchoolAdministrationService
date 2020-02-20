@@ -65,15 +65,28 @@ public class GradeResource {
      * or with status {@code 500 (Internal Server Error)} if the gradeDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/grades")
-    public ResponseEntity<GradeDTO> updateGrade(@RequestBody GradeDTO gradeDTO) throws URISyntaxException {
+    @PutMapping("/grades/{id}")
+    public ResponseEntity<GradeDTO> updateGrade(@RequestBody GradeDTO gradeDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update Grade : {}", gradeDTO);
-        if (gradeDTO.getId() == null) {
+        Optional<GradeDTO> gradeDTOUpdate = gradeService.findOne(id);
+        if ( !gradeDTOUpdate.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        GradeDTO result = gradeService.save(gradeDTO);
+        if (gradeDTO.getSemester()!=null){
+            gradeDTOUpdate.get().setSemester(gradeDTO.getSemester());
+        }
+        if (gradeDTO.getGrade()!=null){
+            gradeDTOUpdate.get().setGrade(gradeDTO.getGrade());
+        }
+        if (gradeDTO.getClassGroupId()!=null){
+            gradeDTOUpdate.get().setClassGroupId(gradeDTO.getClassGroupId());
+        }
+        if (gradeDTO.getStudentId()!=null){
+            gradeDTOUpdate.get().setStudentId(gradeDTO.getStudentId());
+        }
+        GradeDTO result = gradeService.save(gradeDTOUpdate.get());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, gradeDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, gradeDTOUpdate.get().getId().toString()))
             .body(result);
     }
 

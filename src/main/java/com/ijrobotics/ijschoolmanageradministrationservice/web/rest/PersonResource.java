@@ -66,15 +66,46 @@ public class PersonResource {
      * or with status {@code 500 (Internal Server Error)} if the personDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/people")
-    public ResponseEntity<PersonDTO> updatePerson(@RequestBody PersonDTO personDTO) throws URISyntaxException {
+    @PutMapping("/people/{id}")
+    public ResponseEntity<PersonDTO> updatePerson(@RequestBody PersonDTO personDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update Person : {}", personDTO);
-        if (personDTO.getId() == null) {
+        Optional<PersonDTO> personDTOUpdate = personService.findOne(id);
+        if ( !personDTOUpdate.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        PersonDTO result = personService.save(personDTO);
+        if (personDTO.getFirstName()!=null){
+            personDTOUpdate.get().setFirstName(personDTO.getFirstName());
+        }
+        if (personDTO.getLastName()!=null){
+            personDTOUpdate.get().setLastName(personDTO.getLastName());
+        }
+        if (personDTO.getGender()!=null){
+            personDTOUpdate.get().setGender(personDTO.getGender());
+        }
+        if (personDTO.getBloodGroup()!=null){
+            personDTOUpdate.get().setBloodGroup(personDTO.getBloodGroup());
+        }
+        if (personDTO.getDateOfBirth()!=null){
+            personDTOUpdate.get().setDateOfBirth(personDTO.getDateOfBirth());
+        }
+        if (personDTO.getPhotograph()!=null){
+            personDTOUpdate.get().setPhotograph(personDTO.getPhotograph());
+        }
+        if (personDTO.getPhotographContentType()!=null){
+            personDTOUpdate.get().setPhotographContentType(personDTO.getPhotographContentType());
+        }
+        if (personDTO.isAssigned()!=null){
+            personDTOUpdate.get().setAssigned(personDTO.isAssigned());
+        }
+        if (personDTO.getUserExtendId()!=null){
+            personDTOUpdate.get().setUserExtendId(personDTO.getUserExtendId());
+        }
+        if (personDTO.getContacts()!=null){
+            personDTOUpdate.get().setContacts(personDTO.getContacts());
+        }
+        PersonDTO result = personService.save(personDTOUpdate.get());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, personDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, personDTOUpdate.get().getId().toString()))
             .body(result);
     }
 

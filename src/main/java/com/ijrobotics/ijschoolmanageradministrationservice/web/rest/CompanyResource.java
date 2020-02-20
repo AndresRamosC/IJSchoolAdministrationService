@@ -65,15 +65,32 @@ public class CompanyResource {
      * or with status {@code 500 (Internal Server Error)} if the companyDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/companies")
-    public ResponseEntity<CompanyDTO> updateCompany(@RequestBody CompanyDTO companyDTO) throws URISyntaxException {
+    @PutMapping("/companies/{id}")
+    public ResponseEntity<CompanyDTO> updateCompany(@RequestBody CompanyDTO companyDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update Company : {}", companyDTO);
-        if (companyDTO.getId() == null) {
+        Optional<CompanyDTO> companyDTOUpdate = companyService.findOne(id);
+        if ( !companyDTOUpdate.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        CompanyDTO result = companyService.save(companyDTO);
+        if (companyDTO.getName()!=null){
+            companyDTOUpdate.get().setName(companyDTO.getName());
+        }
+        if (companyDTO.getBussinessField()!=null){
+            companyDTOUpdate.get().setBussinessField(companyDTO.getBussinessField());
+        }
+        if (companyDTO.getWebPage()!=null){
+            companyDTOUpdate.get().setWebPage(companyDTO.getWebPage());
+        }
+        if (companyDTO.getDescription()!=null){
+            companyDTOUpdate.get().setDescription(companyDTO.getDescription());
+        }
+        if (companyDTO.getContacts()!=null){
+            companyDTOUpdate.get().setContacts(companyDTO.getContacts());
+        }
+
+        CompanyDTO result = companyService.save(companyDTOUpdate.get());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, companyDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, companyDTOUpdate.get().getId().toString()))
             .body(result);
     }
 

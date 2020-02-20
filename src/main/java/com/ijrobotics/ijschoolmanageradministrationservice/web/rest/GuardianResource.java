@@ -65,15 +65,29 @@ public class GuardianResource {
      * or with status {@code 500 (Internal Server Error)} if the guardianDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/guardians")
-    public ResponseEntity<GuardianDTO> updateGuardian(@RequestBody GuardianDTO guardianDTO) throws URISyntaxException {
+    @PutMapping("/guardians/{id}")
+    public ResponseEntity<GuardianDTO> updateGuardian(@RequestBody GuardianDTO guardianDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update Guardian : {}", guardianDTO);
-        if (guardianDTO.getId() == null) {
+        Optional<GuardianDTO> guardianDTOUpdate = guardianService.findOne(id);
+        if ( !guardianDTOUpdate.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        GuardianDTO result = guardianService.save(guardianDTO);
+        if (guardianDTO.getEducationLevel()!=null){
+            guardianDTOUpdate.get().setEducationLevel(guardianDTO.getEducationLevel());
+        }
+        if (guardianDTO.getOccupation()!=null){
+            guardianDTOUpdate.get().setOccupation(guardianDTO.getOccupation());
+        }
+        if (guardianDTO.getWorkAdress()!=null){
+            guardianDTOUpdate.get().setWorkAdress(guardianDTO.getWorkAdress());
+        }
+        if (guardianDTO.getPersonId()!=null){
+            guardianDTOUpdate.get().setPersonId(guardianDTO.getPersonId());
+        }
+
+        GuardianDTO result = guardianService.save(guardianDTOUpdate.get());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, guardianDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, guardianDTOUpdate.get().getId().toString()))
             .body(result);
     }
 

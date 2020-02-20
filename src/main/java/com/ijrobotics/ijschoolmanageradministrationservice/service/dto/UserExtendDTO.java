@@ -3,6 +3,9 @@ package com.ijrobotics.ijschoolmanageradministrationservice.service.dto;
 import java.time.ZonedDateTime;
 import java.io.Serializable;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.enumeration.UserType;
 
 /**
@@ -47,10 +50,12 @@ public class UserExtendDTO implements Serializable {
         this.userName = userName;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
