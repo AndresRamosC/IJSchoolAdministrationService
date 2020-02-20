@@ -87,6 +87,9 @@ public class StudentResource {
         if (studentDTO.getGuardians()!=null){
             studentDTOUpdate.get().setGuardians(studentDTO.getGuardians());
         }
+        if (studentDTO.getClassGroups()!=null){
+            studentDTOUpdate.get().setClassGroups(studentDTO.getClassGroups());
+        }
         StudentDTO result = studentService.save(studentDTOUpdate.get());
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, studentDTOUpdate.get().getId().toString()))

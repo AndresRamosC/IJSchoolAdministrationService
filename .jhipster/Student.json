@@ -52,6 +52,14 @@
             "relationshipName": "guardian",
             "otherEntityField": "id",
             "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "classGroup",
+            "otherEntityRelationshipName": "student",
+            "relationshipName": "classGroup",
+            "otherEntityField": "id",
+            "ownerSide": true
         }
     ],
     "changelogDate": "20200219162400",

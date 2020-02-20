@@ -27,6 +27,8 @@ public class StudentDTO implements Serializable {
 
     private Set<GuardianDTO> guardians = new HashSet<>();
 
+    private Set<ClassGroupDTO> classGroups = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -81,6 +83,14 @@ public class StudentDTO implements Serializable {
 
     public void setGuardians(Set<GuardianDTO> guardians) {
         this.guardians = guardians;
+    }
+
+    public Set<ClassGroupDTO> getClassGroups() {
+        return classGroups;
+    }
+
+    public void setClassGroups(Set<ClassGroupDTO> classGroups) {
+        this.classGroups = classGroups;
     }
 
     @Override

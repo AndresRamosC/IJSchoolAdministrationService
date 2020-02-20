@@ -60,6 +60,13 @@ public class Student implements Serializable {
                inverseJoinColumns = @JoinColumn(name = "guardian_id", referencedColumnName = "id"))
     private Set<Guardian> guardians = new HashSet<>();
 
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "student_class_group",
+               joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "class_group_id", referencedColumnName = "id"))
+    private Set<ClassGroup> classGroups = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -232,6 +239,31 @@ public class Student implements Serializable {
 
     public void setGuardians(Set<Guardian> guardians) {
         this.guardians = guardians;
+    }
+
+    public Set<ClassGroup> getClassGroups() {
+        return classGroups;
+    }
+
+    public Student classGroups(Set<ClassGroup> classGroups) {
+        this.classGroups = classGroups;
+        return this;
+    }
+
+    public Student addClassGroup(ClassGroup classGroup) {
+        this.classGroups.add(classGroup);
+        classGroup.getStudents().add(this);
+        return this;
+    }
+
+    public Student removeClassGroup(ClassGroup classGroup) {
+        this.classGroups.remove(classGroup);
+        classGroup.getStudents().remove(this);
+        return this;
+    }
+
+    public void setClassGroups(Set<ClassGroup> classGroups) {
+        this.classGroups = classGroups;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

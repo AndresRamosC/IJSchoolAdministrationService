@@ -59,6 +59,14 @@
             "otherEntityRelationshipName": "classGroup",
             "relationshipName": "teacher",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "student",
+            "otherEntityRelationshipName": "classGroup",
+            "relationshipName": "student",
+            "otherEntityField": "id",
+            "ownerSide": false
         }
     ],
     "changelogDate": "20200219162800",

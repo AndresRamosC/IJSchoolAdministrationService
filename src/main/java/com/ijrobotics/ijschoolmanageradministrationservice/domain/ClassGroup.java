@@ -64,6 +64,11 @@ public class ClassGroup implements Serializable {
     @JsonIgnoreProperties("classGroups")
     private Teacher teacher;
 
+    @ManyToMany(mappedBy = "classGroups")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonIgnore
+    private Set<Student> students = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -238,6 +243,31 @@ public class ClassGroup implements Serializable {
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
+    }
+
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public ClassGroup students(Set<Student> students) {
+        this.students = students;
+        return this;
+    }
+
+    public ClassGroup addStudent(Student student) {
+        this.students.add(student);
+        student.getClassGroups().add(this);
+        return this;
+    }
+
+    public ClassGroup removeStudent(Student student) {
+        this.students.remove(student);
+        student.getClassGroups().remove(this);
+        return this;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -9,7 +9,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Student} and its DTO {@link StudentDTO}.
  */
-@Mapper(componentModel = "spring", uses = {PersonMapper.class, GuardianMapper.class})
+@Mapper(componentModel = "spring", uses = {PersonMapper.class, GuardianMapper.class, ClassGroupMapper.class})
 public interface StudentMapper extends EntityMapper<StudentDTO, Student> {
 
     @Mapping(source = "person.id", target = "personId")
@@ -23,6 +23,7 @@ public interface StudentMapper extends EntityMapper<StudentDTO, Student> {
     @Mapping(target = "assignments", ignore = true)
     @Mapping(target = "removeAssignment", ignore = true)
     @Mapping(target = "removeGuardian", ignore = true)
+    @Mapping(target = "removeClassGroup", ignore = true)
     Student toEntity(StudentDTO studentDTO);
 
     default Student fromId(Long id) {
