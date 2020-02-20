@@ -34,17 +34,16 @@
             "relationshipName": "attendance"
         },
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "assignment",
+            "otherEntityRelationshipName": "classGroup",
+            "relationshipName": "assignment"
+        },
+        {
             "relationshipType": "one-to-one",
             "otherEntityName": "grade",
             "otherEntityRelationshipName": "classGroup",
             "relationshipName": "grade",
-            "ownerSide": false
-        },
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "assignment",
-            "otherEntityRelationshipName": "classGroup",
-            "relationshipName": "assignment",
             "ownerSide": false
         },
         {

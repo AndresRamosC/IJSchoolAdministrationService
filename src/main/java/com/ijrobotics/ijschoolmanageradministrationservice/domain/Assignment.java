@@ -48,8 +48,8 @@ public class Assignment implements Serializable {
     @Column(name = "attachment_content_type")
     private String attachmentContentType;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @ManyToOne
+    @JsonIgnoreProperties("assignments")
     private ClassGroup classGroup;
 
     @ManyToOne

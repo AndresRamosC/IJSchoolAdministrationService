@@ -75,21 +75,6 @@ public class ClassGroupService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-
-    /**
-     *  Get all the classGroups where Assignment is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true) 
-    public List<ClassGroupDTO> findAllWhereAssignmentIsNull() {
-        log.debug("Request to get all classGroups where Assignment is null");
-        return StreamSupport
-            .stream(classGroupRepository.findAll().spliterator(), false)
-            .filter(classGroup -> classGroup.getAssignment() == null)
-            .map(classGroupMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-
     /**
      * Get one classGroup by id.
      *

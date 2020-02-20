@@ -66,37 +66,15 @@ public class ClassGroupResource {
      * or with status {@code 500 (Internal Server Error)} if the classGroupDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/class-groups/{id}")
-    public ResponseEntity<ClassGroupDTO> updateClassGroup(@RequestBody ClassGroupDTO classGroupDTO,@PathVariable Long id) throws URISyntaxException {
+    @PutMapping("/class-groups")
+    public ResponseEntity<ClassGroupDTO> updateClassGroup(@RequestBody ClassGroupDTO classGroupDTO) throws URISyntaxException {
         log.debug("REST request to update ClassGroup : {}", classGroupDTO);
-        Optional<ClassGroupDTO> classGroupDTOUpdate = classGroupService.findOne(id);
-        if ( !classGroupDTOUpdate.isPresent()) {
+        if (classGroupDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (classGroupDTO.getGroupCode() !=null){
-            classGroupDTOUpdate.get().setGroupCode(classGroupDTO.getGroupCode());
-        }
-        if (classGroupDTO.getStartHour() !=null){
-            classGroupDTOUpdate.get().setStartHour(classGroupDTO.getStartHour());
-        }
-        if (classGroupDTO.getEndHour() !=null){
-            classGroupDTOUpdate.get().setEndHour(classGroupDTO.getEndHour());
-        }
-        if (classGroupDTO.getClassRoom() !=null){
-            classGroupDTOUpdate.get().setClassRoom(classGroupDTO.getClassRoom());
-        }
-        if (classGroupDTO.getSize() !=null){
-            classGroupDTOUpdate.get().setSize(classGroupDTO.getSize());
-        }
-        if (classGroupDTO.getSubjectId() !=null){
-            classGroupDTOUpdate.get().setSubjectId(classGroupDTO.getSubjectId());
-        }
-        if (classGroupDTO.getTeacherId() !=null){
-            classGroupDTOUpdate.get().setTeacherId(classGroupDTO.getTeacherId());
-        }
-        ClassGroupDTO result = classGroupService.save(classGroupDTOUpdate.get());
+        ClassGroupDTO result = classGroupService.save(classGroupDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, classGroupDTOUpdate.get().getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, classGroupDTO.getId().toString()))
             .body(result);
     }
 
@@ -111,10 +89,6 @@ public class ClassGroupResource {
         if ("grade-is-null".equals(filter)) {
             log.debug("REST request to get all ClassGroups where grade is null");
             return classGroupService.findAllWhereGradeIsNull();
-        }
-        if ("assignment-is-null".equals(filter)) {
-            log.debug("REST request to get all ClassGroups where assignment is null");
-            return classGroupService.findAllWhereAssignmentIsNull();
         }
         log.debug("REST request to get all ClassGroups");
         return classGroupService.findAll();
