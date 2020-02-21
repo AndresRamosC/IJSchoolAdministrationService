@@ -82,6 +82,18 @@ public class StudentService {
         return studentRepository.findOneWithEagerRelationships(id)
             .map(studentMapper::toDto);
     }
+    /**
+     * Get students by Guardian id.
+     *
+     * @param id the id of the Guardian.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public List<StudentDTO> findStudentsWithGuardian(Long id) {
+        log.debug("Request to get Student with guardian: {}", id);
+        return studentRepository.findByGuardiansId(id).stream()
+            .map(studentMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+    }
 
     /**
      * Delete the student by id.

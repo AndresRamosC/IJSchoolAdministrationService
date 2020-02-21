@@ -127,6 +127,18 @@ public class StudentResource {
      * @param id the id of the studentDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
+    @GetMapping("/students/withGuardian/{id}")
+    public List<StudentDTO> getStudentFromGuadianID(@PathVariable Long id) {
+        log.debug("REST request to get Student with guardian : {}", id);
+        return  studentService.findStudentsWithGuardian(id);
+    }
+
+    /**
+     * {@code DELETE  /students/:id} : delete the "id" student.
+     *
+     * @param id the id of the studentDTO to delete.
+     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     */
     @DeleteMapping("/students/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         log.debug("REST request to delete Student : {}", id);
