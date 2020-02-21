@@ -1,11 +1,11 @@
 id;creation_date;title;description;due_date;done;grade;attachment;attachment_content_type;student_id;class_group_id
-1;2020-02-18T21:00:55;24/7;Buckinghamshire;2020-02-18T23:34:38;false;30203;../fake-data/blob/hipster.png;image/png;1;1
-2;2020-02-18T20:55:15;Brunei Dollar withdrawal deliver;Auto Loan Account North Dakota Concrete;2020-02-19T08:09:21;true;78477;../fake-data/blob/hipster.png;image/png;1;2
-3;2020-02-19T10:00:58;Guinea Franc Handcrafted Steel Mouse;New York;2020-02-18T23:12:41;false;33183;../fake-data/blob/hipster.png;image/png;1;3
-4;2020-02-19T00:12:39;Industrial Oklahoma;Sleek deposit;2020-02-18T17:23:57;false;69284;../fake-data/blob/hipster.png;image/png;1;4
-5;2020-02-19T14:27:28;Nepal Chicken;Awesome Concrete Shoes;2020-02-18T18:15:49;true;28156;../fake-data/blob/hipster.png;image/png;1;5
-6;2020-02-18T19:07:40;24 hour Dynamic systematic;streamline;2020-02-18T22:29:29;false;52388;../fake-data/blob/hipster.png;image/png;1;6
-7;2020-02-19T09:59:52;transmitting compressing hacking;Analyst bypassing;2020-02-18T21:53:21;true;6686;../fake-data/blob/hipster.png;image/png;2;1
-8;2020-02-19T07:53:53;reboot;frictionless;2020-02-19T03:04:22;false;80703;../fake-data/blob/hipster.png;image/png;2;2
-9;2020-02-19T02:31:16;Beauty;Bedfordshire;2020-02-19T15:17:44;true;93259;../fake-data/blob/hipster.png;image/png;2;3
-10;2020-02-19T02:01:48;FTP Car;bus AGP;2020-02-19T11:39:52;false;7063;../fake-data/blob/hipster.png;image/png;3;1
+1;2020-02-18T21:00:55;Research;Bring a research about Buckinghamshire, minimum 500 words;2020-02-18T23:34:38;false;30203;../fake-data/blob/hipster.png;image/png;1;1
+2;2020-02-18T20:55:15;Solve Problems;Solve the problems about Auto Loan Account that i gave in class;2020-02-19T08:09:21;true;78477;../fake-data/blob/hipster.png;image/png;1;2
+3;2020-02-19T10:00:58;Bring to class;Bring to class an article of a newspaper of New York;2020-02-18T23:12:41;false;33183;../fake-data/blob/hipster.png;image/png;1;3
+4;2020-02-19T00:12:39;Lecture of the day;read about Sleek deposit and we will discuss it during next class;2020-02-18T17:23:57;false;69284;../fake-data/blob/hipster.png;image/png;1;4
+5;2020-02-19T14:27:28;Research;Research about the Awesome Concrete Shoes;2020-02-18T18:15:49;true;28156;../fake-data/blob/hipster.png;image/png;1;5
+6;2020-02-18T19:07:40;24 hour Dynamic;Create a streamline and keep it running during 24 hours;2020-02-18T22:29:29;false;52388;../fake-data/blob/hipster.png;image/png;1;6
+7;2020-02-19T09:59:52;Solve Problems;Solver the problems from the book Analyst bypassing on page 28;2020-02-18T21:53:21;true;6686;../fake-data/blob/hipster.png;image/png;2;1
+8;2020-02-19T07:53:53;Lecture of the day;read about frictionless object and how they are created;2020-02-19T03:04:22;false;80703;../fake-data/blob/hipster.png;image/png;2;2
+9;2020-02-19T02:31:16;Bring to class;Bring for tomorrow class an image of the animals that are in the Bedfordshire zoo ;2020-02-19T15:17:44;true;93259;../fake-data/blob/hipster.png;image/png;2;3
+10;2020-02-19T02:01:48;Bring material to class;Bring for next class a box of shoes,paper and scissors ;2020-02-19T11:39:52;false;7063;../fake-data/blob/hipster.png;image/png;3;1
