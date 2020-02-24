@@ -8,6 +8,8 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Assignment.
@@ -41,12 +43,9 @@ public class Assignment implements Serializable {
     @Column(name = "grade")
     private Float grade;
 
-    @Lob
-    @Column(name = "attachment")
-    private byte[] attachment;
-
-    @Column(name = "attachment_content_type")
-    private String attachmentContentType;
+    @OneToMany(mappedBy = "assignment")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Attachments> attachments = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties("assignments")
@@ -143,30 +142,29 @@ public class Assignment implements Serializable {
         this.grade = grade;
     }
 
-    public byte[] getAttachment() {
-        return attachment;
+    public Set<Attachments> getAttachments() {
+        return attachments;
     }
 
-    public Assignment attachment(byte[] attachment) {
-        this.attachment = attachment;
+    public Assignment attachments(Set<Attachments> attachments) {
+        this.attachments = attachments;
         return this;
     }
 
-    public void setAttachment(byte[] attachment) {
-        this.attachment = attachment;
-    }
-
-    public String getAttachmentContentType() {
-        return attachmentContentType;
-    }
-
-    public Assignment attachmentContentType(String attachmentContentType) {
-        this.attachmentContentType = attachmentContentType;
+    public Assignment addAttachments(Attachments attachments) {
+        this.attachments.add(attachments);
+        attachments.setAssignment(this);
         return this;
     }
 
-    public void setAttachmentContentType(String attachmentContentType) {
-        this.attachmentContentType = attachmentContentType;
+    public Assignment removeAttachments(Attachments attachments) {
+        this.attachments.remove(attachments);
+        attachments.setAssignment(null);
+        return this;
+    }
+
+    public void setAttachments(Set<Attachments> attachments) {
+        this.attachments = attachments;
     }
 
     public ClassGroup getClassGroup() {
@@ -222,8 +220,6 @@ public class Assignment implements Serializable {
             ", dueDate='" + getDueDate() + "'" +
             ", done='" + isDone() + "'" +
             ", grade=" + getGrade() +
-            ", attachment='" + getAttachment() + "'" +
-            ", attachmentContentType='" + getAttachmentContentType() + "'" +
             "}";
     }
 }

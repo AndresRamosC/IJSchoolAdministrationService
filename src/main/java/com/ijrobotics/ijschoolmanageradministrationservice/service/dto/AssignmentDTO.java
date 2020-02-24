@@ -3,7 +3,6 @@ package com.ijrobotics.ijschoolmanageradministrationservice.service.dto;
 import java.time.ZonedDateTime;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Lob;
 
 /**
  * A DTO for the {@link com.ijrobotics.ijschoolmanageradministrationservice.domain.Assignment} entity.
@@ -24,10 +23,6 @@ public class AssignmentDTO implements Serializable {
 
     private Float grade;
 
-    @Lob
-    private byte[] attachment;
-
-    private String attachmentContentType;
 
     private Long classGroupId;
 
@@ -89,22 +84,6 @@ public class AssignmentDTO implements Serializable {
         this.grade = grade;
     }
 
-    public byte[] getAttachment() {
-        return attachment;
-    }
-
-    public void setAttachment(byte[] attachment) {
-        this.attachment = attachment;
-    }
-
-    public String getAttachmentContentType() {
-        return attachmentContentType;
-    }
-
-    public void setAttachmentContentType(String attachmentContentType) {
-        this.attachmentContentType = attachmentContentType;
-    }
-
     public Long getClassGroupId() {
         return classGroupId;
     }
@@ -152,7 +131,6 @@ public class AssignmentDTO implements Serializable {
             ", dueDate='" + getDueDate() + "'" +
             ", done='" + isDone() + "'" +
             ", grade=" + getGrade() +
-            ", attachment='" + getAttachment() + "'" +
             ", classGroupId=" + getClassGroupId() +
             ", studentId=" + getStudentId() +
             "}";

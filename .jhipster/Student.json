@@ -46,6 +46,12 @@
             "relationshipName": "assignment"
         },
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "exculpatory",
+            "otherEntityRelationshipName": "student",
+            "relationshipName": "exculpatory"
+        },
+        {
             "relationshipType": "many-to-many",
             "otherEntityName": "guardian",
             "otherEntityRelationshipName": "student",

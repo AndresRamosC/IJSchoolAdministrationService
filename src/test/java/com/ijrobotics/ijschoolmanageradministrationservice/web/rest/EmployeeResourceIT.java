@@ -37,6 +37,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.enumeration.EducationLevel;
 /**
  * Integration tests for the {@link EmployeeResource} REST controller.
  */
@@ -46,8 +47,8 @@ public class EmployeeResourceIT {
     private static final ZonedDateTime DEFAULT_CREATION_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_CREATION_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
-    private static final String DEFAULT_EDUCATION_LEVEL = "AAAAAAAAAA";
-    private static final String UPDATED_EDUCATION_LEVEL = "BBBBBBBBBB";
+    private static final EducationLevel DEFAULT_EDUCATION_LEVEL = EducationLevel.MIDDLE;
+    private static final EducationLevel UPDATED_EDUCATION_LEVEL = EducationLevel.HIGH;
 
     private static final String DEFAULT_DEPARTMENT = "AAAAAAAAAA";
     private static final String UPDATED_DEPARTMENT = "BBBBBBBBBB";
@@ -202,7 +203,7 @@ public class EmployeeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(employee.getId().intValue())))
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(sameInstant(DEFAULT_CREATION_DATE))))
-            .andExpect(jsonPath("$.[*].educationLevel").value(hasItem(DEFAULT_EDUCATION_LEVEL)))
+            .andExpect(jsonPath("$.[*].educationLevel").value(hasItem(DEFAULT_EDUCATION_LEVEL.toString())))
             .andExpect(jsonPath("$.[*].department").value(hasItem(DEFAULT_DEPARTMENT)))
             .andExpect(jsonPath("$.[*].controlNumber").value(hasItem(DEFAULT_CONTROL_NUMBER.intValue())))
             .andExpect(jsonPath("$.[*].employmentType").value(hasItem(DEFAULT_EMPLOYMENT_TYPE)))
@@ -222,7 +223,7 @@ public class EmployeeResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(employee.getId().intValue()))
             .andExpect(jsonPath("$.creationDate").value(sameInstant(DEFAULT_CREATION_DATE)))
-            .andExpect(jsonPath("$.educationLevel").value(DEFAULT_EDUCATION_LEVEL))
+            .andExpect(jsonPath("$.educationLevel").value(DEFAULT_EDUCATION_LEVEL.toString()))
             .andExpect(jsonPath("$.department").value(DEFAULT_DEPARTMENT))
             .andExpect(jsonPath("$.controlNumber").value(DEFAULT_CONTROL_NUMBER.intValue()))
             .andExpect(jsonPath("$.employmentType").value(DEFAULT_EMPLOYMENT_TYPE))

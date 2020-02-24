@@ -52,6 +52,10 @@ public class ClassGroup implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Assignment> assignments = new HashSet<>();
 
+    @OneToMany(mappedBy = "classGroup")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<GroupNotices> groupNotices = new HashSet<>();
+
     @OneToOne(mappedBy = "classGroup")
     @JsonIgnore
     private Grade grade;
@@ -204,6 +208,31 @@ public class ClassGroup implements Serializable {
 
     public void setAssignments(Set<Assignment> assignments) {
         this.assignments = assignments;
+    }
+
+    public Set<GroupNotices> getGroupNotices() {
+        return groupNotices;
+    }
+
+    public ClassGroup groupNotices(Set<GroupNotices> groupNotices) {
+        this.groupNotices = groupNotices;
+        return this;
+    }
+
+    public ClassGroup addGroupNotices(GroupNotices groupNotices) {
+        this.groupNotices.add(groupNotices);
+        groupNotices.setClassGroup(this);
+        return this;
+    }
+
+    public ClassGroup removeGroupNotices(GroupNotices groupNotices) {
+        this.groupNotices.remove(groupNotices);
+        groupNotices.setClassGroup(null);
+        return this;
+    }
+
+    public void setGroupNotices(Set<GroupNotices> groupNotices) {
+        this.groupNotices = groupNotices;
     }
 
     public Grade getGrade() {

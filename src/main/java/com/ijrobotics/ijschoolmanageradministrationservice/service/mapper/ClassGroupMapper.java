@@ -20,6 +20,8 @@ public interface ClassGroupMapper extends EntityMapper<ClassGroupDTO, ClassGroup
     @Mapping(target = "removeAttendance", ignore = true)
     @Mapping(target = "assignments", ignore = true)
     @Mapping(target = "removeAssignment", ignore = true)
+    @Mapping(target = "groupNotices", ignore = true)
+    @Mapping(target = "removeGroupNotices", ignore = true)
     @Mapping(target = "grade", ignore = true)
     @Mapping(source = "subjectId", target = "subject")
     @Mapping(source = "teacherId", target = "teacher")

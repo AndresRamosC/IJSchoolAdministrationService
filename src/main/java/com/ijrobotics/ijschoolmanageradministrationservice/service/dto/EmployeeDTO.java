@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.io.Serializable;
 import java.util.Objects;
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.enumeration.EducationLevel;
 
 /**
  * A DTO for the {@link com.ijrobotics.ijschoolmanageradministrationservice.domain.Employee} entity.
@@ -14,7 +15,7 @@ public class EmployeeDTO implements Serializable {
 
     private ZonedDateTime creationDate;
 
-    private String educationLevel;
+    private EducationLevel educationLevel;
 
     private String department;
 
@@ -45,11 +46,11 @@ public class EmployeeDTO implements Serializable {
         this.creationDate = creationDate;
     }
 
-    public String getEducationLevel() {
+    public EducationLevel getEducationLevel() {
         return educationLevel;
     }
 
-    public void setEducationLevel(String educationLevel) {
+    public void setEducationLevel(EducationLevel educationLevel) {
         this.educationLevel = educationLevel;
     }
 

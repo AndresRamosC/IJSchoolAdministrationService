@@ -1,5 +1,6 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.Assignment;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.AssignmentService;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AssignmentDTO;
@@ -65,15 +66,38 @@ public class AssignmentResource {
      * or with status {@code 500 (Internal Server Error)} if the assignmentDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/assignments")
-    public ResponseEntity<AssignmentDTO> updateAssignment(@RequestBody AssignmentDTO assignmentDTO) throws URISyntaxException {
+    @PutMapping("/assignments/{id}")
+    public ResponseEntity<AssignmentDTO> updateAssignment(@RequestBody AssignmentDTO assignmentDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update Assignment : {}", assignmentDTO);
-        if (assignmentDTO.getId() == null) {
+        Optional<AssignmentDTO> assignmentDTOUpdate = assignmentService.findOne(id);
+        if (!assignmentDTOUpdate.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        AssignmentDTO result = assignmentService.save(assignmentDTO);
+
+        if (assignmentDTO.getStudentId()!=null){
+            assignmentDTOUpdate.get().setStudentId(assignmentDTO.getStudentId());
+        }
+        if (assignmentDTO.getClassGroupId()!=null){
+            assignmentDTOUpdate.get().setClassGroupId(assignmentDTO.getClassGroupId());
+        }
+        if (assignmentDTO.getGrade()!=null){
+            assignmentDTOUpdate.get().setGrade(assignmentDTO.getGrade());
+        }
+        if (assignmentDTO.getDueDate()!=null){
+            assignmentDTOUpdate.get().setDueDate(assignmentDTO.getDueDate());
+        }
+        if (assignmentDTO.getDescription()!=null){
+            assignmentDTOUpdate.get().setDescription(assignmentDTO.getDescription());
+        }
+        if (assignmentDTO.getTitle()!=null){
+            assignmentDTOUpdate.get().setTitle(assignmentDTO.getTitle());
+        }
+        if (assignmentDTO.isDone()!=null){
+            assignmentDTOUpdate.get().setDone(assignmentDTO.isDone());
+        }
+        AssignmentDTO result = assignmentService.save(assignmentDTOUpdate.get());
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, assignmentDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, assignmentDTOUpdate.get().getId().toString()))
             .body(result);
     }
 

@@ -45,6 +45,9 @@ public class AttendanceResourceIT {
     private static final ZonedDateTime DEFAULT_CREATION_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_CREATION_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
+    private static final Boolean DEFAULT_ON_TIME = false;
+    private static final Boolean UPDATED_ON_TIME = true;
+
     @Autowired
     private AttendanceRepository attendanceRepository;
 
@@ -93,7 +96,8 @@ public class AttendanceResourceIT {
      */
     public static Attendance createEntity(EntityManager em) {
         Attendance attendance = new Attendance()
-            .creationDate(DEFAULT_CREATION_DATE);
+            .creationDate(DEFAULT_CREATION_DATE)
+            .onTime(DEFAULT_ON_TIME);
         return attendance;
     }
     /**
@@ -104,7 +108,8 @@ public class AttendanceResourceIT {
      */
     public static Attendance createUpdatedEntity(EntityManager em) {
         Attendance attendance = new Attendance()
-            .creationDate(UPDATED_CREATION_DATE);
+            .creationDate(UPDATED_CREATION_DATE)
+            .onTime(UPDATED_ON_TIME);
         return attendance;
     }
 
@@ -130,6 +135,7 @@ public class AttendanceResourceIT {
         assertThat(attendanceList).hasSize(databaseSizeBeforeCreate + 1);
         Attendance testAttendance = attendanceList.get(attendanceList.size() - 1);
         assertThat(testAttendance.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
+        assertThat(testAttendance.isOnTime()).isEqualTo(DEFAULT_ON_TIME);
     }
 
     @Test
@@ -164,7 +170,8 @@ public class AttendanceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(attendance.getId().intValue())))
-            .andExpect(jsonPath("$.[*].creationDate").value(hasItem(sameInstant(DEFAULT_CREATION_DATE))));
+            .andExpect(jsonPath("$.[*].creationDate").value(hasItem(sameInstant(DEFAULT_CREATION_DATE))))
+            .andExpect(jsonPath("$.[*].onTime").value(hasItem(DEFAULT_ON_TIME.booleanValue())));
     }
     
     @Test
@@ -178,7 +185,8 @@ public class AttendanceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(attendance.getId().intValue()))
-            .andExpect(jsonPath("$.creationDate").value(sameInstant(DEFAULT_CREATION_DATE)));
+            .andExpect(jsonPath("$.creationDate").value(sameInstant(DEFAULT_CREATION_DATE)))
+            .andExpect(jsonPath("$.onTime").value(DEFAULT_ON_TIME.booleanValue()));
     }
 
     @Test
@@ -202,7 +210,8 @@ public class AttendanceResourceIT {
         // Disconnect from session so that the updates on updatedAttendance are not directly saved in db
         em.detach(updatedAttendance);
         updatedAttendance
-            .creationDate(UPDATED_CREATION_DATE);
+            .creationDate(UPDATED_CREATION_DATE)
+            .onTime(UPDATED_ON_TIME);
         AttendanceDTO attendanceDTO = attendanceMapper.toDto(updatedAttendance);
 
         restAttendanceMockMvc.perform(put("/api/attendances")
@@ -215,6 +224,7 @@ public class AttendanceResourceIT {
         assertThat(attendanceList).hasSize(databaseSizeBeforeUpdate);
         Attendance testAttendance = attendanceList.get(attendanceList.size() - 1);
         assertThat(testAttendance.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);
+        assertThat(testAttendance.isOnTime()).isEqualTo(UPDATED_ON_TIME);
     }
 
     @Test

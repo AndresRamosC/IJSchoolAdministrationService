@@ -20,7 +20,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
@@ -60,11 +59,6 @@ public class AssignmentResourceIT {
 
     private static final Float DEFAULT_GRADE = 1F;
     private static final Float UPDATED_GRADE = 2F;
-
-    private static final byte[] DEFAULT_ATTACHMENT = TestUtil.createByteArray(1, "0");
-    private static final byte[] UPDATED_ATTACHMENT = TestUtil.createByteArray(1, "1");
-    private static final String DEFAULT_ATTACHMENT_CONTENT_TYPE = "image/jpg";
-    private static final String UPDATED_ATTACHMENT_CONTENT_TYPE = "image/png";
 
     @Autowired
     private AssignmentRepository assignmentRepository;
@@ -119,9 +113,7 @@ public class AssignmentResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .dueDate(DEFAULT_DUE_DATE)
             .done(DEFAULT_DONE)
-            .grade(DEFAULT_GRADE)
-            .attachment(DEFAULT_ATTACHMENT)
-            .attachmentContentType(DEFAULT_ATTACHMENT_CONTENT_TYPE);
+            .grade(DEFAULT_GRADE);
         return assignment;
     }
     /**
@@ -137,9 +129,7 @@ public class AssignmentResourceIT {
             .description(UPDATED_DESCRIPTION)
             .dueDate(UPDATED_DUE_DATE)
             .done(UPDATED_DONE)
-            .grade(UPDATED_GRADE)
-            .attachment(UPDATED_ATTACHMENT)
-            .attachmentContentType(UPDATED_ATTACHMENT_CONTENT_TYPE);
+            .grade(UPDATED_GRADE);
         return assignment;
     }
 
@@ -170,8 +160,6 @@ public class AssignmentResourceIT {
         assertThat(testAssignment.getDueDate()).isEqualTo(DEFAULT_DUE_DATE);
         assertThat(testAssignment.isDone()).isEqualTo(DEFAULT_DONE);
         assertThat(testAssignment.getGrade()).isEqualTo(DEFAULT_GRADE);
-        assertThat(testAssignment.getAttachment()).isEqualTo(DEFAULT_ATTACHMENT);
-        assertThat(testAssignment.getAttachmentContentType()).isEqualTo(DEFAULT_ATTACHMENT_CONTENT_TYPE);
     }
 
     @Test
@@ -211,9 +199,7 @@ public class AssignmentResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].dueDate").value(hasItem(sameInstant(DEFAULT_DUE_DATE))))
             .andExpect(jsonPath("$.[*].done").value(hasItem(DEFAULT_DONE.booleanValue())))
-            .andExpect(jsonPath("$.[*].grade").value(hasItem(DEFAULT_GRADE.doubleValue())))
-            .andExpect(jsonPath("$.[*].attachmentContentType").value(hasItem(DEFAULT_ATTACHMENT_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].attachment").value(hasItem(Base64Utils.encodeToString(DEFAULT_ATTACHMENT))));
+            .andExpect(jsonPath("$.[*].grade").value(hasItem(DEFAULT_GRADE.doubleValue())));
     }
     
     @Test
@@ -232,9 +218,7 @@ public class AssignmentResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.dueDate").value(sameInstant(DEFAULT_DUE_DATE)))
             .andExpect(jsonPath("$.done").value(DEFAULT_DONE.booleanValue()))
-            .andExpect(jsonPath("$.grade").value(DEFAULT_GRADE.doubleValue()))
-            .andExpect(jsonPath("$.attachmentContentType").value(DEFAULT_ATTACHMENT_CONTENT_TYPE))
-            .andExpect(jsonPath("$.attachment").value(Base64Utils.encodeToString(DEFAULT_ATTACHMENT)));
+            .andExpect(jsonPath("$.grade").value(DEFAULT_GRADE.doubleValue()));
     }
 
     @Test
@@ -263,9 +247,7 @@ public class AssignmentResourceIT {
             .description(UPDATED_DESCRIPTION)
             .dueDate(UPDATED_DUE_DATE)
             .done(UPDATED_DONE)
-            .grade(UPDATED_GRADE)
-            .attachment(UPDATED_ATTACHMENT)
-            .attachmentContentType(UPDATED_ATTACHMENT_CONTENT_TYPE);
+            .grade(UPDATED_GRADE);
         AssignmentDTO assignmentDTO = assignmentMapper.toDto(updatedAssignment);
 
         restAssignmentMockMvc.perform(put("/api/assignments")
@@ -283,8 +265,6 @@ public class AssignmentResourceIT {
         assertThat(testAssignment.getDueDate()).isEqualTo(UPDATED_DUE_DATE);
         assertThat(testAssignment.isDone()).isEqualTo(UPDATED_DONE);
         assertThat(testAssignment.getGrade()).isEqualTo(UPDATED_GRADE);
-        assertThat(testAssignment.getAttachment()).isEqualTo(UPDATED_ATTACHMENT);
-        assertThat(testAssignment.getAttachmentContentType()).isEqualTo(UPDATED_ATTACHMENT_CONTENT_TYPE);
     }
 
     @Test

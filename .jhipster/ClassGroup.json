@@ -40,6 +40,12 @@
             "relationshipName": "assignment"
         },
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "groupNotices",
+            "otherEntityRelationshipName": "classGroup",
+            "relationshipName": "groupNotices"
+        },
+        {
             "relationshipType": "one-to-one",
             "otherEntityName": "grade",
             "otherEntityRelationshipName": "classGroup",

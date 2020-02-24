@@ -53,6 +53,10 @@ public class Student implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Assignment> assignments = new HashSet<>();
 
+    @OneToMany(mappedBy = "student")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Exculpatory> exculpatories = new HashSet<>();
+
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "student_guardian",
@@ -214,6 +218,31 @@ public class Student implements Serializable {
 
     public void setAssignments(Set<Assignment> assignments) {
         this.assignments = assignments;
+    }
+
+    public Set<Exculpatory> getExculpatories() {
+        return exculpatories;
+    }
+
+    public Student exculpatories(Set<Exculpatory> exculpatories) {
+        this.exculpatories = exculpatories;
+        return this;
+    }
+
+    public Student addExculpatory(Exculpatory exculpatory) {
+        this.exculpatories.add(exculpatory);
+        exculpatory.setStudent(this);
+        return this;
+    }
+
+    public Student removeExculpatory(Exculpatory exculpatory) {
+        this.exculpatories.remove(exculpatory);
+        exculpatory.setStudent(null);
+        return this;
+    }
+
+    public void setExculpatories(Set<Exculpatory> exculpatories) {
+        this.exculpatories = exculpatories;
     }
 
     public Set<Guardian> getGuardians() {

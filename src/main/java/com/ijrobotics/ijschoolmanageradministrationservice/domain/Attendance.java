@@ -26,6 +26,9 @@ public class Attendance implements Serializable {
     @Column(name = "creation_date")
     private ZonedDateTime creationDate;
 
+    @Column(name = "on_time")
+    private Boolean onTime;
+
     @ManyToOne
     @JsonIgnoreProperties("attendances")
     private Student student;
@@ -54,6 +57,19 @@ public class Attendance implements Serializable {
 
     public void setCreationDate(ZonedDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Boolean isOnTime() {
+        return onTime;
+    }
+
+    public Attendance onTime(Boolean onTime) {
+        this.onTime = onTime;
+        return this;
+    }
+
+    public void setOnTime(Boolean onTime) {
+        this.onTime = onTime;
     }
 
     public Student getStudent() {
@@ -104,6 +120,7 @@ public class Attendance implements Serializable {
         return "Attendance{" +
             "id=" + getId() +
             ", creationDate='" + getCreationDate() + "'" +
+            ", onTime='" + isOnTime() + "'" +
             "}";
     }
 }

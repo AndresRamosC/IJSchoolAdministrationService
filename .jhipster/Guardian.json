@@ -7,7 +7,8 @@
         },
         {
             "fieldName": "educationLevel",
-            "fieldType": "String"
+            "fieldType": "EducationLevel",
+            "fieldValues": "MIDDLE,HIGH,COLLEGE,MASTERS,PHD"
         },
         {
             "fieldName": "occupation",
@@ -26,6 +27,12 @@
             "relationshipName": "person",
             "otherEntityField": "id",
             "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "exculpatory",
+            "otherEntityRelationshipName": "guardian",
+            "relationshipName": "exculpatory"
         },
         {
             "relationshipType": "many-to-many",

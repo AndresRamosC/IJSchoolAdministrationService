@@ -7,7 +7,8 @@
         },
         {
             "fieldName": "educationLevel",
-            "fieldType": "String"
+            "fieldType": "EducationLevel",
+            "fieldValues": "MIDDLE,HIGH,COLLEGE,MASTERS,PHD"
         },
         {
             "fieldName": "department",

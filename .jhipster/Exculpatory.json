@@ -1,0 +1,48 @@
+{
+    "name": "Exculpatory",
+    "fields": [
+        {
+            "fieldName": "creationDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "leaveDateAndHour",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "fullDay",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "guardian",
+            "otherEntityRelationshipName": "exculpatory",
+            "relationshipName": "guardian",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "student",
+            "otherEntityRelationshipName": "exculpatory",
+            "relationshipName": "student",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200224201800",
+    "entityTableName": "exculpatory",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "IJSchoolManagerAdministrationService",
+    "applications": "*",
+    "microserviceName": "IJSchoolManagerAdministrationService"
+}

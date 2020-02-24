@@ -4,6 +4,10 @@
         {
             "fieldName": "creationDate",
             "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "onTime",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [

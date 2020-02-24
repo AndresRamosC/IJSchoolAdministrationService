@@ -16,6 +16,8 @@ public interface AssignmentMapper extends EntityMapper<AssignmentDTO, Assignment
     @Mapping(source = "student.id", target = "studentId")
     AssignmentDTO toDto(Assignment assignment);
 
+    @Mapping(target = "attachments", ignore = true)
+    @Mapping(target = "removeAttachments", ignore = true)
     @Mapping(source = "classGroupId", target = "classGroup")
     @Mapping(source = "studentId", target = "student")
     Assignment toEntity(AssignmentDTO assignmentDTO);

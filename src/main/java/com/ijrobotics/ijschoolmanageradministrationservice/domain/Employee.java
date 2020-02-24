@@ -10,6 +10,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.enumeration.EducationLevel;
+
 /**
  * A Employee.
  */
@@ -27,8 +29,9 @@ public class Employee implements Serializable {
     @Column(name = "creation_date")
     private ZonedDateTime creationDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "education_level")
-    private String educationLevel;
+    private EducationLevel educationLevel;
 
     @Column(name = "department")
     private String department;
@@ -75,16 +78,16 @@ public class Employee implements Serializable {
         this.creationDate = creationDate;
     }
 
-    public String getEducationLevel() {
+    public EducationLevel getEducationLevel() {
         return educationLevel;
     }
 
-    public Employee educationLevel(String educationLevel) {
+    public Employee educationLevel(EducationLevel educationLevel) {
         this.educationLevel = educationLevel;
         return this;
     }
 
-    public void setEducationLevel(String educationLevel) {
+    public void setEducationLevel(EducationLevel educationLevel) {
         this.educationLevel = educationLevel;
     }
 

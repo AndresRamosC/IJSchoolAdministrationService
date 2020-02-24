@@ -13,6 +13,8 @@ public class AttendanceDTO implements Serializable {
 
     private ZonedDateTime creationDate;
 
+    private Boolean onTime;
+
 
     private Long studentId;
 
@@ -32,6 +34,14 @@ public class AttendanceDTO implements Serializable {
 
     public void setCreationDate(ZonedDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Boolean isOnTime() {
+        return onTime;
+    }
+
+    public void setOnTime(Boolean onTime) {
+        this.onTime = onTime;
     }
 
     public Long getStudentId() {
@@ -76,6 +86,7 @@ public class AttendanceDTO implements Serializable {
         return "AttendanceDTO{" +
             "id=" + getId() +
             ", creationDate='" + getCreationDate() + "'" +
+            ", onTime='" + isOnTime() + "'" +
             ", studentId=" + getStudentId() +
             ", classGroupId=" + getClassGroupId() +
             "}";

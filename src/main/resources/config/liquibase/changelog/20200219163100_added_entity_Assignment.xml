@@ -34,12 +34,6 @@
             <column name="grade" type="${floatType}">
                 <constraints nullable="true" />
             </column>
-            <column name="attachment" type="longblob">
-                <constraints nullable="true" />
-            </column>
-            <column name="attachment_content_type" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="class_group_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -77,8 +71,6 @@
             <column name="due_date" type="datetime"/>
             <column name="done" type="boolean"/>
             <column name="grade" type="numeric"/>
-            <column name="attachment" type="blob"/>
-            <column name="attachment_content_type" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

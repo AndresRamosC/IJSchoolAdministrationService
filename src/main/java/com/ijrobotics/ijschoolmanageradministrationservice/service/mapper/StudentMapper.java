@@ -22,6 +22,8 @@ public interface StudentMapper extends EntityMapper<StudentDTO, Student> {
     @Mapping(target = "removeGrade", ignore = true)
     @Mapping(target = "assignments", ignore = true)
     @Mapping(target = "removeAssignment", ignore = true)
+    @Mapping(target = "exculpatories", ignore = true)
+    @Mapping(target = "removeExculpatory", ignore = true)
     @Mapping(target = "removeGuardian", ignore = true)
     @Mapping(target = "removeClassGroup", ignore = true)
     Student toEntity(StudentDTO studentDTO);

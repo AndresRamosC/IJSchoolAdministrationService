@@ -36,6 +36,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.enumeration.EducationLevel;
 /**
  * Integration tests for the {@link GuardianResource} REST controller.
  */
@@ -45,8 +46,8 @@ public class GuardianResourceIT {
     private static final ZonedDateTime DEFAULT_CREATION_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_CREATION_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
-    private static final String DEFAULT_EDUCATION_LEVEL = "AAAAAAAAAA";
-    private static final String UPDATED_EDUCATION_LEVEL = "BBBBBBBBBB";
+    private static final EducationLevel DEFAULT_EDUCATION_LEVEL = EducationLevel.MIDDLE;
+    private static final EducationLevel UPDATED_EDUCATION_LEVEL = EducationLevel.HIGH;
 
     private static final String DEFAULT_OCCUPATION = "AAAAAAAAAA";
     private static final String UPDATED_OCCUPATION = "BBBBBBBBBB";
@@ -183,7 +184,7 @@ public class GuardianResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(guardian.getId().intValue())))
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(sameInstant(DEFAULT_CREATION_DATE))))
-            .andExpect(jsonPath("$.[*].educationLevel").value(hasItem(DEFAULT_EDUCATION_LEVEL)))
+            .andExpect(jsonPath("$.[*].educationLevel").value(hasItem(DEFAULT_EDUCATION_LEVEL.toString())))
             .andExpect(jsonPath("$.[*].occupation").value(hasItem(DEFAULT_OCCUPATION)))
             .andExpect(jsonPath("$.[*].workAdress").value(hasItem(DEFAULT_WORK_ADRESS)));
     }
@@ -200,7 +201,7 @@ public class GuardianResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(guardian.getId().intValue()))
             .andExpect(jsonPath("$.creationDate").value(sameInstant(DEFAULT_CREATION_DATE)))
-            .andExpect(jsonPath("$.educationLevel").value(DEFAULT_EDUCATION_LEVEL))
+            .andExpect(jsonPath("$.educationLevel").value(DEFAULT_EDUCATION_LEVEL.toString()))
             .andExpect(jsonPath("$.occupation").value(DEFAULT_OCCUPATION))
             .andExpect(jsonPath("$.workAdress").value(DEFAULT_WORK_ADRESS));
     }

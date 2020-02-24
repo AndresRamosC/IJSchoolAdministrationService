@@ -16,6 +16,8 @@ public interface GuardianMapper extends EntityMapper<GuardianDTO, Guardian> {
     GuardianDTO toDto(Guardian guardian);
 
     @Mapping(source = "personId", target = "person")
+    @Mapping(target = "exculpatories", ignore = true)
+    @Mapping(target = "removeExculpatory", ignore = true)
     @Mapping(target = "students", ignore = true)
     @Mapping(target = "removeStudent", ignore = true)
     Guardian toEntity(GuardianDTO guardianDTO);

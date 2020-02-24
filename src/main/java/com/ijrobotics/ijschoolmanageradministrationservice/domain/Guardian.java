@@ -11,6 +11,8 @@ import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.enumeration.EducationLevel;
+
 /**
  * A Guardian.
  */
@@ -28,8 +30,9 @@ public class Guardian implements Serializable {
     @Column(name = "creation_date")
     private ZonedDateTime creationDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "education_level")
-    private String educationLevel;
+    private EducationLevel educationLevel;
 
     @Column(name = "occupation")
     private String occupation;
@@ -40,6 +43,10 @@ public class Guardian implements Serializable {
     @OneToOne
     @JoinColumn(unique = true)
     private Person person;
+
+    @OneToMany(mappedBy = "guardian")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Exculpatory> exculpatories = new HashSet<>();
 
     @ManyToMany(mappedBy = "guardians")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -68,16 +75,16 @@ public class Guardian implements Serializable {
         this.creationDate = creationDate;
     }
 
-    public String getEducationLevel() {
+    public EducationLevel getEducationLevel() {
         return educationLevel;
     }
 
-    public Guardian educationLevel(String educationLevel) {
+    public Guardian educationLevel(EducationLevel educationLevel) {
         this.educationLevel = educationLevel;
         return this;
     }
 
-    public void setEducationLevel(String educationLevel) {
+    public void setEducationLevel(EducationLevel educationLevel) {
         this.educationLevel = educationLevel;
     }
 
@@ -118,6 +125,31 @@ public class Guardian implements Serializable {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public Set<Exculpatory> getExculpatories() {
+        return exculpatories;
+    }
+
+    public Guardian exculpatories(Set<Exculpatory> exculpatories) {
+        this.exculpatories = exculpatories;
+        return this;
+    }
+
+    public Guardian addExculpatory(Exculpatory exculpatory) {
+        this.exculpatories.add(exculpatory);
+        exculpatory.setGuardian(this);
+        return this;
+    }
+
+    public Guardian removeExculpatory(Exculpatory exculpatory) {
+        this.exculpatories.remove(exculpatory);
+        exculpatory.setGuardian(null);
+        return this;
+    }
+
+    public void setExculpatories(Set<Exculpatory> exculpatories) {
+        this.exculpatories = exculpatories;
     }
 
     public Set<Student> getStudents() {
