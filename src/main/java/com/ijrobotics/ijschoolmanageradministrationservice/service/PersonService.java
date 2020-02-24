@@ -76,7 +76,7 @@ public class PersonService {
      *  Get all the people where Guardian is {@code null}.
      *  @return the list of entities.
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<PersonDTO> findAllWhereGuardianIsNull() {
         log.debug("Request to get all people where Guardian is null");
         return StreamSupport
@@ -91,7 +91,7 @@ public class PersonService {
      *  Get all the people where Student is {@code null}.
      *  @return the list of entities.
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<PersonDTO> findAllWhereStudentIsNull() {
         log.debug("Request to get all people where Student is null");
         return StreamSupport
@@ -106,7 +106,7 @@ public class PersonService {
      *  Get all the people where Employee is {@code null}.
      *  @return the list of entities.
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<PersonDTO> findAllWhereEmployeeIsNull() {
         log.debug("Request to get all people where Employee is null");
         return StreamSupport
@@ -126,6 +126,19 @@ public class PersonService {
     public Optional<PersonDTO> findOne(Long id) {
         log.debug("Request to get Person : {}", id);
         return personRepository.findOneWithEagerRelationships(id)
+            .map(personMapper::toDto);
+    }
+
+    /**
+     * Get one person by user Extended id.
+     *
+     * @param id the id of the userExtended.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<PersonDTO> findOneWithUserId(Long id) {
+        log.debug("Request to get Person : {}", id);
+        return personRepository.findByUserExtendId(id)
             .map(personMapper::toDto);
     }
 

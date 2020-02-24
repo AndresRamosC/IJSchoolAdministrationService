@@ -148,6 +148,19 @@ public class PersonResource {
     }
 
     /**
+     * {@code GET  /people/:id} : get the person from userExtendedID.
+     *
+     * @param id the id of the userExtended to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the personDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/people/byUserID/{id}")
+    public ResponseEntity<PersonDTO> getPersonFromUserExtendedId(@PathVariable Long id) {
+        log.debug("REST request to get Person : {}", id);
+        Optional<PersonDTO> personDTO = personService.findOneWithUserId(id);
+        return ResponseUtil.wrapOrNotFound(personDTO);
+    }
+
+    /**
      * {@code DELETE  /people/:id} : delete the "id" person.
      *
      * @param id the id of the personDTO to delete.
