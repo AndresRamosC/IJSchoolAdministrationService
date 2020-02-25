@@ -25,8 +25,7 @@ public class ClassGroupDTO implements Serializable {
 
     private Integer weekDays;
 
-
-    private Long subjectId;
+    private SubjectDTO subjectId;
 
     private Long teacherId;
 
@@ -94,11 +93,11 @@ public class ClassGroupDTO implements Serializable {
         this.weekDays = weekDays;
     }
 
-    public Long getSubjectId() {
+    public SubjectDTO getSubjectId() {
         return subjectId;
     }
 
-    public void setSubjectId(Long subjectId) {
+    public void setSubjectId(SubjectDTO subjectId) {
         this.subjectId = subjectId;
     }
 

@@ -63,7 +63,6 @@ public class GuardianDashBoardInfoResource {
                     studentAndPersonDTOList.add(new StudentAndPersonDto(studentDTO,personService.findOne(studentDTO.getPersonId()).get()));
                 });
                 GuardianDashBoardInfoDto fulldto= new GuardianDashBoardInfoDto(guardianUserExtendDTO.get(),personDTO.get(),guardianDTO.get(),studentAndPersonDTOList);
-                log.info("************************FULL DTO:   "+fulldto.toString());
                 return fulldto;
             }else {
                 throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");

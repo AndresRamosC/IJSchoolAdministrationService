@@ -12,7 +12,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {SubjectMapper.class, TeacherMapper.class})
 public interface ClassGroupMapper extends EntityMapper<ClassGroupDTO, ClassGroup> {
 
-    @Mapping(source = "subject.id", target = "subjectId")
+    @Mapping(source = "subject", target = "subjectId")
     @Mapping(source = "teacher.id", target = "teacherId")
     ClassGroupDTO toDto(ClassGroup classGroup);
 
