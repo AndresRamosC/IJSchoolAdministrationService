@@ -3,9 +3,6 @@ package com.ijrobotics.ijschoolmanageradministrationservice.service.dto;
 import java.time.ZonedDateTime;
 import java.io.Serializable;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.enumeration.UserType;
 
 /**
@@ -24,6 +21,8 @@ public class UserExtendDTO implements Serializable {
     private Boolean enabled;
 
     private UserType type;
+
+    private String keycloakUserId;
 
 
     public Long getId() {
@@ -50,12 +49,10 @@ public class UserExtendDTO implements Serializable {
         this.userName = userName;
     }
 
-    @JsonIgnore
     public String getPassword() {
         return password;
     }
 
-    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
@@ -74,6 +71,14 @@ public class UserExtendDTO implements Serializable {
 
     public void setType(UserType type) {
         this.type = type;
+    }
+
+    public String getKeycloakUserId() {
+        return keycloakUserId;
+    }
+
+    public void setKeycloakUserId(String keycloakUserId) {
+        this.keycloakUserId = keycloakUserId;
     }
 
     @Override
@@ -106,6 +111,7 @@ public class UserExtendDTO implements Serializable {
             ", password='" + getPassword() + "'" +
             ", enabled='" + isEnabled() + "'" +
             ", type='" + getType() + "'" +
+            ", keycloakUserId='" + getKeycloakUserId() + "'" +
             "}";
     }
 }

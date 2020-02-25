@@ -21,6 +21,10 @@
             "fieldName": "type",
             "fieldType": "UserType",
             "fieldValues": "GUARDIAN,EMPLOYEE,STUDENT"
+        },
+        {
+            "fieldName": "keycloakUserId",
+            "fieldType": "String"
         }
     ],
     "relationships": [

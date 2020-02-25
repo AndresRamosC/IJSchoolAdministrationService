@@ -1,11 +1,11 @@
 id;creation_date;education_level;occupation;work_adress;person_id
-1;2020-02-19T03:36:12;College;relationships;Fake address;1
-2;2020-02-19T09:35:19;College;Supervisor;Fake address;2
-3;2020-02-19T01:05:34;College;Wells Shoes;Fake address;3
-4;2020-02-18T21:08:03;College;Supervisor;Fake address;4
-5;2020-02-18T16:50:26;College;Faker;Fake address;5
-6;2020-02-19T00:11:41;College;Manager;Fake address;6
-7;2020-02-19T11:24:58;College;Engineer;Fake address;7
-8;2020-02-19T14:43:38;College;Quality Control;Fake address;8
-9;2020-02-19T15:20:32;College;Optimization;Fake address;9
-10;2020-02-19T13:14:07;College;bypassing Tuna;Fake address;10
+1;2020-02-19T03:36:12;COLLEGE;relationships;Fake address;1
+2;2020-02-19T09:35:19;COLLEGE;Supervisor;Fake address;2
+3;2020-02-19T01:05:34;COLLEGE;Wells Shoes;Fake address;3
+4;2020-02-18T21:08:03;COLLEGE;Supervisor;Fake address;4
+5;2020-02-18T16:50:26;COLLEGE;Faker;Fake address;5
+6;2020-02-19T00:11:41;COLLEGE;Manager;Fake address;6
+7;2020-02-19T11:24:58;COLLEGE;Engineer;Fake address;7
+8;2020-02-19T14:43:38;COLLEGE;Quality Control;Fake address;8
+9;2020-02-19T15:20:32;COLLEGE;Optimization;Fake address;9
+10;2020-02-19T13:14:07;COLLEGE;bypassing Tuna;Fake address;10

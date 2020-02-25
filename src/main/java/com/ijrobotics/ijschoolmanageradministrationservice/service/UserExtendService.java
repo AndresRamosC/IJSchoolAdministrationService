@@ -67,7 +67,7 @@ public class UserExtendService {
      *  Get all the userExtends where Person is {@code null}.
      *  @return the list of entities.
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<UserExtendDTO> findAllWherePersonIsNull() {
         log.debug("Request to get all userExtends where Person is null");
         return StreamSupport
@@ -89,6 +89,19 @@ public class UserExtendService {
         return userExtendRepository.findById(id)
             .map(userExtendMapper::toDto);
     }
+    /**
+     * Get one userExtend by KeycloakUserName.
+     *
+     * @param keycloakUserName the userName of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<UserExtendDTO> findOneByKeycloakUserName(String keycloakUserName) {
+        log.debug("Request to get UserExtend : {}", keycloakUserName);
+        return userExtendRepository.findByKeycloakUserId(keycloakUserName)
+            .map(userExtendMapper::toDto);
+    }
+
 
     /**
      * Delete the userExtend by id.

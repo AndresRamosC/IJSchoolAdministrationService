@@ -71,6 +71,18 @@ public class GuardianService {
         return guardianRepository.findById(id)
             .map(guardianMapper::toDto);
     }
+    /**
+     * Get one guardian by person id.
+     *
+     * @param id the id of the person.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<GuardianDTO> findOneByPersonId(Long id) {
+        log.debug("Request to get Guardian : {}", id);
+        return guardianRepository.findByPersonId(id)
+            .map(guardianMapper::toDto);
+    }
 
     /**
      * Delete the guardian by id.

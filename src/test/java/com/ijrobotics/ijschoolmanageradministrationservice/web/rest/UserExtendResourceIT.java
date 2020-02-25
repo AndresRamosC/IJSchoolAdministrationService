@@ -58,6 +58,9 @@ public class UserExtendResourceIT {
     private static final UserType DEFAULT_TYPE = UserType.GUARDIAN;
     private static final UserType UPDATED_TYPE = UserType.EMPLOYEE;
 
+    private static final String DEFAULT_KEYCLOAK_USER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_KEYCLOAK_USER_ID = "BBBBBBBBBB";
+
     @Autowired
     private UserExtendRepository userExtendRepository;
 
@@ -110,7 +113,8 @@ public class UserExtendResourceIT {
             .userName(DEFAULT_USER_NAME)
             .password(DEFAULT_PASSWORD)
             .enabled(DEFAULT_ENABLED)
-            .type(DEFAULT_TYPE);
+            .type(DEFAULT_TYPE)
+            .keycloakUserId(DEFAULT_KEYCLOAK_USER_ID);
         return userExtend;
     }
     /**
@@ -125,7 +129,8 @@ public class UserExtendResourceIT {
             .userName(UPDATED_USER_NAME)
             .password(UPDATED_PASSWORD)
             .enabled(UPDATED_ENABLED)
-            .type(UPDATED_TYPE);
+            .type(UPDATED_TYPE)
+            .keycloakUserId(UPDATED_KEYCLOAK_USER_ID);
         return userExtend;
     }
 
@@ -155,6 +160,7 @@ public class UserExtendResourceIT {
         assertThat(testUserExtend.getPassword()).isEqualTo(DEFAULT_PASSWORD);
         assertThat(testUserExtend.isEnabled()).isEqualTo(DEFAULT_ENABLED);
         assertThat(testUserExtend.getType()).isEqualTo(DEFAULT_TYPE);
+        assertThat(testUserExtend.getKeycloakUserId()).isEqualTo(DEFAULT_KEYCLOAK_USER_ID);
     }
 
     @Test
@@ -193,7 +199,8 @@ public class UserExtendResourceIT {
             .andExpect(jsonPath("$.[*].userName").value(hasItem(DEFAULT_USER_NAME)))
             .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD)))
             .andExpect(jsonPath("$.[*].enabled").value(hasItem(DEFAULT_ENABLED.booleanValue())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())));
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].keycloakUserId").value(hasItem(DEFAULT_KEYCLOAK_USER_ID)));
     }
     
     @Test
@@ -211,7 +218,8 @@ public class UserExtendResourceIT {
             .andExpect(jsonPath("$.userName").value(DEFAULT_USER_NAME))
             .andExpect(jsonPath("$.password").value(DEFAULT_PASSWORD))
             .andExpect(jsonPath("$.enabled").value(DEFAULT_ENABLED.booleanValue()))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()));
+            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
+            .andExpect(jsonPath("$.keycloakUserId").value(DEFAULT_KEYCLOAK_USER_ID));
     }
 
     @Test
@@ -239,7 +247,8 @@ public class UserExtendResourceIT {
             .userName(UPDATED_USER_NAME)
             .password(UPDATED_PASSWORD)
             .enabled(UPDATED_ENABLED)
-            .type(UPDATED_TYPE);
+            .type(UPDATED_TYPE)
+            .keycloakUserId(UPDATED_KEYCLOAK_USER_ID);
         UserExtendDTO userExtendDTO = userExtendMapper.toDto(updatedUserExtend);
 
         restUserExtendMockMvc.perform(put("/api/user-extends")
@@ -256,6 +265,7 @@ public class UserExtendResourceIT {
         assertThat(testUserExtend.getPassword()).isEqualTo(UPDATED_PASSWORD);
         assertThat(testUserExtend.isEnabled()).isEqualTo(UPDATED_ENABLED);
         assertThat(testUserExtend.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testUserExtend.getKeycloakUserId()).isEqualTo(UPDATED_KEYCLOAK_USER_ID);
     }
 
     @Test

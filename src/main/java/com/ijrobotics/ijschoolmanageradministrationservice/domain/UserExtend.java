@@ -41,6 +41,9 @@ public class UserExtend implements Serializable {
     @Column(name = "type")
     private UserType type;
 
+    @Column(name = "keycloak_user_id")
+    private String keycloakUserId;
+
     @OneToOne(mappedBy = "userExtend")
     @JsonIgnore
     private Person person;
@@ -119,6 +122,19 @@ public class UserExtend implements Serializable {
         this.type = type;
     }
 
+    public String getKeycloakUserId() {
+        return keycloakUserId;
+    }
+
+    public UserExtend keycloakUserId(String keycloakUserId) {
+        this.keycloakUserId = keycloakUserId;
+        return this;
+    }
+
+    public void setKeycloakUserId(String keycloakUserId) {
+        this.keycloakUserId = keycloakUserId;
+    }
+
     public Person getPerson() {
         return person;
     }
@@ -158,6 +174,7 @@ public class UserExtend implements Serializable {
             ", password='" + getPassword() + "'" +
             ", enabled='" + isEnabled() + "'" +
             ", type='" + getType() + "'" +
+            ", keycloakUserId='" + getKeycloakUserId() + "'" +
             "}";
     }
 }
