@@ -22,16 +22,19 @@
             <column name="group_code" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="start_hour" type="datetime">
+            <column name="start_hour" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="end_hour" type="datetime">
+            <column name="end_hour" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="class_room" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="size" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="week_days" type="integer">
                 <constraints nullable="true" />
             </column>
             <column name="subject_id" type="bigint">
@@ -43,8 +46,6 @@
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         <dropDefaultValue tableName="class_group" columnName="creation_date" columnDataType="datetime"/>
-        <dropDefaultValue tableName="class_group" columnName="start_hour" columnDataType="datetime"/>
-        <dropDefaultValue tableName="class_group" columnName="end_hour" columnDataType="datetime"/>
     </changeSet>
 
     <changeSet id="20200219162800-1-relations" author="jhipster">
@@ -68,10 +69,11 @@
             <column name="id" type="numeric"/>
             <column name="creation_date" type="datetime"/>
             <column name="group_code" type="string"/>
-            <column name="start_hour" type="datetime"/>
-            <column name="end_hour" type="datetime"/>
+            <column name="start_hour" type="string"/>
+            <column name="end_hour" type="string"/>
             <column name="class_room" type="string"/>
             <column name="size" type="numeric"/>
+            <column name="week_days" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

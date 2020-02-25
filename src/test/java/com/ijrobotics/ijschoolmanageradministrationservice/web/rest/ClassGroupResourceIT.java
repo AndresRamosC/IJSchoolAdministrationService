@@ -48,17 +48,20 @@ public class ClassGroupResourceIT {
     private static final String DEFAULT_GROUP_CODE = "AAAAAAAAAA";
     private static final String UPDATED_GROUP_CODE = "BBBBBBBBBB";
 
-    private static final ZonedDateTime DEFAULT_START_HOUR = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_START_HOUR = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final String DEFAULT_START_HOUR = "AAAAAAAAAA";
+    private static final String UPDATED_START_HOUR = "BBBBBBBBBB";
 
-    private static final ZonedDateTime DEFAULT_END_HOUR = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_END_HOUR = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final String DEFAULT_END_HOUR = "AAAAAAAAAA";
+    private static final String UPDATED_END_HOUR = "BBBBBBBBBB";
 
     private static final String DEFAULT_CLASS_ROOM = "AAAAAAAAAA";
     private static final String UPDATED_CLASS_ROOM = "BBBBBBBBBB";
 
     private static final Integer DEFAULT_SIZE = 1;
     private static final Integer UPDATED_SIZE = 2;
+
+    private static final Integer DEFAULT_WEEK_DAYS = 1;
+    private static final Integer UPDATED_WEEK_DAYS = 2;
 
     @Autowired
     private ClassGroupRepository classGroupRepository;
@@ -113,7 +116,8 @@ public class ClassGroupResourceIT {
             .startHour(DEFAULT_START_HOUR)
             .endHour(DEFAULT_END_HOUR)
             .classRoom(DEFAULT_CLASS_ROOM)
-            .size(DEFAULT_SIZE);
+            .size(DEFAULT_SIZE)
+            .weekDays(DEFAULT_WEEK_DAYS);
         return classGroup;
     }
     /**
@@ -129,7 +133,8 @@ public class ClassGroupResourceIT {
             .startHour(UPDATED_START_HOUR)
             .endHour(UPDATED_END_HOUR)
             .classRoom(UPDATED_CLASS_ROOM)
-            .size(UPDATED_SIZE);
+            .size(UPDATED_SIZE)
+            .weekDays(UPDATED_WEEK_DAYS);
         return classGroup;
     }
 
@@ -160,6 +165,7 @@ public class ClassGroupResourceIT {
         assertThat(testClassGroup.getEndHour()).isEqualTo(DEFAULT_END_HOUR);
         assertThat(testClassGroup.getClassRoom()).isEqualTo(DEFAULT_CLASS_ROOM);
         assertThat(testClassGroup.getSize()).isEqualTo(DEFAULT_SIZE);
+        assertThat(testClassGroup.getWeekDays()).isEqualTo(DEFAULT_WEEK_DAYS);
     }
 
     @Test
@@ -196,10 +202,11 @@ public class ClassGroupResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(classGroup.getId().intValue())))
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(sameInstant(DEFAULT_CREATION_DATE))))
             .andExpect(jsonPath("$.[*].groupCode").value(hasItem(DEFAULT_GROUP_CODE)))
-            .andExpect(jsonPath("$.[*].startHour").value(hasItem(sameInstant(DEFAULT_START_HOUR))))
-            .andExpect(jsonPath("$.[*].endHour").value(hasItem(sameInstant(DEFAULT_END_HOUR))))
+            .andExpect(jsonPath("$.[*].startHour").value(hasItem(DEFAULT_START_HOUR)))
+            .andExpect(jsonPath("$.[*].endHour").value(hasItem(DEFAULT_END_HOUR)))
             .andExpect(jsonPath("$.[*].classRoom").value(hasItem(DEFAULT_CLASS_ROOM)))
-            .andExpect(jsonPath("$.[*].size").value(hasItem(DEFAULT_SIZE)));
+            .andExpect(jsonPath("$.[*].size").value(hasItem(DEFAULT_SIZE)))
+            .andExpect(jsonPath("$.[*].weekDays").value(hasItem(DEFAULT_WEEK_DAYS)));
     }
     
     @Test
@@ -215,10 +222,11 @@ public class ClassGroupResourceIT {
             .andExpect(jsonPath("$.id").value(classGroup.getId().intValue()))
             .andExpect(jsonPath("$.creationDate").value(sameInstant(DEFAULT_CREATION_DATE)))
             .andExpect(jsonPath("$.groupCode").value(DEFAULT_GROUP_CODE))
-            .andExpect(jsonPath("$.startHour").value(sameInstant(DEFAULT_START_HOUR)))
-            .andExpect(jsonPath("$.endHour").value(sameInstant(DEFAULT_END_HOUR)))
+            .andExpect(jsonPath("$.startHour").value(DEFAULT_START_HOUR))
+            .andExpect(jsonPath("$.endHour").value(DEFAULT_END_HOUR))
             .andExpect(jsonPath("$.classRoom").value(DEFAULT_CLASS_ROOM))
-            .andExpect(jsonPath("$.size").value(DEFAULT_SIZE));
+            .andExpect(jsonPath("$.size").value(DEFAULT_SIZE))
+            .andExpect(jsonPath("$.weekDays").value(DEFAULT_WEEK_DAYS));
     }
 
     @Test
@@ -247,7 +255,8 @@ public class ClassGroupResourceIT {
             .startHour(UPDATED_START_HOUR)
             .endHour(UPDATED_END_HOUR)
             .classRoom(UPDATED_CLASS_ROOM)
-            .size(UPDATED_SIZE);
+            .size(UPDATED_SIZE)
+            .weekDays(UPDATED_WEEK_DAYS);
         ClassGroupDTO classGroupDTO = classGroupMapper.toDto(updatedClassGroup);
 
         restClassGroupMockMvc.perform(put("/api/class-groups")
@@ -265,6 +274,7 @@ public class ClassGroupResourceIT {
         assertThat(testClassGroup.getEndHour()).isEqualTo(UPDATED_END_HOUR);
         assertThat(testClassGroup.getClassRoom()).isEqualTo(UPDATED_CLASS_ROOM);
         assertThat(testClassGroup.getSize()).isEqualTo(UPDATED_SIZE);
+        assertThat(testClassGroup.getWeekDays()).isEqualTo(UPDATED_WEEK_DAYS);
     }
 
     @Test

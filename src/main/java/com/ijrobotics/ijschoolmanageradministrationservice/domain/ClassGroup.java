@@ -33,16 +33,19 @@ public class ClassGroup implements Serializable {
     private String groupCode;
 
     @Column(name = "start_hour")
-    private ZonedDateTime startHour;
+    private String startHour;
 
     @Column(name = "end_hour")
-    private ZonedDateTime endHour;
+    private String endHour;
 
     @Column(name = "class_room")
     private String classRoom;
 
     @Column(name = "size")
     private Integer size;
+
+    @Column(name = "week_days")
+    private Integer weekDays;
 
     @OneToMany(mappedBy = "classGroup")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -108,29 +111,29 @@ public class ClassGroup implements Serializable {
         this.groupCode = groupCode;
     }
 
-    public ZonedDateTime getStartHour() {
+    public String getStartHour() {
         return startHour;
     }
 
-    public ClassGroup startHour(ZonedDateTime startHour) {
+    public ClassGroup startHour(String startHour) {
         this.startHour = startHour;
         return this;
     }
 
-    public void setStartHour(ZonedDateTime startHour) {
+    public void setStartHour(String startHour) {
         this.startHour = startHour;
     }
 
-    public ZonedDateTime getEndHour() {
+    public String getEndHour() {
         return endHour;
     }
 
-    public ClassGroup endHour(ZonedDateTime endHour) {
+    public ClassGroup endHour(String endHour) {
         this.endHour = endHour;
         return this;
     }
 
-    public void setEndHour(ZonedDateTime endHour) {
+    public void setEndHour(String endHour) {
         this.endHour = endHour;
     }
 
@@ -158,6 +161,19 @@ public class ClassGroup implements Serializable {
 
     public void setSize(Integer size) {
         this.size = size;
+    }
+
+    public Integer getWeekDays() {
+        return weekDays;
+    }
+
+    public ClassGroup weekDays(Integer weekDays) {
+        this.weekDays = weekDays;
+        return this;
+    }
+
+    public void setWeekDays(Integer weekDays) {
+        this.weekDays = weekDays;
     }
 
     public Set<Attendance> getAttendances() {
@@ -326,6 +342,7 @@ public class ClassGroup implements Serializable {
             ", endHour='" + getEndHour() + "'" +
             ", classRoom='" + getClassRoom() + "'" +
             ", size=" + getSize() +
+            ", weekDays=" + getWeekDays() +
             "}";
     }
 }

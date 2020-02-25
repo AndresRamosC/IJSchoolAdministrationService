@@ -15,13 +15,15 @@ public class ClassGroupDTO implements Serializable {
 
     private String groupCode;
 
-    private ZonedDateTime startHour;
+    private String startHour;
 
-    private ZonedDateTime endHour;
+    private String endHour;
 
     private String classRoom;
 
     private Integer size;
+
+    private Integer weekDays;
 
 
     private Long subjectId;
@@ -52,19 +54,19 @@ public class ClassGroupDTO implements Serializable {
         this.groupCode = groupCode;
     }
 
-    public ZonedDateTime getStartHour() {
+    public String getStartHour() {
         return startHour;
     }
 
-    public void setStartHour(ZonedDateTime startHour) {
+    public void setStartHour(String startHour) {
         this.startHour = startHour;
     }
 
-    public ZonedDateTime getEndHour() {
+    public String getEndHour() {
         return endHour;
     }
 
-    public void setEndHour(ZonedDateTime endHour) {
+    public void setEndHour(String endHour) {
         this.endHour = endHour;
     }
 
@@ -82,6 +84,14 @@ public class ClassGroupDTO implements Serializable {
 
     public void setSize(Integer size) {
         this.size = size;
+    }
+
+    public Integer getWeekDays() {
+        return weekDays;
+    }
+
+    public void setWeekDays(Integer weekDays) {
+        this.weekDays = weekDays;
     }
 
     public Long getSubjectId() {
@@ -131,6 +141,7 @@ public class ClassGroupDTO implements Serializable {
             ", endHour='" + getEndHour() + "'" +
             ", classRoom='" + getClassRoom() + "'" +
             ", size=" + getSize() +
+            ", weekDays=" + getWeekDays() +
             ", subjectId=" + getSubjectId() +
             ", teacherId=" + getTeacherId() +
             "}";
