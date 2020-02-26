@@ -2,7 +2,9 @@ package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.service.ClassGroupService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.StudentService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.TeacherService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.StudentDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.TeacherDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
 
@@ -42,6 +44,9 @@ public class ClassGroupResource {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private TeacherService teacherService;
 
     public ClassGroupResource(ClassGroupService classGroupService) {
         this.classGroupService = classGroupService;
@@ -143,6 +148,40 @@ public class ClassGroupResource {
             }
         });
         return classGroupDTOList;
+    }
+    /**
+     * {@code GET  /class-groups/:TeacherId/:Date} : get the classGroup of a teacher on a day.
+     *
+     * @param teacherId the id of the teacher to retrieve the classes.
+     * @param date the day to get the classes
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the classGroupDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/class-groups/fromTeacher/{teacherId}/{date}")
+    public List<ClassGroupDTO> getClassGroupFromTeacherIdAndDate(@PathVariable Long teacherId,@PathVariable String date) {
+        List<ClassGroupDTO> classGroupDTOList=new ArrayList<>();
+
+        Optional<TeacherDTO> teacherDTO=teacherService.findOne(teacherId);
+        if (teacherDTO.isPresent()){
+            List<ClassGroupDTO> classGroupDTOList1 =  classGroupService.findAllWhereTeacherIdOrderedByStartHour(teacherDTO.get().getId());
+
+            String[] formattedDate=date.split("-");
+            LocalDate localDate=LocalDate.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),Integer.parseInt(formattedDate[2]));
+            //Monday 1, sunday 7
+            int weekDay=localDate.getDayOfWeek().getValue()-1;
+            classGroupDTOList1.forEach(classGroupDTO -> {
+                boolean[] bits = new boolean[7];
+                for (int i = 6; i >= 0; i--) {
+                    bits[i] = (classGroupDTO.getWeekDays() & (1 << i)) != 0;
+                }
+                if (bits[weekDay]){
+                    classGroupDTOList.add(classGroupDTO);
+                }
+            });
+            return classGroupDTOList;
+        }else{
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
+        }
+
     }
 
     /**

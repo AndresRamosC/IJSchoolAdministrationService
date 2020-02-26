@@ -71,6 +71,18 @@ public class TeacherService {
         return teacherRepository.findById(id)
             .map(teacherMapper::toDto);
     }
+    /**
+     * Get one Teacher by Employee id.
+     *
+     * @param id the id of the person.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<TeacherDTO> findOneByEmployeeId(Long id) {
+        log.debug("Request to get Teacher : {}", id);
+        return teacherRepository.findByEmployeeId(id)
+            .map(teacherMapper::toDto);
+    }
 
     /**
      * Delete the teacher by id.

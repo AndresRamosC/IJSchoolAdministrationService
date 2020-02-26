@@ -65,12 +65,34 @@ public class ClassGroupService {
      *  Get all the classGroups where Grade is {@code null}.
      *  @return the list of entities.
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<ClassGroupDTO> findAllWhereGradeIsNull() {
         log.debug("Request to get all classGroups where Grade is null");
         return StreamSupport
             .stream(classGroupRepository.findAll().spliterator(), false)
             .filter(classGroup -> classGroup.getGrade() == null)
+            .map(classGroupMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+    /**
+     *  Get all the classGroups where Teacher ID is {@code null} ordered by subject ID and StarHour.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<ClassGroupDTO> findAllWhereTeacherIdOrderedBySubjectIdAndStartHour(Long id) {
+        log.debug("Request to get all classGroups where Teacher id ");
+        return classGroupRepository.findByTeacherIdOrderBySubjectIdAscStartHourAsc(id).stream()
+            .map(classGroupMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+    /**
+     *  Get all the classGroups where Teacher ID is {@code null} ordered by  StarHour.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<ClassGroupDTO> findAllWhereTeacherIdOrderedByStartHour(Long id) {
+        log.debug("Request to get all classGroups where Teacher id ");
+        return classGroupRepository.findByTeacherIdOrderByStartHourAsc(id).stream()
             .map(classGroupMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }

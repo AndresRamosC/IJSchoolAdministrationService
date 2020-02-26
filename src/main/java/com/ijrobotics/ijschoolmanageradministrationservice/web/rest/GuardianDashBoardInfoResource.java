@@ -33,8 +33,6 @@ public class GuardianDashBoardInfoResource {
     @Autowired
     private GuardianService guardianService;
     @Autowired
-    private ContactService contactService;
-    @Autowired
     private StudentService studentService;
 
     /**
@@ -43,8 +41,8 @@ public class GuardianDashBoardInfoResource {
      * @return the list of entities.
      */
     @GetMapping("/GuardianDashBoard/{userName}")
-    public GuardianDashBoardInfoDto  findInfo(@PathVariable String userName) { //GuardianDashBoardInfoDto findInfo() {
-        log.debug("Request to get all Guardians");
+    public GuardianDashBoardInfoDTO findInfo(@PathVariable String userName) { //GuardianDashBoardInfoDto findInfo() {
+        log.debug("Request to get all Guardian´s info");
 
         Optional<UserExtendDTO> guardianUserExtendDTO= userExtendService.findOneByKeycloakUserName(userName);
         //Get the user extend from the user of keycloak
@@ -62,7 +60,7 @@ public class GuardianDashBoardInfoResource {
                 studentDTOList.forEach(studentDTO -> {
                     studentAndPersonDTOList.add(new StudentAndPersonDto(studentDTO,personService.findOne(studentDTO.getPersonId()).get()));
                 });
-                GuardianDashBoardInfoDto fulldto= new GuardianDashBoardInfoDto(guardianUserExtendDTO.get(),personDTO.get(),guardianDTO.get(),studentAndPersonDTOList);
+                GuardianDashBoardInfoDTO fulldto= new GuardianDashBoardInfoDTO(guardianUserExtendDTO.get(),personDTO.get(),guardianDTO.get(),studentAndPersonDTOList);
                 return fulldto;
             }else {
                 throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
@@ -70,9 +68,6 @@ public class GuardianDashBoardInfoResource {
         }else {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
         }
-
-
-
     }
 }
 

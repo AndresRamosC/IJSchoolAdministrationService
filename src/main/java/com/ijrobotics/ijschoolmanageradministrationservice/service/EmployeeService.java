@@ -65,7 +65,7 @@ public class EmployeeService {
      *  Get all the employees where Teacher is {@code null}.
      *  @return the list of entities.
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<EmployeeDTO> findAllWhereTeacherIsNull() {
         log.debug("Request to get all employees where Teacher is null");
         return StreamSupport
@@ -85,6 +85,18 @@ public class EmployeeService {
     public Optional<EmployeeDTO> findOne(Long id) {
         log.debug("Request to get Employee : {}", id);
         return employeeRepository.findById(id)
+            .map(employeeMapper::toDto);
+    }
+    /**
+     * Get one Employee by Person id.
+     *
+     * @param id the id of the person.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<EmployeeDTO> findOneByPersonId(Long id) {
+        log.debug("Request to get Teacher : {}", id);
+        return employeeRepository.findByPersonId(id)
             .map(employeeMapper::toDto);
     }
 

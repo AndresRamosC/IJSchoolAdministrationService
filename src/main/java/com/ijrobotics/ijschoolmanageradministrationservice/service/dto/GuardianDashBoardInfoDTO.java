@@ -5,13 +5,13 @@ import com.ijrobotics.ijschoolmanageradministrationservice.domain.*;
 import java.io.Serializable;
 import java.util.List;
 
-public class GuardianDashBoardInfoDto implements Serializable {
+public class GuardianDashBoardInfoDTO implements Serializable {
     private UserExtendDTO guardianUserExtend;
     private PersonDTO guardianPerson;
     private GuardianDTO guardianInfo;
     private List<StudentAndPersonDto> studentList;
 
-    public GuardianDashBoardInfoDto(UserExtendDTO guardianUserExtend, PersonDTO guardianPerson, GuardianDTO guardianInfo, List<StudentAndPersonDto> studentList) {
+    public GuardianDashBoardInfoDTO(UserExtendDTO guardianUserExtend, PersonDTO guardianPerson, GuardianDTO guardianInfo, List<StudentAndPersonDto> studentList) {
         this.guardianUserExtend = guardianUserExtend;
         this.guardianPerson = guardianPerson;
         this.guardianInfo = guardianInfo;
