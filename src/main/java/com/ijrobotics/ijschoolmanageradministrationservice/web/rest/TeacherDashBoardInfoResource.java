@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -79,7 +76,7 @@ public class TeacherDashBoardInfoResource {
         }
     }
 
-    public Map<Long,Long> getAmountOfGroups(List<ClassGroupDTO> classGroupDTOList){
+    public List<SubjectAmountDto> getAmountOfGroups(List<ClassGroupDTO> classGroupDTOList){
         Map<Long,Long> amountOfGroups = new HashMap<>();
         classGroupDTOList.forEach(classGroupDTO -> {
             if (!amountOfGroups.containsKey(classGroupDTO.getSubjectId().getId())){
@@ -88,6 +85,10 @@ public class TeacherDashBoardInfoResource {
                 amountOfGroups.put(classGroupDTO.getSubjectId().getId(),amountOfGroups.get(classGroupDTO.getSubjectId().getId())+1);
             }
         });
-        return amountOfGroups;
+        List<SubjectAmountDto> subjectAmountDtoList=new ArrayList<>();
+        amountOfGroups.forEach((key,val) -> {
+            subjectAmountDtoList.add(new SubjectAmountDto(key,val));
+        });
+        return subjectAmountDtoList;
     }
 }
