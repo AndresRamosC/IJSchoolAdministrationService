@@ -1,12 +1,12 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.ClassGroup;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.AttendanceService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.ClassGroupService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.StudentService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.TeacherService;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.StudentDTO;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.TeacherDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.*;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -15,11 +15,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,6 +51,8 @@ public class ClassGroupResource {
 
     @Autowired
     private TeacherService teacherService;
+    @Autowired
+    private AttendanceService attendanceService;
 
     public ClassGroupResource(ClassGroupService classGroupService) {
         this.classGroupService = classGroupService;
@@ -182,6 +188,30 @@ public class ClassGroupResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
         }
 
+    }
+    /**
+     * {@code GET  /class-groups/Students/:ClassGroupID} : get the students of a classgroup.
+     *
+     * @param classGroupID the id of the group to retrieve the students.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the List of Students, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/class-groups/Students/{classGroupID}/{date}")
+    @Transactional
+    public List<StudentsInClassRoomDTO> getStudentsFromClassGroup(@PathVariable Long classGroupID,@PathVariable String date ) {
+        ClassGroup classGroup=classGroupService.findClassToGetStudents(classGroupID).get();
+        List<StudentsInClassRoomDTO> studentsInClassRoomDTOList=new ArrayList<>();
+        String[] formattedDate=date.split("-");
+        ZonedDateTime zonedDateTimeRequest=ZonedDateTime.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),Integer.parseInt(formattedDate[2]),0,0,0,0, ZoneId.systemDefault());
+        ZonedDateTime zonedDateTimeAfter=ZonedDateTime.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),Integer.parseInt(formattedDate[2]),23,59,0,0, ZoneId.systemDefault());
+        classGroup.getStudents().forEach(student -> {
+            Optional<AttendanceDTO> attendanceDTO=attendanceService.findOneByStudentIdAndClassGroupIdOnADate(student.getId(),classGroup.getId(),zonedDateTimeRequest.truncatedTo(ChronoUnit.MINUTES),zonedDateTimeAfter.truncatedTo(ChronoUnit.MINUTES));
+            if (attendanceDTO.isPresent()){
+                studentsInClassRoomDTOList.add(new StudentsInClassRoomDTO(student.getId(),student.getPerson().getLastName()+" "+student.getPerson().getFirstName(),attendanceDTO.get().isOnTime()));
+            }else {
+                studentsInClassRoomDTOList.add(0,new StudentsInClassRoomDTO(student.getId(),student.getPerson().getLastName()+" "+student.getPerson().getFirstName()));
+            }
+        });
+        return studentsInClassRoomDTOList;
     }
 
     /**

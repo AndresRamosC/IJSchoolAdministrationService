@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -69,6 +70,19 @@ public class AttendanceService {
     public Optional<AttendanceDTO> findOne(Long id) {
         log.debug("Request to get Attendance : {}", id);
         return attendanceRepository.findById(id)
+            .map(attendanceMapper::toDto);
+    }
+    /**
+     * Get one attendance by classGroupID and studentID.
+     *
+     * @param classGroupId the id of the classGroup.
+     * @param studentId the id of the student.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<AttendanceDTO> findOneByStudentIdAndClassGroupIdOnADate(Long studentId, Long classGroupId, ZonedDateTime date, ZonedDateTime dateAfter) {
+        log.debug("Request to get Attendance from student: {} and class: {}", studentId,classGroupId);
+        return attendanceRepository.findByStudentIdAndClassGroupIdAndCreationDateBetween(studentId,classGroupId,date,dateAfter)
             .map(attendanceMapper::toDto);
     }
 

@@ -109,6 +109,17 @@ public class ClassGroupService {
         return classGroupRepository.findById(id)
             .map(classGroupMapper::toDto);
     }
+    /**
+     * Get one classGroup by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<ClassGroup> findClassToGetStudents(Long id) {
+        log.debug("Request to get ClassGroup : {}", id);
+        return classGroupRepository.findById(id);
+    }
 
     /**
      * Delete the classGroup by id.

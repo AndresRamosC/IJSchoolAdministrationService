@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +54,7 @@ public class AttendanceResource {
         if (attendanceDTO.getId() != null) {
             throw new BadRequestAlertException("A new attendance cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        attendanceDTO.setCreationDate(ZonedDateTime.now().truncatedTo(ChronoUnit.MINUTES));
         AttendanceDTO result = attendanceService.save(attendanceDTO);
         return ResponseEntity.created(new URI("/api/attendances/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
