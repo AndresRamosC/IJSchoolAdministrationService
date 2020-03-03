@@ -65,7 +65,7 @@
             "otherEntityRelationshipName": "student",
             "relationshipName": "classGroup",
             "otherEntityField": "id",
-            "ownerSide": true
+            "ownerSide": false
         }
     ],
     "changelogDate": "20200219162400",

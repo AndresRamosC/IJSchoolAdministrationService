@@ -1,9 +1,11 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
 
-import com.ijrobotics.ijschoolmanageradministrationservice.domain.ClassGroup;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.*;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.*;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.ClassGroupAndSubjectDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.SubjectAmountDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.TeacherDashBoardInfoDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +40,8 @@ public class TeacherDashBoardInfoResource {
 
     @Autowired
     private ClassGroupService classGroupService;
-
+    @Autowired
+    private SubjectService subjectService;
     /**
      * Get all the information of a Guard Dashboard using the ID of keycloak.
      *
@@ -62,8 +65,11 @@ public class TeacherDashBoardInfoResource {
                 if (employeeDTO.isPresent()){
                     Optional<TeacherDTO> teacherDTO= teacherService.findOneByEmployeeId(employeeDTO.get().getId());
                     List<ClassGroupDTO> classGroupDTOList = classGroupService.findAllWhereTeacherIdOrderedBySubjectIdAndStartHour(teacherDTO.get().getId());
-
-                    TeacherDashBoardInfoDTO fulldto= new TeacherDashBoardInfoDTO(teacherUserExtendDTO.get(),personDTO.get(),employeeDTO.get(),teacherDTO.get(),classGroupDTOList,getAmountOfGroups(classGroupDTOList));
+                    List<ClassGroupAndSubjectDto> classGroupAndSubjectDtoList=new ArrayList<>();
+                    classGroupDTOList.forEach(classGroupDTO -> {
+                        classGroupAndSubjectDtoList.add(new ClassGroupAndSubjectDto(classGroupDTO,subjectService.findOne(classGroupDTO.getSubjectId()).get()));
+                    });
+                    TeacherDashBoardInfoDTO fulldto= new TeacherDashBoardInfoDTO(teacherUserExtendDTO.get(),personDTO.get(),employeeDTO.get(),teacherDTO.get(),classGroupAndSubjectDtoList,getAmountOfGroups(classGroupDTOList));
                     return fulldto;
                 }else {
                     throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
@@ -76,13 +82,13 @@ public class TeacherDashBoardInfoResource {
         }
     }
 
-    public List<SubjectAmountDto> getAmountOfGroups(List<ClassGroupDTO> classGroupDTOList){
+    static List<SubjectAmountDto> getAmountOfGroups(List<ClassGroupDTO> classGroupDTOList){
         Map<Long,Long> amountOfGroups = new HashMap<>();
         classGroupDTOList.forEach(classGroupDTO -> {
-            if (!amountOfGroups.containsKey(classGroupDTO.getSubjectId().getId())){
-                amountOfGroups.put(classGroupDTO.getSubjectId().getId(), 1L);
+            if (!amountOfGroups.containsKey(classGroupDTO.getSubjectId())){
+                amountOfGroups.put(classGroupDTO.getSubjectId(), 1L);
             }else {
-                amountOfGroups.put(classGroupDTO.getSubjectId().getId(),amountOfGroups.get(classGroupDTO.getSubjectId().getId())+1);
+                amountOfGroups.put(classGroupDTO.getSubjectId(),amountOfGroups.get(classGroupDTO.getSubjectId())+1);
             }
         });
         List<SubjectAmountDto> subjectAmountDtoList=new ArrayList<>();

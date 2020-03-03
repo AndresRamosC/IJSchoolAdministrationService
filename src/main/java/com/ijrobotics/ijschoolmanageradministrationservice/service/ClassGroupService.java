@@ -96,6 +96,17 @@ public class ClassGroupService {
             .map(classGroupMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
+    /**
+     *  Get all the classGroups where Student ID appears is {@code null} ordered by StarHour.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<ClassGroupDTO> findAllWhereStudentIdOrderedByStartHour(Long id) {
+        log.debug("Request to get all classGroups where student id ");
+        return classGroupRepository.findByStudentsIdOrderByStartHourAsc(id).stream()
+            .map(classGroupMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
 
     /**
      * Get one classGroup by id.

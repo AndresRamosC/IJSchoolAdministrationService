@@ -27,13 +27,13 @@
                                  referencedTableName="guardian"/>
 
         <addForeignKeyConstraint baseColumnNames="student_id"
-                                 baseTableName="student_class_group"
+                                 baseTableName="class_group_student"
                                  constraintName="fk_student_class_group_student_id"
                                  referencedColumnNames="id"
                                  referencedTableName="student"/>
 
         <addForeignKeyConstraint baseColumnNames="class_group_id"
-                                 baseTableName="student_class_group"
+                                 baseTableName="class_group_student"
                                  constraintName="fk_student_class_group_class_group_id"
                                  referencedColumnNames="id"
                                  referencedTableName="class_group"/>
@@ -45,13 +45,6 @@
             <column name="guardian_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
-        <loadData
-            file="config/liquibase/fake-data/student_class_group.csv"
-            separator=";"
-            tableName="student_class_group">
-            <column name="student_id" type="numeric"/>
-            <column name="class_group_id" type="numeric"/>
-            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
-        </loadData>
+
     </changeSet>
 </databaseChangeLog>

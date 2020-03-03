@@ -49,17 +49,6 @@
 
         <addPrimaryKey columnNames="student_id, guardian_id" tableName="student_guardian"/>
         
-        <createTable tableName="student_class_group">
-            <column name="class_group_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="student_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addPrimaryKey columnNames="student_id, class_group_id" tableName="student_class_group"/>
-        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 

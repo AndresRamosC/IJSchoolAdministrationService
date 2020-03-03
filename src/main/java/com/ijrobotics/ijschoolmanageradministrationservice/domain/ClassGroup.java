@@ -59,6 +59,13 @@ public class ClassGroup implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<GroupNotices> groupNotices = new HashSet<>();
 
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "class_group_student",
+               joinColumns = @JoinColumn(name = "class_group_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
+    private Set<Student> students = new HashSet<>();
+
     @OneToOne(mappedBy = "classGroup")
     @JsonIgnore
     private Grade grade;
@@ -70,11 +77,6 @@ public class ClassGroup implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("classGroups")
     private Teacher teacher;
-
-    @ManyToMany(mappedBy = "classGroups")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JsonIgnore
-    private Set<Student> students = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -251,6 +253,31 @@ public class ClassGroup implements Serializable {
         this.groupNotices = groupNotices;
     }
 
+    public Set<Student> getStudents() {
+        return students;
+    }
+
+    public ClassGroup students(Set<Student> students) {
+        this.students = students;
+        return this;
+    }
+
+    public ClassGroup addStudent(Student student) {
+        this.students.add(student);
+        student.getClassGroups().add(this);
+        return this;
+    }
+
+    public ClassGroup removeStudent(Student student) {
+        this.students.remove(student);
+        student.getClassGroups().remove(this);
+        return this;
+    }
+
+    public void setStudents(Set<Student> students) {
+        this.students = students;
+    }
+
     public Grade getGrade() {
         return grade;
     }
@@ -288,31 +315,6 @@ public class ClassGroup implements Serializable {
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
-    }
-
-    public Set<Student> getStudents() {
-        return students;
-    }
-
-    public ClassGroup students(Set<Student> students) {
-        this.students = students;
-        return this;
-    }
-
-    public ClassGroup addStudent(Student student) {
-        this.students.add(student);
-        student.getClassGroups().add(this);
-        return this;
-    }
-
-    public ClassGroup removeStudent(Student student) {
-        this.students.remove(student);
-        student.getClassGroups().remove(this);
-        return this;
-    }
-
-    public void setStudents(Set<Student> students) {
-        this.students = students;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

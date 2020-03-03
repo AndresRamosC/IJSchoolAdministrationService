@@ -3,6 +3,9 @@ package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.service.*;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.*;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.ClassGroupAndSubjectDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.GuardianDashBoardInfoDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.StudentAndPersonDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +37,10 @@ public class GuardianDashBoardInfoResource {
     private GuardianService guardianService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private ClassGroupService classGroupService;
+    @Autowired
+    private SubjectService subjectService;
 
     /**
      * Get all the information of a Guard Dashboard using the ID of keycloak.
@@ -58,7 +65,13 @@ public class GuardianDashBoardInfoResource {
                 List<StudentDTO> studentDTOList=studentService.findStudentsWithGuardian(guardianDTO.get().getId());
                 List<StudentAndPersonDto> studentAndPersonDTOList = new ArrayList<>();
                 studentDTOList.forEach(studentDTO -> {
-                    studentAndPersonDTOList.add(new StudentAndPersonDto(studentDTO,personService.findOne(studentDTO.getPersonId()).get()));
+                   List<ClassGroupDTO>  classGroupDTOList=classGroupService.findAllWhereStudentIdOrderedByStartHour(studentDTO.getId());
+
+                   List<ClassGroupAndSubjectDto> classGroupAndSubjectDtoList=new ArrayList<>();
+                   classGroupDTOList.forEach(classGroupDTO -> {
+                       classGroupAndSubjectDtoList.add(new ClassGroupAndSubjectDto(classGroupDTO,subjectService.findOne(classGroupDTO.getSubjectId()).get()));
+                   });
+                    studentAndPersonDTOList.add(new StudentAndPersonDto(studentDTO,personService.findOne(studentDTO.getPersonId()).get(),classGroupAndSubjectDtoList));
                 });
                 GuardianDashBoardInfoDTO fulldto= new GuardianDashBoardInfoDTO(guardianUserExtendDTO.get(),personDTO.get(),guardianDTO.get(),studentAndPersonDTOList);
                 return fulldto;

@@ -50,6 +50,17 @@
 
     <changeSet id="20200219162800-1-relations" author="jhipster">
 
+        <createTable tableName="class_group_student">
+            <column name="student_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="class_group_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="class_group_id, student_id" tableName="class_group_student"/>
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 

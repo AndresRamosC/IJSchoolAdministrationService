@@ -2,6 +2,8 @@ package com.ijrobotics.ijschoolmanageradministrationservice.service.dto;
 
 import java.time.ZonedDateTime;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -25,7 +27,17 @@ public class ClassGroupDTO implements Serializable {
 
     private Integer weekDays;
 
-    private SubjectDTO subjectId;
+    private Long subjectId;
+
+    private Set<StudentDTO> students;
+
+    public Set<StudentDTO> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<StudentDTO> students) {
+        this.students = students;
+    }
 
     private Long teacherId;
 
@@ -93,11 +105,11 @@ public class ClassGroupDTO implements Serializable {
         this.weekDays = weekDays;
     }
 
-    public SubjectDTO getSubjectId() {
+    public Long getSubjectId() {
         return subjectId;
     }
 
-    public void setSubjectId(SubjectDTO subjectId) {
+    public void setSubjectId(Long subjectId) {
         this.subjectId = subjectId;
     }
 

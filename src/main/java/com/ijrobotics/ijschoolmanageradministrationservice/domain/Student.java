@@ -1,5 +1,6 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -64,11 +65,9 @@ public class Student implements Serializable {
                inverseJoinColumns = @JoinColumn(name = "guardian_id", referencedColumnName = "id"))
     private Set<Guardian> guardians = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "students")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "student_class_group",
-               joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "class_group_id", referencedColumnName = "id"))
+    @JsonIgnore
     private Set<ClassGroup> classGroups = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

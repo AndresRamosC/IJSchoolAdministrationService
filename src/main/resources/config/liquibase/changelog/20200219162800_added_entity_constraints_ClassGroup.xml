@@ -7,7 +7,19 @@
         Added the constraints for entity ClassGroup.
     -->
     <changeSet id="20200219162800-2" author="jhipster">
-        
+
+        <addForeignKeyConstraint baseColumnNames="class_group_id"
+                                 baseTableName="class_group_student"
+                                 constraintName="fk_class_group_student_class_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="class_group"/>
+
+        <addForeignKeyConstraint baseColumnNames="student_id"
+                                 baseTableName="class_group_student"
+                                 constraintName="fk_class_group_student_student_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="student"/>
+
         <addForeignKeyConstraint baseColumnNames="subject_id"
                                  baseTableName="class_group"
                                  constraintName="fk_class_group_subject_id"
@@ -19,6 +31,12 @@
                                  constraintName="fk_class_group_teacher_id"
                                  referencedColumnNames="id"
                                  referencedTableName="teacher"/>
-
+        <loadData
+            file="config/liquibase/fake-data/student_class_group.csv"
+            separator=";"
+            tableName="class_group_student">
+            <column name="student_id" type="numeric"/>
+            <column name="class_group_id" type="numeric"/>
+        </loadData>
     </changeSet>
 </databaseChangeLog>

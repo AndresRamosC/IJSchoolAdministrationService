@@ -1,5 +1,7 @@
-package com.ijrobotics.ijschoolmanageradministrationservice.service.dto;
+package com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS;
 
+
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,10 +11,10 @@ public class TeacherDashBoardInfoDTO implements Serializable {
     private PersonDTO teacherPerson;
     private TeacherDTO teacherInfo;
     private EmployeeDTO employeeDTO;
-    private List<ClassGroupDTO> classGroupDTOList;
+    private List<ClassGroupAndSubjectDto> classGroupDTOList;
     private List<SubjectAmountDto> amountOfGroups;
 
-    public TeacherDashBoardInfoDTO(UserExtendDTO teacherUserExtend, PersonDTO teacherPerson, EmployeeDTO employeeDTO, TeacherDTO teacherInfo, List<ClassGroupDTO> classGroupDTOList,List<SubjectAmountDto>  amountOfGroups) {
+    public TeacherDashBoardInfoDTO(UserExtendDTO teacherUserExtend, PersonDTO teacherPerson, EmployeeDTO employeeDTO, TeacherDTO teacherInfo, List<ClassGroupAndSubjectDto> classGroupDTOList,List<SubjectAmountDto>  amountOfGroups) {
         this.teacherUserExtend = teacherUserExtend;
         this.teacherPerson = teacherPerson;
         this.teacherInfo = teacherInfo;
@@ -53,11 +55,11 @@ public class TeacherDashBoardInfoDTO implements Serializable {
         this.teacherInfo = teacherInfo;
     }
 
-    public List<ClassGroupDTO> getClassGroupDTOList() {
+    public List<ClassGroupAndSubjectDto> getClassGroupDTOList() {
         return classGroupDTOList;
     }
 
-    public void setClassGroupDTOList(List<ClassGroupDTO> classGroupDTOList) {
+    public void setClassGroupDTOList(List<ClassGroupAndSubjectDto> classGroupDTOList) {
         this.classGroupDTOList = classGroupDTOList;
     }
 

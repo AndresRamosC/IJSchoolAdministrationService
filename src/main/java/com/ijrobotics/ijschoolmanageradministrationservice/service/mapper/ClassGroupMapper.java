@@ -9,10 +9,10 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ClassGroup} and its DTO {@link ClassGroupDTO}.
  */
-@Mapper(componentModel = "spring", uses = {SubjectMapper.class, TeacherMapper.class})
+@Mapper(componentModel = "spring", uses = {StudentMapper.class, SubjectMapper.class, TeacherMapper.class})
 public interface ClassGroupMapper extends EntityMapper<ClassGroupDTO, ClassGroup> {
 
-    @Mapping(source = "subject", target = "subjectId")
+    @Mapping(source = "subject.id", target = "subjectId")
     @Mapping(source = "teacher.id", target = "teacherId")
     ClassGroupDTO toDto(ClassGroup classGroup);
 
@@ -22,11 +22,10 @@ public interface ClassGroupMapper extends EntityMapper<ClassGroupDTO, ClassGroup
     @Mapping(target = "removeAssignment", ignore = true)
     @Mapping(target = "groupNotices", ignore = true)
     @Mapping(target = "removeGroupNotices", ignore = true)
+    @Mapping(target = "removeStudent", ignore = true)
     @Mapping(target = "grade", ignore = true)
     @Mapping(source = "subjectId", target = "subject")
     @Mapping(source = "teacherId", target = "teacher")
-    @Mapping(target = "students", ignore = true)
-    @Mapping(target = "removeStudent", ignore = true)
     ClassGroup toEntity(ClassGroupDTO classGroupDTO);
 
     default ClassGroup fromId(Long id) {

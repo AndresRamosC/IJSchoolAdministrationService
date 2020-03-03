@@ -1,12 +1,12 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.ClassGroup;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.AttendanceService;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.ClassGroupService;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.StudentService;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.TeacherService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.*;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.*;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.ClassGroupAndSubjectDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.StudentsInClassRoomDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -25,10 +25,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
 
 /**
  * REST controller for managing {@link com.ijrobotics.ijschoolmanageradministrationservice.domain.ClassGroup}.
@@ -53,6 +51,8 @@ public class ClassGroupResource {
     private TeacherService teacherService;
     @Autowired
     private AttendanceService attendanceService;
+    @Autowired
+    private SubjectService subjectService;
 
     public ClassGroupResource(ClassGroupService classGroupService) {
         this.classGroupService = classGroupService;
@@ -101,11 +101,12 @@ public class ClassGroupResource {
     /**
      * {@code GET  /class-groups} : get all the classGroups.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @param filter the filter of the request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of classGroups in body.
      */
     @GetMapping("/class-groups")
-    public List<ClassGroupDTO> getAllClassGroups(@RequestParam(required = false) String filter) {
+    public List<ClassGroupDTO> getAllClassGroups(@RequestParam(required = false) String filter,@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         if ("grade-is-null".equals(filter)) {
             log.debug("REST request to get all ClassGroups where grade is null");
             return classGroupService.findAllWhereGradeIsNull();
@@ -135,25 +136,25 @@ public class ClassGroupResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the classGroupDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/class-groups/{studentId}/{date}")
-    public List<ClassGroupDTO> getClassGroupFromStudentIdAndDate(@PathVariable Long studentId,@PathVariable String date) {
-        List<ClassGroupDTO> classGroupDTOList=new ArrayList<>();
+    public List<ClassGroupAndSubjectDto> getClassGroupFromStudentIdAndDate(@PathVariable Long studentId,@PathVariable String date) {
+        List<ClassGroupAndSubjectDto> classGroupAndSubjectDtoList=new ArrayList<>();
 
-        Optional<StudentDTO> studentDTO=studentService.findOne(studentId);
 
         String[] formattedDate=date.split("-");
         LocalDate localDate=LocalDate.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),Integer.parseInt(formattedDate[2]));
         //Monday 1, sunday 7
         int weekDay=localDate.getDayOfWeek().getValue()-1;
-        studentDTO.get().getClassGroups().forEach(classGroupDTO -> {
+
+        classGroupService.findAllWhereStudentIdOrderedByStartHour(studentId).forEach(classGroupDTO -> {
             boolean[] bits = new boolean[7];
             for (int i = 6; i >= 0; i--) {
                 bits[i] = (classGroupDTO.getWeekDays() & (1 << i)) != 0;
             }
             if (bits[weekDay]){
-                classGroupDTOList.add(classGroupDTO);
+                classGroupAndSubjectDtoList.add(new ClassGroupAndSubjectDto(classGroupDTO,subjectService.findOne(classGroupDTO.getSubjectId()).get()));
             }
         });
-        return classGroupDTOList;
+        return classGroupAndSubjectDtoList;
     }
     /**
      * {@code GET  /class-groups/:TeacherId/:Date} : get the classGroup of a teacher on a day.
@@ -163,7 +164,7 @@ public class ClassGroupResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the classGroupDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/class-groups/fromTeacher/{teacherId}/{date}")
-    public List<ClassGroupDTO> getClassGroupFromTeacherIdAndDate(@PathVariable Long teacherId,@PathVariable String date) {
+    public List<ClassGroupAndSubjectDto> getClassGroupFromTeacherIdAndDate(@PathVariable Long teacherId,@PathVariable String date) {
         List<ClassGroupDTO> classGroupDTOList=new ArrayList<>();
 
         Optional<TeacherDTO> teacherDTO=teacherService.findOne(teacherId);
@@ -183,7 +184,11 @@ public class ClassGroupResource {
                     classGroupDTOList.add(classGroupDTO);
                 }
             });
-            return classGroupDTOList;
+            List<ClassGroupAndSubjectDto> classGroupAndSubjectDtoList=new ArrayList<>();
+            classGroupDTOList.forEach(classGroupDTO -> {
+                classGroupAndSubjectDtoList.add(new ClassGroupAndSubjectDto(classGroupDTO,subjectService.findOne(classGroupDTO.getSubjectId()).get()));
+            });
+            return classGroupAndSubjectDtoList;
         }else{
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
         }
@@ -197,7 +202,7 @@ public class ClassGroupResource {
      */
     @GetMapping("/class-groups/Students/{classGroupID}/{date}")
     @Transactional
-    public List<StudentsInClassRoomDTO> getStudentsFromClassGroup(@PathVariable Long classGroupID,@PathVariable String date ) {
+    public List<StudentsInClassRoomDTO> getStudentsFromClassGroup(@PathVariable Long classGroupID, @PathVariable String date ) {
         ClassGroup classGroup=classGroupService.findClassToGetStudents(classGroupID).get();
         List<StudentsInClassRoomDTO> studentsInClassRoomDTOList=new ArrayList<>();
         String[] formattedDate=date.split("-");
@@ -226,4 +231,5 @@ public class ClassGroupResource {
         classGroupService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
 }

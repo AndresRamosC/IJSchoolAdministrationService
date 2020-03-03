@@ -3,9 +3,7 @@ package com.ijrobotics.ijschoolmanageradministrationservice.service.dto;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A DTO for the {@link com.ijrobotics.ijschoolmanageradministrationservice.domain.Student} entity.
@@ -83,14 +81,6 @@ public class StudentDTO implements Serializable {
 
     public void setGuardians(Set<GuardianDTO> guardians) {
         this.guardians = guardians;
-    }
-
-    public Set<ClassGroupDTO> getClassGroups() {
-        return classGroups;
-    }
-
-    public void setClassGroups(Set<ClassGroupDTO> classGroups) {
-        this.classGroups = classGroups;
     }
 
     @Override
