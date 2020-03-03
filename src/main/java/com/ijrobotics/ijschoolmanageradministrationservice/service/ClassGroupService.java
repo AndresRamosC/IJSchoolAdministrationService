@@ -127,9 +127,9 @@ public class ClassGroupService {
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<ClassGroup> findClassToGetStudents(Long id) {
+    public Optional<ClassGroupDTO> findClassToGetStudents(Long id) {
         log.debug("Request to get ClassGroup : {}", id);
-        return classGroupRepository.findById(id);
+        return classGroupRepository.findById(id).map(classGroupMapper::toDto);
     }
 
     /**

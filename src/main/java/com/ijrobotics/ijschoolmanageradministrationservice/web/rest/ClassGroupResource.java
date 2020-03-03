@@ -4,6 +4,7 @@ import com.ijrobotics.ijschoolmanageradministrationservice.domain.ClassGroup;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.*;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.*;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.ClassGroupAndSubjectDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.StudentAndPersonDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.StudentsInClassRoomDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
@@ -53,6 +54,8 @@ public class ClassGroupResource {
     private AttendanceService attendanceService;
     @Autowired
     private SubjectService subjectService;
+    @Autowired
+    private PersonService personService;
 
     public ClassGroupResource(ClassGroupService classGroupService) {
         this.classGroupService = classGroupService;
@@ -195,25 +198,48 @@ public class ClassGroupResource {
 
     }
     /**
-     * {@code GET  /class-groups/Students/:ClassGroupID} : get the students of a classgroup.
+     * {@code GET  /class-groups/Students/Attendance/:ClassGroupID} : get the students of a classgroup and the attendance.
      *
      * @param classGroupID the id of the group to retrieve the students.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the List of Students, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/class-groups/Students/{classGroupID}/{date}")
+    @GetMapping("/class-groups/Students/Attendance/{classGroupID}/{date}")
     @Transactional
-    public List<StudentsInClassRoomDTO> getStudentsFromClassGroup(@PathVariable Long classGroupID, @PathVariable String date ) {
-        ClassGroup classGroup=classGroupService.findClassToGetStudents(classGroupID).get();
+    public List<StudentsInClassRoomDTO> getStudentsAttendanceFromClassGroup(@PathVariable Long classGroupID, @PathVariable String date ) {
+        ClassGroupDTO classGroup=classGroupService.findClassToGetStudents(classGroupID).get();
         List<StudentsInClassRoomDTO> studentsInClassRoomDTOList=new ArrayList<>();
         String[] formattedDate=date.split("-");
         ZonedDateTime zonedDateTimeRequest=ZonedDateTime.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),Integer.parseInt(formattedDate[2]),0,0,0,0, ZoneId.systemDefault());
         ZonedDateTime zonedDateTimeAfter=ZonedDateTime.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),Integer.parseInt(formattedDate[2]),23,59,0,0, ZoneId.systemDefault());
         classGroup.getStudents().forEach(student -> {
             Optional<AttendanceDTO> attendanceDTO=attendanceService.findOneByStudentIdAndClassGroupIdOnADate(student.getId(),classGroup.getId(),zonedDateTimeRequest.truncatedTo(ChronoUnit.MINUTES),zonedDateTimeAfter.truncatedTo(ChronoUnit.MINUTES));
-            if (attendanceDTO.isPresent()){
-                studentsInClassRoomDTOList.add(new StudentsInClassRoomDTO(student.getId(),student.getPerson().getLastName()+" "+student.getPerson().getFirstName(),attendanceDTO.get().isOnTime()));
-            }else {
-                studentsInClassRoomDTOList.add(0,new StudentsInClassRoomDTO(student.getId(),student.getPerson().getLastName()+" "+student.getPerson().getFirstName()));
+            Optional<PersonDTO> personDTO =personService.findOne(student.getPersonId());
+            if (personDTO.isPresent()){
+                if (attendanceDTO.isPresent()){
+
+                    studentsInClassRoomDTOList.add(new StudentsInClassRoomDTO(student.getId(),personDTO.get().getLastName()+" "+personDTO.get().getFirstName(),attendanceDTO.get().isOnTime()));
+                }else {
+                    studentsInClassRoomDTOList.add(0,new StudentsInClassRoomDTO(student.getId(),personDTO.get().getLastName()+" "+personDTO.get().getFirstName()));
+                }
+            }
+        });
+        return studentsInClassRoomDTOList;
+    }
+    /**
+     * {@code GET  /class-groups/Students/:ClassGroupID} : get the students of a classgroup.
+     *
+     * @param classGroupID the id of the group to retrieve the students.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the List of Students, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/class-groups/Students/{classGroupID}")
+    @Transactional
+    public List<StudentAndPersonDto> getStudentsFromClassGroup(@PathVariable Long classGroupID) {
+        ClassGroupDTO classGroup=classGroupService.findClassToGetStudents(classGroupID).get();
+        List<StudentAndPersonDto> studentsInClassRoomDTOList=new ArrayList<>();
+        classGroup.getStudents().forEach(student -> {
+            Optional<PersonDTO> personDTO =personService.findOne(student.getPersonId());
+            if (personDTO.isPresent()){
+                studentsInClassRoomDTOList.add(new StudentAndPersonDto(student,personDTO.get(),new ArrayList<>()));
             }
         });
         return studentsInClassRoomDTOList;
