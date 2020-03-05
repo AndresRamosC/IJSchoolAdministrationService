@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -95,4 +96,41 @@ public class AttendanceService {
         log.debug("Request to delete Attendance : {}", id);
         attendanceRepository.deleteById(id);
     }
+
+    /**
+     * Get all the attendances of a given Day.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<AttendanceDTO> findAllAttendanceFromStudentByDay( long studentId, String day) {
+        log.debug("Request to get all Attendances");
+        String[] formattedDate=day.split("-");
+        ZonedDateTime zonedDateTimeRequest=ZonedDateTime.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),Integer.parseInt(formattedDate[2]),0,0,0,0, ZoneId.systemDefault());
+        ZonedDateTime zonedDateTimeAfter=zonedDateTimeRequest.plusHours(23).plusMinutes(59);
+        System.out.println("zonedDateTimeRequest = " + zonedDateTimeRequest.toString());
+        System.out.println("zonedDateTimeAfter.toString() = " + zonedDateTimeAfter.toString());
+        return attendanceRepository.findByStudentIdAndCreationDateBetween(studentId,zonedDateTimeRequest,zonedDateTimeAfter).stream()
+            .map(attendanceMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+    /**
+     * Get all the attendances of a given month.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<AttendanceDTO> findAllAttendanceFromStudentInClassByMonth( long studentId, long classGroupId,String month) {
+        log.debug("Request to get all Attendances");
+        String[] formattedDate=month.split("-");
+
+        ZonedDateTime zonedDateTimeRequest=ZonedDateTime.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),1,0,0,0,0, ZoneId.systemDefault());
+        ZonedDateTime zonedDateTimeAfter=zonedDateTimeRequest.plusMonths(1);
+        System.out.println("zonedDateTimeRequest = " + zonedDateTimeRequest.toString());
+        System.out.println("zonedDateTimeAfter.toString() = " + zonedDateTimeAfter.toString());
+        return attendanceRepository.findByStudentIdAndClassGroupIdAndCreationDateBetweenOrderByCreationDate(studentId,classGroupId,zonedDateTimeRequest,zonedDateTimeAfter).stream()
+            .map(attendanceMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
 }

@@ -127,4 +127,25 @@ public class AttendanceResource {
         attendanceService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * {@code GET  /attendances/student/byDay/} : get all the attendances of a given day.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of attendances in body.
+     */
+    @GetMapping("/attendances/student/classGroup/byDay/{studentId}/{day}")
+    public List<AttendanceDTO> getAllAttendancesOfStudentByDay(@PathVariable long studentId,@PathVariable String day) {
+        log.debug("REST request to get all Attendances of a given day");
+        return attendanceService.findAllAttendanceFromStudentByDay(studentId,day);
+    }
+    /**
+     * {@code GET  /attendances/byMonth} : get all the attendances of a given month.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of attendances in body.
+     */
+    @GetMapping("/attendances/student/classGroup/byMonth/{studentId}/{classGroupId}/{month}")
+    public List<AttendanceDTO> getAllAttendancesOfStudentInClassByMonth(@PathVariable long studentId,@PathVariable long classGroupId,@PathVariable String month) {
+        log.debug("REST request to get all Attendances of a given month ordered by day");
+        return attendanceService.findAllAttendanceFromStudentInClassByMonth(studentId,classGroupId,month);
+    }
 }

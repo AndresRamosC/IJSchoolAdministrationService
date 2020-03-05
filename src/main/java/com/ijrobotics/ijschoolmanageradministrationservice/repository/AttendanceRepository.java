@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,4 +17,6 @@ import java.util.Optional;
 @Repository
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     Optional<Attendance> findByStudentIdAndClassGroupIdAndCreationDateBetween(@Param("studentId") Long studentId,@Param("classGroupId") Long classGroupId, ZonedDateTime CreationDate, ZonedDateTime endCreationDate);
+    List<Attendance> findByStudentIdAndCreationDateBetween(@Param("studentId") Long studentId, ZonedDateTime CreationDate, ZonedDateTime endCreationDate);
+    List<Attendance> findByStudentIdAndClassGroupIdAndCreationDateBetweenOrderByCreationDate(@Param("studentId") Long studentId,@Param("classGroupId") Long classGroupId, ZonedDateTime CreationDate, ZonedDateTime endCreationDate);
 }

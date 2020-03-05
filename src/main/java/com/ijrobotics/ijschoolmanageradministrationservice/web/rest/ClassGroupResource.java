@@ -210,7 +210,7 @@ public class ClassGroupResource {
         List<StudentsInClassRoomDTO> studentsInClassRoomDTOList=new ArrayList<>();
         String[] formattedDate=date.split("-");
         ZonedDateTime zonedDateTimeRequest=ZonedDateTime.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),Integer.parseInt(formattedDate[2]),0,0,0,0, ZoneId.systemDefault());
-        ZonedDateTime zonedDateTimeAfter=ZonedDateTime.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),Integer.parseInt(formattedDate[2]),23,59,0,0, ZoneId.systemDefault());
+        ZonedDateTime zonedDateTimeAfter=zonedDateTimeRequest.plusHours(23).plusMinutes(59);
         classGroup.getStudents().forEach(student -> {
             Optional<AttendanceDTO> attendanceDTO=attendanceService.findOneByStudentIdAndClassGroupIdOnADate(student.getId(),classGroup.getId(),zonedDateTimeRequest.truncatedTo(ChronoUnit.MINUTES),zonedDateTimeAfter.truncatedTo(ChronoUnit.MINUTES));
             Optional<PersonDTO> personDTO =personService.findOne(student.getPersonId());
