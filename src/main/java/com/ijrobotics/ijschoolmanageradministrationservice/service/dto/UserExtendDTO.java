@@ -25,10 +25,6 @@ public class UserExtendDTO implements Serializable {
     private String keycloakUserId;
 
 
-    private String userId;
-
-    private String userLogin;
-
     public Long getId() {
         return id;
     }
@@ -85,22 +81,6 @@ public class UserExtendDTO implements Serializable {
         this.keycloakUserId = keycloakUserId;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getUserLogin() {
-        return userLogin;
-    }
-
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -132,8 +112,6 @@ public class UserExtendDTO implements Serializable {
             ", enabled='" + isEnabled() + "'" +
             ", type='" + getType() + "'" +
             ", keycloakUserId='" + getKeycloakUserId() + "'" +
-            ", userId='" + getUserId() + "'" +
-            ", userLogin='" + getUserLogin() + "'" +
             "}";
     }
 }

@@ -9,14 +9,10 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link UserExtend} and its DTO {@link UserExtendDTO}.
  */
-@Mapper(componentModel = "spring", uses = {UserMapper.class})
+@Mapper(componentModel = "spring", uses = {})
 public interface UserExtendMapper extends EntityMapper<UserExtendDTO, UserExtend> {
 
-    @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "user.login", target = "userLogin")
-    UserExtendDTO toDto(UserExtend userExtend);
 
-    @Mapping(source = "userId", target = "user")
     @Mapping(target = "person", ignore = true)
     UserExtend toEntity(UserExtendDTO userExtendDTO);
 

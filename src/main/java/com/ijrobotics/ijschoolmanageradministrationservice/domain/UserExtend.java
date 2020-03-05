@@ -44,10 +44,6 @@ public class UserExtend implements Serializable {
     @Column(name = "keycloak_user_id")
     private String keycloakUserId;
 
-    @OneToOne
-    @JoinColumn(unique = true)
-    private User user;
-
     @OneToOne(mappedBy = "userExtend")
     @JsonIgnore
     private Person person;
@@ -137,19 +133,6 @@ public class UserExtend implements Serializable {
 
     public void setKeycloakUserId(String keycloakUserId) {
         this.keycloakUserId = keycloakUserId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public UserExtend user(User user) {
-        this.user = user;
-        return this;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Person getPerson() {

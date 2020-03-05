@@ -30,14 +30,6 @@
     "relationships": [
         {
             "relationshipType": "one-to-one",
-            "otherEntityName": "user",
-            "otherEntityRelationshipName": "userExtend",
-            "relationshipName": "user",
-            "otherEntityField": "login",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-one",
             "otherEntityName": "person",
             "otherEntityRelationshipName": "userExtend",
             "relationshipName": "person",
