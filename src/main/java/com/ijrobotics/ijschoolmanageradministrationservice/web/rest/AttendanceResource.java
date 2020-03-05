@@ -133,7 +133,7 @@ public class AttendanceResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of attendances in body.
      */
-    @GetMapping("/attendances/student/classGroup/byDay/{studentId}/{day}")
+    @GetMapping("/attendances/student/byDay/{studentId}/{day}")
     public List<AttendanceDTO> getAllAttendancesOfStudentByDay(@PathVariable long studentId,@PathVariable String day) {
         log.debug("REST request to get all Attendances of a given day");
         return attendanceService.findAllAttendanceFromStudentByDay(studentId,day);
