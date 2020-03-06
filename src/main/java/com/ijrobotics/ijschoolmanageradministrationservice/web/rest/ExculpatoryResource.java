@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,7 @@ public class ExculpatoryResource {
         if (exculpatoryDTO.getId() != null) {
             throw new BadRequestAlertException("A new exculpatory cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        exculpatoryDTO.setCreationDate(ZonedDateTime.now());
         ExculpatoryDTO result = exculpatoryService.save(exculpatoryDTO);
         return ResponseEntity.created(new URI("/api/exculpatories/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,7 @@ public class TeacherResource {
         if (teacherDTO.getId() != null) {
             throw new BadRequestAlertException("A new teacher cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        teacherDTO.setCreationDate(ZonedDateTime.now());
         TeacherDTO result = teacherService.save(teacherDTO);
         return ResponseEntity.created(new URI("/api/teachers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

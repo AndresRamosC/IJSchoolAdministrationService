@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,6 +51,7 @@ public class GradeResource {
         if (gradeDTO.getId() != null) {
             throw new BadRequestAlertException("A new grade cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        gradeDTO.setCreationDate(ZonedDateTime.now());
         GradeDTO result = gradeService.save(gradeDTO);
         return ResponseEntity.created(new URI("/api/grades/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

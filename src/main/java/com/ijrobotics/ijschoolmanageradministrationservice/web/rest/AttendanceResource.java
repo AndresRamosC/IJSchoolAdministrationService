@@ -54,11 +54,17 @@ public class AttendanceResource {
         if (attendanceDTO.getId() != null) {
             throw new BadRequestAlertException("A new attendance cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        attendanceDTO.setCreationDate(ZonedDateTime.now().truncatedTo(ChronoUnit.MINUTES));
-        AttendanceDTO result = attendanceService.save(attendanceDTO);
-        return ResponseEntity.created(new URI("/api/attendances/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        attendanceDTO.setCreationDate(ZonedDateTime.now());
+        ZonedDateTime time=ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+        Optional<AttendanceDTO> attendanceDTOOptional = attendanceService.findOneByStudentIdAndClassGroupIdOnADate(attendanceDTO.getStudentId(),attendanceDTO.getClassGroupId(),time,time.plusHours(23));
+        if (!attendanceDTOOptional.isPresent()){
+            AttendanceDTO result = attendanceService.save(attendanceDTO);
+            return ResponseEntity.created(new URI("/api/attendances/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        }else{
+            throw new BadRequestAlertException("A new attendance cannot be created", ENTITY_NAME, "attendance for that class already exist");
+        }
     }
 
     /**

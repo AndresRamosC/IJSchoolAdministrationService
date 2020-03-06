@@ -7,12 +7,7 @@
         Added the constraints for entity UserExtend.
     -->
     <changeSet id="20200219161900-2" author="jhipster">
-        
-        <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="user_extend"
-                                 constraintName="fk_user_extend_user_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/>
+
 
     </changeSet>
 </databaseChangeLog>

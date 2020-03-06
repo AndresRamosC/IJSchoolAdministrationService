@@ -74,6 +74,7 @@ public class ClassGroupResource {
         if (classGroupDTO.getId() != null) {
             throw new BadRequestAlertException("A new classGroup cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        classGroupDTO.setCreationDate(ZonedDateTime.now());
         ClassGroupDTO result = classGroupService.save(classGroupDTO);
         return ResponseEntity.created(new URI("/api/class-groups/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,7 @@ public class AssignmentResource {
         if (assignmentDTO.getId() != null) {
             throw new BadRequestAlertException("A new assignment cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        assignmentDTO.setCreationDate(ZonedDateTime.now());
         AssignmentDTO result = assignmentService.save(assignmentDTO);
         return ResponseEntity.created(new URI("/api/assignments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
