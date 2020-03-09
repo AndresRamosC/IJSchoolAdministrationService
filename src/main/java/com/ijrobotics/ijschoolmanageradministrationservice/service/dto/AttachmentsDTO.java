@@ -3,7 +3,6 @@ package com.ijrobotics.ijschoolmanageradministrationservice.service.dto;
 import java.time.ZonedDateTime;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Lob;
 
 /**
  * A DTO for the {@link com.ijrobotics.ijschoolmanageradministrationservice.domain.Attachments} entity.
@@ -14,10 +13,14 @@ public class AttachmentsDTO implements Serializable {
 
     private ZonedDateTime creationDate;
 
-    @Lob
-    private byte[] attachment;
+    private String title;
 
-    private String attachmentContentType;
+    private Long size;
+
+    private String mimeType;
+
+
+    private Long attachmentsContentId;
 
     private Long assignmentId;
 
@@ -37,20 +40,36 @@ public class AttachmentsDTO implements Serializable {
         this.creationDate = creationDate;
     }
 
-    public byte[] getAttachment() {
-        return attachment;
+    public String getTitle() {
+        return title;
     }
 
-    public void setAttachment(byte[] attachment) {
-        this.attachment = attachment;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getAttachmentContentType() {
-        return attachmentContentType;
+    public Long getSize() {
+        return size;
     }
 
-    public void setAttachmentContentType(String attachmentContentType) {
-        this.attachmentContentType = attachmentContentType;
+    public void setSize(Long size) {
+        this.size = size;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
+    public Long getAttachmentsContentId() {
+        return attachmentsContentId;
+    }
+
+    public void setAttachmentsContentId(Long attachmentsContentId) {
+        this.attachmentsContentId = attachmentsContentId;
     }
 
     public Long getAssignmentId() {
@@ -87,7 +106,10 @@ public class AttachmentsDTO implements Serializable {
         return "AttachmentsDTO{" +
             "id=" + getId() +
             ", creationDate='" + getCreationDate() + "'" +
-            ", attachment='" + getAttachment() + "'" +
+            ", title='" + getTitle() + "'" +
+            ", size=" + getSize() +
+            ", mimeType='" + getMimeType() + "'" +
+            ", attachmentsContentId=" + getAttachmentsContentId() +
             ", assignmentId=" + getAssignmentId() +
             "}";
     }

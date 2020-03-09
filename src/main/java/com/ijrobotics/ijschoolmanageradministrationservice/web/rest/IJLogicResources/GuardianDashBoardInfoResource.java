@@ -1,4 +1,4 @@
-package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
+package com.ijrobotics.ijschoolmanageradministrationservice.web.rest.IJLogicResources;
 
 
 import com.ijrobotics.ijschoolmanageradministrationservice.service.*;
@@ -23,7 +23,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api")
 public class GuardianDashBoardInfoResource {
-    private final Logger log = LoggerFactory.getLogger(GuardianService.class);
+    private final Logger log = LoggerFactory.getLogger(GuardianDashBoardInfoResource.class);
     private static final String ENTITY_NAME = "ijSchoolManagerAdministrationServiceGuardianDashBoard";
 
     @Value("${jhipster.clientApp.name}")

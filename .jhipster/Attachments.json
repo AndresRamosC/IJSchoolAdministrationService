@@ -6,12 +6,27 @@
             "fieldType": "ZonedDateTime"
         },
         {
-            "fieldName": "attachment",
-            "fieldType": "byte[]",
-            "fieldTypeBlobContent": "any"
+            "fieldName": "title",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "size",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "mimeType",
+            "fieldType": "String"
         }
     ],
     "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "attachmentsContent",
+            "otherEntityRelationshipName": "attachments",
+            "relationshipName": "attachmentsContent",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "assignment",

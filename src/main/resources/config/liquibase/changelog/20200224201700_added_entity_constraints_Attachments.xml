@@ -8,6 +8,12 @@
     -->
     <changeSet id="20200224201700-2" author="jhipster">
         
+        <addForeignKeyConstraint baseColumnNames="attachments_content_id"
+                                 baseTableName="attachments"
+                                 constraintName="fk_attachments_attachments_content_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="attachments_content"/>
+
         <addForeignKeyConstraint baseColumnNames="assignment_id"
                                  baseTableName="attachments"
                                  constraintName="fk_attachments_assignment_id"

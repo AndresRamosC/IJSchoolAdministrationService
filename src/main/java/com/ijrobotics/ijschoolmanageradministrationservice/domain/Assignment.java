@@ -43,7 +43,7 @@ public class Assignment implements Serializable {
     @Column(name = "grade")
     private Float grade;
 
-    @OneToMany(mappedBy = "assignment")
+    @OneToMany(mappedBy = "assignment",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Attachments> attachments = new HashSet<>();
 

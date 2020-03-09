@@ -1,23 +1,32 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.Assignment;
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.Attachments;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.AssignmentService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AssignmentMapper;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentFileMapper;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentsMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AssignmentDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing {@link com.ijrobotics.ijschoolmanageradministrationservice.domain.Assignment}.
@@ -34,9 +43,13 @@ public class AssignmentResource {
     private String applicationName;
 
     private final AssignmentService assignmentService;
+    private final AttachmentFileMapper attachmentFileMapper;
+    private final AssignmentMapper assignmentMapper;
 
-    public AssignmentResource(AssignmentService assignmentService) {
+    public AssignmentResource(AssignmentService assignmentService,AttachmentFileMapper attachmentFileMapper,AssignmentMapper assignmentMapper) {
         this.assignmentService = assignmentService;
+        this.attachmentFileMapper= attachmentFileMapper;
+        this.assignmentMapper=assignmentMapper;
     }
 
     /**
@@ -56,6 +69,23 @@ public class AssignmentResource {
         AssignmentDTO result = assignmentService.save(assignmentDTO);
         return ResponseEntity.created(new URI("/api/assignments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+    @PostMapping("/v2/assignments")
+    @Timed
+    public ResponseEntity<AssignmentDTO> createAssignment2(@Valid @RequestPart AssignmentDTO assignmentDTO, @RequestPart List<MultipartFile> files) throws URISyntaxException, IOException {
+        log.debug("REST request to save Assignment : {}", assignmentDTO);
+        if (assignmentDTO.getId() != null) {
+            throw new BadRequestAlertException("A new Assignment cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+
+        Assignment assignment=assignmentMapper.toEntity(assignmentDTO);
+        Set<Attachments> documents = attachmentFileMapper.multiPartFilesToDocuments(files);
+        documents.forEach(assignment::addAttachments);
+
+        AssignmentDTO result = assignmentService.save(assignmentDTO);
+        return ResponseEntity.created(new URI("/api/cars/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName,false,ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 

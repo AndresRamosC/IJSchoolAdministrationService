@@ -1,0 +1,34 @@
+{
+    "name": "AttachmentsContent",
+    "fields": [
+        {
+            "fieldName": "creationDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "data",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "attachments",
+            "otherEntityRelationshipName": "attachmentsContent",
+            "relationshipName": "attachments",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20200309183100",
+    "entityTableName": "attachments_content",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "IJSchoolManagerAdministrationService",
+    "applications": "*",
+    "microserviceName": "IJSchoolManagerAdministrationService"
+}

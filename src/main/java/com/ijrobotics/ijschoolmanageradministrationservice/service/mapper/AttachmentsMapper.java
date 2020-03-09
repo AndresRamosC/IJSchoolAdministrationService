@@ -9,12 +9,14 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Attachments} and its DTO {@link AttachmentsDTO}.
  */
-@Mapper(componentModel = "spring", uses = {AssignmentMapper.class})
+@Mapper(componentModel = "spring", uses = {AttachmentsContentMapper.class, AssignmentMapper.class})
 public interface AttachmentsMapper extends EntityMapper<AttachmentsDTO, Attachments> {
 
+    @Mapping(source = "attachmentsContent.id", target = "attachmentsContentId")
     @Mapping(source = "assignment.id", target = "assignmentId")
     AttachmentsDTO toDto(Attachments attachments);
 
+    @Mapping(source = "attachmentsContentId", target = "attachmentsContent")
     @Mapping(source = "assignmentId", target = "assignment")
     Attachments toEntity(AttachmentsDTO attachmentsDTO);
 

@@ -1,20 +1,25 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.Attachments;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.AttachmentsService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentsMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AttachmentsDTO;
 
+import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.DocumentNotFoundException;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,9 +38,11 @@ public class AttachmentsResource {
     private String applicationName;
 
     private final AttachmentsService attachmentsService;
+    private final AttachmentsMapper attachmentsMapper;
 
-    public AttachmentsResource(AttachmentsService attachmentsService) {
+    public AttachmentsResource(AttachmentsService attachmentsService,AttachmentsMapper attachmentsMapper) {
         this.attachmentsService = attachmentsService;
+        this.attachmentsMapper=attachmentsMapper;
     }
 
     /**
@@ -51,7 +58,6 @@ public class AttachmentsResource {
         if (attachmentsDTO.getId() != null) {
             throw new BadRequestAlertException("A new attachments cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        attachmentsDTO.setCreationDate(ZonedDateTime.now());
         AttachmentsDTO result = attachmentsService.save(attachmentsDTO);
         return ResponseEntity.created(new URI("/api/attachments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -77,11 +83,14 @@ public class AttachmentsResource {
         if (attachmentsDTO.getAssignmentId()!=null){
             attachmentsDTOUpdate.get().setAssignmentId(attachmentsDTO.getAssignmentId());
         }
-        if (attachmentsDTO.getAttachment()!=null){
-            attachmentsDTOUpdate.get().setAttachment(attachmentsDTO.getAttachment());
+        if (attachmentsDTO.getSize()!=null){
+            attachmentsDTOUpdate.get().setSize(attachmentsDTO.getSize());
         }
-        if (attachmentsDTO.getAttachmentContentType()!=null){
-            attachmentsDTOUpdate.get().setAttachmentContentType(attachmentsDTO.getAttachmentContentType());
+        if (attachmentsDTO.getTitle()!=null){
+            attachmentsDTOUpdate.get().setTitle(attachmentsDTO.getTitle());
+        }
+        if (attachmentsDTO.getMimeType()!=null){
+            attachmentsDTOUpdate.get().setMimeType(attachmentsDTO.getMimeType());
         }
         AttachmentsDTO result = attachmentsService.save(attachmentsDTOUpdate.get());
         return ResponseEntity.ok()
@@ -124,5 +133,17 @@ public class AttachmentsResource {
         log.debug("REST request to delete Attachments : {}", id);
         attachmentsService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @GetMapping("/documents/{id}/$content")
+    @Timed
+    public ResponseEntity<byte[]> getDocumentContent(@PathVariable Long id) {
+        Attachments attachment = attachmentsMapper.toEntity(attachmentsService.findOne(id)
+            .orElseThrow(DocumentNotFoundException::new));
+
+        return ResponseEntity.ok()
+            .contentType(MediaType.parseMediaType(attachment.getMimeType()))
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + attachment.getTitle() + "\"")
+            .body(attachment.retrieveContent());
     }
 }

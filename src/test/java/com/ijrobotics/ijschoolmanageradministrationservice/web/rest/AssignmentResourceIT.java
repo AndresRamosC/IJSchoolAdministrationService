@@ -7,6 +7,7 @@ import com.ijrobotics.ijschoolmanageradministrationservice.repository.Assignment
 import com.ijrobotics.ijschoolmanageradministrationservice.service.AssignmentService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AssignmentDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AssignmentMapper;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentFileMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -84,6 +85,9 @@ public class AssignmentResourceIT {
     @Autowired
     private Validator validator;
 
+    @Autowired
+    private AttachmentFileMapper attachmentFileMapper;
+
     private MockMvc restAssignmentMockMvc;
 
     private Assignment assignment;
@@ -91,7 +95,7 @@ public class AssignmentResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AssignmentResource assignmentResource = new AssignmentResource(assignmentService);
+        final AssignmentResource assignmentResource = new AssignmentResource(assignmentService,attachmentFileMapper,assignmentMapper);
         this.restAssignmentMockMvc = MockMvcBuilders.standaloneSetup(assignmentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -201,7 +205,7 @@ public class AssignmentResourceIT {
             .andExpect(jsonPath("$.[*].done").value(hasItem(DEFAULT_DONE.booleanValue())))
             .andExpect(jsonPath("$.[*].grade").value(hasItem(DEFAULT_GRADE.doubleValue())));
     }
-    
+
     @Test
     @Transactional
     public void getAssignment() throws Exception {

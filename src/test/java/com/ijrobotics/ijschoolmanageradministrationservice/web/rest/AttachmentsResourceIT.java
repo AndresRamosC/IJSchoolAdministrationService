@@ -20,7 +20,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Base64Utils;
 import org.springframework.validation.Validator;
 
 import javax.persistence.EntityManager;
@@ -46,10 +45,14 @@ public class AttachmentsResourceIT {
     private static final ZonedDateTime DEFAULT_CREATION_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_CREATION_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
-    private static final byte[] DEFAULT_ATTACHMENT = TestUtil.createByteArray(1, "0");
-    private static final byte[] UPDATED_ATTACHMENT = TestUtil.createByteArray(1, "1");
-    private static final String DEFAULT_ATTACHMENT_CONTENT_TYPE = "image/jpg";
-    private static final String UPDATED_ATTACHMENT_CONTENT_TYPE = "image/png";
+    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
+    private static final String UPDATED_TITLE = "BBBBBBBBBB";
+
+    private static final Long DEFAULT_SIZE = 1L;
+    private static final Long UPDATED_SIZE = 2L;
+
+    private static final String DEFAULT_MIME_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_MIME_TYPE = "BBBBBBBBBB";
 
     @Autowired
     private AttachmentsRepository attachmentsRepository;
@@ -82,7 +85,7 @@ public class AttachmentsResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AttachmentsResource attachmentsResource = new AttachmentsResource(attachmentsService);
+        final AttachmentsResource attachmentsResource = new AttachmentsResource(attachmentsService,attachmentsMapper);
         this.restAttachmentsMockMvc = MockMvcBuilders.standaloneSetup(attachmentsResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -100,8 +103,9 @@ public class AttachmentsResourceIT {
     public static Attachments createEntity(EntityManager em) {
         Attachments attachments = new Attachments()
             .creationDate(DEFAULT_CREATION_DATE)
-            .attachment(DEFAULT_ATTACHMENT)
-            .attachmentContentType(DEFAULT_ATTACHMENT_CONTENT_TYPE);
+            .title(DEFAULT_TITLE)
+            .size(DEFAULT_SIZE)
+            .mimeType(DEFAULT_MIME_TYPE);
         return attachments;
     }
     /**
@@ -113,8 +117,9 @@ public class AttachmentsResourceIT {
     public static Attachments createUpdatedEntity(EntityManager em) {
         Attachments attachments = new Attachments()
             .creationDate(UPDATED_CREATION_DATE)
-            .attachment(UPDATED_ATTACHMENT)
-            .attachmentContentType(UPDATED_ATTACHMENT_CONTENT_TYPE);
+            .title(UPDATED_TITLE)
+            .size(UPDATED_SIZE)
+            .mimeType(UPDATED_MIME_TYPE);
         return attachments;
     }
 
@@ -140,8 +145,9 @@ public class AttachmentsResourceIT {
         assertThat(attachmentsList).hasSize(databaseSizeBeforeCreate + 1);
         Attachments testAttachments = attachmentsList.get(attachmentsList.size() - 1);
         assertThat(testAttachments.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
-        assertThat(testAttachments.getAttachment()).isEqualTo(DEFAULT_ATTACHMENT);
-        assertThat(testAttachments.getAttachmentContentType()).isEqualTo(DEFAULT_ATTACHMENT_CONTENT_TYPE);
+        assertThat(testAttachments.getTitle()).isEqualTo(DEFAULT_TITLE);
+        assertThat(testAttachments.getSize()).isEqualTo(DEFAULT_SIZE);
+        assertThat(testAttachments.getMimeType()).isEqualTo(DEFAULT_MIME_TYPE);
     }
 
     @Test
@@ -177,10 +183,11 @@ public class AttachmentsResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(attachments.getId().intValue())))
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(sameInstant(DEFAULT_CREATION_DATE))))
-            .andExpect(jsonPath("$.[*].attachmentContentType").value(hasItem(DEFAULT_ATTACHMENT_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].attachment").value(hasItem(Base64Utils.encodeToString(DEFAULT_ATTACHMENT))));
+            .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
+            .andExpect(jsonPath("$.[*].size").value(hasItem(DEFAULT_SIZE.intValue())))
+            .andExpect(jsonPath("$.[*].mimeType").value(hasItem(DEFAULT_MIME_TYPE)));
     }
-    
+
     @Test
     @Transactional
     public void getAttachments() throws Exception {
@@ -193,8 +200,9 @@ public class AttachmentsResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(attachments.getId().intValue()))
             .andExpect(jsonPath("$.creationDate").value(sameInstant(DEFAULT_CREATION_DATE)))
-            .andExpect(jsonPath("$.attachmentContentType").value(DEFAULT_ATTACHMENT_CONTENT_TYPE))
-            .andExpect(jsonPath("$.attachment").value(Base64Utils.encodeToString(DEFAULT_ATTACHMENT)));
+            .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
+            .andExpect(jsonPath("$.size").value(DEFAULT_SIZE.intValue()))
+            .andExpect(jsonPath("$.mimeType").value(DEFAULT_MIME_TYPE));
     }
 
     @Test
@@ -219,8 +227,9 @@ public class AttachmentsResourceIT {
         em.detach(updatedAttachments);
         updatedAttachments
             .creationDate(UPDATED_CREATION_DATE)
-            .attachment(UPDATED_ATTACHMENT)
-            .attachmentContentType(UPDATED_ATTACHMENT_CONTENT_TYPE);
+            .title(UPDATED_TITLE)
+            .size(UPDATED_SIZE)
+            .mimeType(UPDATED_MIME_TYPE);
         AttachmentsDTO attachmentsDTO = attachmentsMapper.toDto(updatedAttachments);
 
         restAttachmentsMockMvc.perform(put("/api/attachments")
@@ -233,8 +242,9 @@ public class AttachmentsResourceIT {
         assertThat(attachmentsList).hasSize(databaseSizeBeforeUpdate);
         Attachments testAttachments = attachmentsList.get(attachmentsList.size() - 1);
         assertThat(testAttachments.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);
-        assertThat(testAttachments.getAttachment()).isEqualTo(UPDATED_ATTACHMENT);
-        assertThat(testAttachments.getAttachmentContentType()).isEqualTo(UPDATED_ATTACHMENT_CONTENT_TYPE);
+        assertThat(testAttachments.getTitle()).isEqualTo(UPDATED_TITLE);
+        assertThat(testAttachments.getSize()).isEqualTo(UPDATED_SIZE);
+        assertThat(testAttachments.getMimeType()).isEqualTo(UPDATED_MIME_TYPE);
     }
 
     @Test

@@ -94,6 +94,18 @@ public class StudentService {
         return studentRepository.findByGuardiansId(id).stream()
             .map(studentMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
+    /**
+     * Get one guardian by person id.
+     *
+     * @param id the id of the person.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<StudentDTO> findOneByPersonId(Long id) {
+        log.debug("Request to get Guardian : {}", id);
+        return studentRepository.findByPersonId(id)
+            .map(studentMapper::toDto);
+    }
 
     /**
      * Delete the student by id.
