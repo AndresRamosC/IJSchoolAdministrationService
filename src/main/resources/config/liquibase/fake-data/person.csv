@@ -1,7 +1,7 @@
-id;creation_date;first_name;last_name;gender;blood_group;date_of_birth;photograph;photograph_content_type;assigned;user_extend_id
-1;2020-02-19T13:58:53;Adam;Balistreri;MALE;APLUS;2020-02-19;../fake-data/blob/guardian.jpg;image/jpg;true;1
-2;2020-02-19T06:41:31;Maximillian;Grant;MALE;BMINUS;2020-02-18;../fake-data/blob/teacher.jpg;image/jpg;true;2
-3;2020-02-18T21:54:01;Angelica;Runte;FEMALE;ABPLUS;2020-02-18;../fake-data/blob/s1.jpg;image/jpg;true;3
+id;creation_date;first_name;last_name;gender;blood_group;date_of_birth;photograph;photograph_content_type;enabled;keycloak_user_id
+1;2020-02-19T13:58:53;Adam;Balistreri;MALE;APLUS;2020-02-19;../fake-data/blob/guardian.jpg;image/jpg;true;b5780cc7-8f57-48a5-9b71-61b6ba4c5703
+2;2020-02-19T06:41:31;Maximillian;Grant;MALE;BMINUS;2020-02-18;../fake-data/blob/teacher.jpg;image/jpg;true;4172ff78-720a-489e-b847-bea3a5d815ce
+3;2020-02-18T21:54:01;Angelica;Runte;FEMALE;ABPLUS;2020-02-18;../fake-data/blob/s1.jpg;image/jpg;true;c518712b-ce00-45c5-b121-42b7a2678daf
 4;2020-02-18T21:52:25;Jacky;O'Conner;FEMALE;OMINUS;2020-02-18;../fake-data/blob/s2.jpg;image/jpg;true;4
 5;2020-02-19T04:51:43;Carey;Marks;FEMALE;BMINUS;2020-02-18;../fake-data/blob/s3.jpg;image/jpg;true;5
 6;2020-02-19T01:46:52;Daisy;Torp;MALE;ABPLUS;2020-02-19;../fake-data/blob/s4.jpg;image/jpg;true;6

@@ -74,8 +74,11 @@ public class PersonResourceIT {
     private static final String DEFAULT_PHOTOGRAPH_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_PHOTOGRAPH_CONTENT_TYPE = "image/png";
 
-    private static final Boolean DEFAULT_ASSIGNED = false;
-    private static final Boolean UPDATED_ASSIGNED = true;
+    private static final Boolean DEFAULT_ENABLED = false;
+    private static final Boolean UPDATED_ENABLED = true;
+
+    private static final String DEFAULT_KEYCLOAK_USER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_KEYCLOAK_USER_ID = "BBBBBBBBBB";
 
     @Autowired
     private PersonRepository personRepository;
@@ -139,7 +142,8 @@ public class PersonResourceIT {
             .dateOfBirth(DEFAULT_DATE_OF_BIRTH)
             .photograph(DEFAULT_PHOTOGRAPH)
             .photographContentType(DEFAULT_PHOTOGRAPH_CONTENT_TYPE)
-            .assigned(DEFAULT_ASSIGNED);
+            .enabled(DEFAULT_ENABLED)
+            .keycloakUserId(DEFAULT_KEYCLOAK_USER_ID);
         return person;
     }
     /**
@@ -158,7 +162,8 @@ public class PersonResourceIT {
             .dateOfBirth(UPDATED_DATE_OF_BIRTH)
             .photograph(UPDATED_PHOTOGRAPH)
             .photographContentType(UPDATED_PHOTOGRAPH_CONTENT_TYPE)
-            .assigned(UPDATED_ASSIGNED);
+            .enabled(UPDATED_ENABLED)
+            .keycloakUserId(UPDATED_KEYCLOAK_USER_ID);
         return person;
     }
 
@@ -191,7 +196,8 @@ public class PersonResourceIT {
         assertThat(testPerson.getDateOfBirth()).isEqualTo(DEFAULT_DATE_OF_BIRTH);
         assertThat(testPerson.getPhotograph()).isEqualTo(DEFAULT_PHOTOGRAPH);
         assertThat(testPerson.getPhotographContentType()).isEqualTo(DEFAULT_PHOTOGRAPH_CONTENT_TYPE);
-        assertThat(testPerson.isAssigned()).isEqualTo(DEFAULT_ASSIGNED);
+        assertThat(testPerson.isEnabled()).isEqualTo(DEFAULT_ENABLED);
+        assertThat(testPerson.getKeycloakUserId()).isEqualTo(DEFAULT_KEYCLOAK_USER_ID);
     }
 
     @Test
@@ -234,7 +240,8 @@ public class PersonResourceIT {
             .andExpect(jsonPath("$.[*].dateOfBirth").value(hasItem(DEFAULT_DATE_OF_BIRTH.toString())))
             .andExpect(jsonPath("$.[*].photographContentType").value(hasItem(DEFAULT_PHOTOGRAPH_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].photograph").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTOGRAPH))))
-            .andExpect(jsonPath("$.[*].assigned").value(hasItem(DEFAULT_ASSIGNED.booleanValue())));
+            .andExpect(jsonPath("$.[*].enabled").value(hasItem(DEFAULT_ENABLED.booleanValue())))
+            .andExpect(jsonPath("$.[*].keycloakUserId").value(hasItem(DEFAULT_KEYCLOAK_USER_ID)));
     }
     
     @SuppressWarnings({"unchecked"})
@@ -289,7 +296,8 @@ public class PersonResourceIT {
             .andExpect(jsonPath("$.dateOfBirth").value(DEFAULT_DATE_OF_BIRTH.toString()))
             .andExpect(jsonPath("$.photographContentType").value(DEFAULT_PHOTOGRAPH_CONTENT_TYPE))
             .andExpect(jsonPath("$.photograph").value(Base64Utils.encodeToString(DEFAULT_PHOTOGRAPH)))
-            .andExpect(jsonPath("$.assigned").value(DEFAULT_ASSIGNED.booleanValue()));
+            .andExpect(jsonPath("$.enabled").value(DEFAULT_ENABLED.booleanValue()))
+            .andExpect(jsonPath("$.keycloakUserId").value(DEFAULT_KEYCLOAK_USER_ID));
     }
 
     @Test
@@ -321,7 +329,8 @@ public class PersonResourceIT {
             .dateOfBirth(UPDATED_DATE_OF_BIRTH)
             .photograph(UPDATED_PHOTOGRAPH)
             .photographContentType(UPDATED_PHOTOGRAPH_CONTENT_TYPE)
-            .assigned(UPDATED_ASSIGNED);
+            .enabled(UPDATED_ENABLED)
+            .keycloakUserId(UPDATED_KEYCLOAK_USER_ID);
         PersonDTO personDTO = personMapper.toDto(updatedPerson);
 
         restPersonMockMvc.perform(put("/api/people")
@@ -341,7 +350,8 @@ public class PersonResourceIT {
         assertThat(testPerson.getDateOfBirth()).isEqualTo(UPDATED_DATE_OF_BIRTH);
         assertThat(testPerson.getPhotograph()).isEqualTo(UPDATED_PHOTOGRAPH);
         assertThat(testPerson.getPhotographContentType()).isEqualTo(UPDATED_PHOTOGRAPH_CONTENT_TYPE);
-        assertThat(testPerson.isAssigned()).isEqualTo(UPDATED_ASSIGNED);
+        assertThat(testPerson.isEnabled()).isEqualTo(UPDATED_ENABLED);
+        assertThat(testPerson.getKeycloakUserId()).isEqualTo(UPDATED_KEYCLOAK_USER_ID);
     }
 
     @Test

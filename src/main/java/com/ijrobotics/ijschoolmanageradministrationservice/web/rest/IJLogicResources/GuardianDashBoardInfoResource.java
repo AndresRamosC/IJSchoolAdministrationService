@@ -28,9 +28,6 @@ public class GuardianDashBoardInfoResource {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
-
-    @Autowired
-    private  UserExtendService userExtendService;
     @Autowired
     private PersonService personService;
     @Autowired
@@ -49,15 +46,7 @@ public class GuardianDashBoardInfoResource {
      */
     @GetMapping("/GuardianDashBoard/{userName}")
     public GuardianDashBoardInfoDTO findInfo(@PathVariable String userName) { //GuardianDashBoardInfoDto findInfo() {
-        log.debug("Request to get all Guardian´s info");
-
-        Optional<UserExtendDTO> guardianUserExtendDTO= userExtendService.findOneByKeycloakUserName(userName);
-        //Get the user extend from the user of keycloak
-
-        if (guardianUserExtendDTO.isPresent()){
-            log.info("GuardianUserExtend*************"+guardianUserExtendDTO.toString());
-            //get the person from the user extend id (the person has the contacts)
-            Optional<PersonDTO> personDTO=personService.findOneWithUserId(guardianUserExtendDTO.get().getId());
+            Optional<PersonDTO> personDTO=personService.findOneWithUserId(userName);
             if (personDTO.isPresent()){
                 //Get the Guardian
                 Optional<GuardianDTO> guardianDTO= guardianService.findOneByPersonId(personDTO.get().getId());
@@ -73,14 +62,12 @@ public class GuardianDashBoardInfoResource {
                    });
                     studentAndPersonDTOList.add(new StudentAndPersonDto(studentDTO,personService.findOne(studentDTO.getPersonId()).get(),classGroupAndSubjectDtoList));
                 });
-                GuardianDashBoardInfoDTO fulldto= new GuardianDashBoardInfoDTO(guardianUserExtendDTO.get(),personDTO.get(),guardianDTO.get(),studentAndPersonDTOList);
+                GuardianDashBoardInfoDTO fulldto= new GuardianDashBoardInfoDTO(personDTO.get(),guardianDTO.get(),studentAndPersonDTOList);
                 return fulldto;
             }else {
                 throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
             }
-        }else {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
-        }
+
     }
 }
 

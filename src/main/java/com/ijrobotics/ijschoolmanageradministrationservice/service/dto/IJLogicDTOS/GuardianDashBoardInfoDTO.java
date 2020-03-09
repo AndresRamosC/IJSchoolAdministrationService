@@ -2,30 +2,20 @@ package com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicD
 
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.GuardianDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.PersonDTO;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.UserExtendDTO;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class GuardianDashBoardInfoDTO implements Serializable {
-    private UserExtendDTO guardianUserExtend;
     private PersonDTO guardianPerson;
     private GuardianDTO guardianInfo;
     private List<StudentAndPersonDto> studentList;
 
-    public GuardianDashBoardInfoDTO(UserExtendDTO guardianUserExtend, PersonDTO guardianPerson, GuardianDTO guardianInfo, List<StudentAndPersonDto> studentList) {
-        this.guardianUserExtend = guardianUserExtend;
+    public GuardianDashBoardInfoDTO(PersonDTO guardianPerson, GuardianDTO guardianInfo, List<StudentAndPersonDto> studentList) {
+
         this.guardianPerson = guardianPerson;
         this.guardianInfo = guardianInfo;
         this.studentList = studentList;
-    }
-
-    public UserExtendDTO getGuardianUserExtend() {
-        return guardianUserExtend;
-    }
-
-    public void setGuardianUserExtend(UserExtendDTO guardianUserExtend) {
-        this.guardianUserExtend = guardianUserExtend;
     }
 
     public PersonDTO getGuardianPerson() {
@@ -55,7 +45,6 @@ public class GuardianDashBoardInfoDTO implements Serializable {
     @Override
     public String toString() {
         return "GuardianDashBoardInfoDto{" +
-            "guardianUserExtend=" + guardianUserExtend +
             ", guardianPerson=" + guardianPerson +
             ", guardianInfo=" + guardianInfo +
             ", studentList=" + studentList +

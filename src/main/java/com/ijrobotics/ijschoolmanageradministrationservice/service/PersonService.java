@@ -132,13 +132,13 @@ public class PersonService {
     /**
      * Get one person by user Extended id.
      *
-     * @param id the id of the userExtended.
+     * @param id the id of the keycloakUserId.
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public Optional<PersonDTO> findOneWithUserId(Long id) {
+    public Optional<PersonDTO> findOneWithUserId(String id) {
         log.debug("Request to get Person : {}", id);
-        return personRepository.findByUserExtendId(id)
+        return personRepository.findByKeycloakUserId(id)
             .map(personMapper::toDto);
     }
 

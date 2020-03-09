@@ -6,13 +6,7 @@
     <!--
         Added the constraints for entity Person.
     -->
-    <changeSet id="20200219162000-2" author="jhipster" context="faker">
-
-        <addForeignKeyConstraint baseColumnNames="user_extend_id"
-                                 baseTableName="person"
-                                 constraintName="fk_person_user_extend_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="user_extend"/>
+    <changeSet id="20200219162000-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="person_id"
                                  baseTableName="person_contact"

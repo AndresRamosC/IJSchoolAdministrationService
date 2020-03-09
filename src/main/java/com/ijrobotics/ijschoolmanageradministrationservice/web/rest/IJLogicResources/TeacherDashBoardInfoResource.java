@@ -28,9 +28,6 @@ public class TeacherDashBoardInfoResource {
     private String applicationName;
 
     @Autowired
-    private UserExtendService userExtendService;
-
-    @Autowired
     private PersonService personService;
     @Autowired
     private EmployeeService employeeService;
@@ -50,14 +47,7 @@ public class TeacherDashBoardInfoResource {
     @GetMapping("/TeacherDashBoard/{userName}")
     public TeacherDashBoardInfoDTO findInfo(@PathVariable String userName) {
         log.debug("Request to get all Teacher´s info");
-
-        Optional<UserExtendDTO> teacherUserExtendDTO= userExtendService.findOneByKeycloakUserName(userName);
-        //Get the user extend from the user of keycloak
-
-        if (teacherUserExtendDTO.isPresent()){
-            log.info("TeacherUserExtend*************"+teacherUserExtendDTO.toString());
-            //get the person from the user extend id (the person has the contacts)
-            Optional<PersonDTO> personDTO=personService.findOneWithUserId(teacherUserExtendDTO.get().getId());
+            Optional<PersonDTO> personDTO=personService.findOneWithUserId(userName);
             if (personDTO.isPresent()){
                 //Get the Employee
                 Optional<EmployeeDTO> employeeDTO = employeeService.findOneByPersonId(personDTO.get().getId());
@@ -69,7 +59,7 @@ public class TeacherDashBoardInfoResource {
                     classGroupDTOList.forEach(classGroupDTO -> {
                         classGroupAndSubjectDtoList.add(new ClassGroupAndSubjectDto(classGroupDTO,subjectService.findOne(classGroupDTO.getSubjectId()).get()));
                     });
-                    TeacherDashBoardInfoDTO fulldto= new TeacherDashBoardInfoDTO(teacherUserExtendDTO.get(),personDTO.get(),employeeDTO.get(),teacherDTO.get(),classGroupAndSubjectDtoList,getAmountOfGroups(classGroupDTOList));
+                    TeacherDashBoardInfoDTO fulldto= new TeacherDashBoardInfoDTO(personDTO.get(),employeeDTO.get(),teacherDTO.get(),classGroupAndSubjectDtoList,getAmountOfGroups(classGroupDTOList));
                     return fulldto;
                 }else {
                     throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
@@ -77,9 +67,7 @@ public class TeacherDashBoardInfoResource {
             }else {
                 throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
             }
-        }else {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
-        }
+
     }
 
     static List<SubjectAmountDto> getAmountOfGroups(List<ClassGroupDTO> classGroupDTOList){

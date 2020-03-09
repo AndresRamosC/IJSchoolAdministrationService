@@ -33,19 +33,15 @@
             "fieldTypeBlobContent": "image"
         },
         {
-            "fieldName": "assigned",
+            "fieldName": "enabled",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "keycloakUserId",
+            "fieldType": "String"
         }
     ],
     "relationships": [
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "userExtend",
-            "otherEntityRelationshipName": "person",
-            "relationshipName": "userExtend",
-            "otherEntityField": "id",
-            "ownerSide": true
-        },
         {
             "relationshipType": "many-to-many",
             "otherEntityName": "contact",

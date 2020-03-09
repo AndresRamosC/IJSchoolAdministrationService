@@ -8,7 +8,6 @@ import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDT
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.StudentDashBoardInfoDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.PersonDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.StudentDTO;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.UserExtendDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +32,6 @@ public class StudentDashBoardInfoResource {
     private String applicationName;
 
     @Autowired
-    private UserExtendService userExtendService;
-    @Autowired
     private PersonService personService;
     @Autowired
     private StudentService studentService;
@@ -49,15 +46,9 @@ public class StudentDashBoardInfoResource {
      */
     @GetMapping("/StudentDashBoard/{userName}")
     public StudentDashBoardInfoDto findInfo(@PathVariable String userName) { //GuardianDashBoardInfoDto findInfo() {
-        log.debug("Request to get all Guardian´s info");
 
-        Optional<UserExtendDTO> studentUserExtendDTO= userExtendService.findOneByKeycloakUserName(userName);
-        //Get the user extend from the user of keycloak
-
-        if (studentUserExtendDTO.isPresent()){
-            log.info("StudentUserExtend*************"+studentUserExtendDTO.toString());
             //get the person from the user extend id (the person has the contacts)
-            Optional<PersonDTO> personDTO=personService.findOneWithUserId(studentUserExtendDTO.get().getId());
+            Optional<PersonDTO> personDTO=personService.findOneWithUserId(userName);
             if (personDTO.isPresent()){
                 //Get the Guardian
                 Optional<StudentDTO> studentDTO=studentService.findOneByPersonId(personDTO.get().getId());
@@ -71,15 +62,12 @@ public class StudentDashBoardInfoResource {
 
 
 
-                        return new StudentDashBoardInfoDto(studentUserExtendDTO.get(),new StudentAndPersonDto(studentDTO.get(),personService.findOne(studentDTO.get().getPersonId()).get(),classGroupAndSubjectDtoList));
+                        return new StudentDashBoardInfoDto(new StudentAndPersonDto(studentDTO.get(),personService.findOne(studentDTO.get().getPersonId()).get(),classGroupAndSubjectDtoList));
                     }else{
                         throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
                     }
             }else {
                 throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
             }
-        }else {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
-        }
     }
 }

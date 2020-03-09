@@ -57,12 +57,11 @@ public class Person implements Serializable {
     @Column(name = "photograph_content_type")
     private String photographContentType;
 
-    @Column(name = "assigned")
-    private Boolean assigned;
+    @Column(name = "enabled")
+    private Boolean enabled;
 
-    @OneToOne
-    @JoinColumn(unique = true)
-    private UserExtend userExtend;
+    @Column(name = "keycloak_user_id")
+    private String keycloakUserId;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -196,30 +195,30 @@ public class Person implements Serializable {
         this.photographContentType = photographContentType;
     }
 
-    public Boolean isAssigned() {
-        return assigned;
+    public Boolean isEnabled() {
+        return enabled;
     }
 
-    public Person assigned(Boolean assigned) {
-        this.assigned = assigned;
+    public Person enabled(Boolean enabled) {
+        this.enabled = enabled;
         return this;
     }
 
-    public void setAssigned(Boolean assigned) {
-        this.assigned = assigned;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
-    public UserExtend getUserExtend() {
-        return userExtend;
+    public String getKeycloakUserId() {
+        return keycloakUserId;
     }
 
-    public Person userExtend(UserExtend userExtend) {
-        this.userExtend = userExtend;
+    public Person keycloakUserId(String keycloakUserId) {
+        this.keycloakUserId = keycloakUserId;
         return this;
     }
 
-    public void setUserExtend(UserExtend userExtend) {
-        this.userExtend = userExtend;
+    public void setKeycloakUserId(String keycloakUserId) {
+        this.keycloakUserId = keycloakUserId;
     }
 
     public Set<Contact> getContacts() {
@@ -315,7 +314,8 @@ public class Person implements Serializable {
             ", dateOfBirth='" + getDateOfBirth() + "'" +
             ", photograph='" + getPhotograph() + "'" +
             ", photographContentType='" + getPhotographContentType() + "'" +
-            ", assigned='" + isAssigned() + "'" +
+            ", enabled='" + isEnabled() + "'" +
+            ", keycloakUserId='" + getKeycloakUserId() + "'" +
             "}";
     }
 }

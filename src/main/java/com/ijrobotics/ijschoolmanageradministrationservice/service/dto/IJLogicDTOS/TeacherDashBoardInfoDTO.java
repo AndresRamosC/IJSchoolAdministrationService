@@ -7,15 +7,13 @@ import java.io.Serializable;
 import java.util.List;
 
 public class TeacherDashBoardInfoDTO implements Serializable {
-    private UserExtendDTO teacherUserExtend;
     private PersonDTO teacherPerson;
     private TeacherDTO teacherInfo;
     private EmployeeDTO employeeDTO;
     private List<ClassGroupAndSubjectDto> classGroupDTOList;
     private List<SubjectAmountDto> amountOfGroups;
 
-    public TeacherDashBoardInfoDTO(UserExtendDTO teacherUserExtend, PersonDTO teacherPerson, EmployeeDTO employeeDTO, TeacherDTO teacherInfo, List<ClassGroupAndSubjectDto> classGroupDTOList,List<SubjectAmountDto>  amountOfGroups) {
-        this.teacherUserExtend = teacherUserExtend;
+    public TeacherDashBoardInfoDTO( PersonDTO teacherPerson, EmployeeDTO employeeDTO, TeacherDTO teacherInfo, List<ClassGroupAndSubjectDto> classGroupDTOList,List<SubjectAmountDto>  amountOfGroups) {
         this.teacherPerson = teacherPerson;
         this.teacherInfo = teacherInfo;
         this.employeeDTO = employeeDTO;
@@ -31,13 +29,6 @@ public class TeacherDashBoardInfoDTO implements Serializable {
         this.employeeDTO = employeeDTO;
     }
 
-    public UserExtendDTO getTeacherUserExtend() {
-        return teacherUserExtend;
-    }
-
-    public void setTeacherUserExtend(UserExtendDTO teacherUserExtend) {
-        this.teacherUserExtend = teacherUserExtend;
-    }
 
     public PersonDTO getTeacherPerson() {
         return teacherPerson;
@@ -74,7 +65,6 @@ public class TeacherDashBoardInfoDTO implements Serializable {
     @Override
     public String toString() {
         return "TeacherDashBoardInfoDTO{" +
-            "teacherUserExtend=" + teacherUserExtend +
             ", teacherPerson=" + teacherPerson +
             ", teacherInfo=" + teacherInfo +
             ", employeeDTO=" + employeeDTO +

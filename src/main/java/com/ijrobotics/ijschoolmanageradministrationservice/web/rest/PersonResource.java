@@ -96,11 +96,11 @@ public class PersonResource {
         if (personDTO.getPhotographContentType()!=null){
             personDTOUpdate.get().setPhotographContentType(personDTO.getPhotographContentType());
         }
-        if (personDTO.isAssigned()!=null){
-            personDTOUpdate.get().setAssigned(personDTO.isAssigned());
+        if (personDTO.isEnabled()!=null){
+            personDTOUpdate.get().setEnabled(personDTO.isEnabled());
         }
-        if (personDTO.getUserExtendId()!=null){
-            personDTOUpdate.get().setUserExtendId(personDTO.getUserExtendId());
+        if (personDTO.getKeycloakUserId()!=null){
+            personDTOUpdate.get().setKeycloakUserId(personDTO.getKeycloakUserId());
         }
         if (personDTO.getContacts()!=null){
             personDTOUpdate.get().setContacts(personDTO.getContacts());
@@ -150,13 +150,13 @@ public class PersonResource {
     }
 
     /**
-     * {@code GET  /people/:id} : get the person from userExtendedID.
+     * {@code GET  /people/:id} : get the person from Keycloak User ID.
      *
-     * @param id the id of the userExtended to retrieve.
+     * @param id the id of the KeycloakUserId to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the personDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/people/byUserID/{id}")
-    public ResponseEntity<PersonDTO> getPersonFromUserExtendedId(@PathVariable Long id) {
+    public ResponseEntity<PersonDTO> getPersonFromUserExtendedId(@PathVariable String id) {
         log.debug("REST request to get Person : {}", id);
         Optional<PersonDTO> personDTO = personService.findOneWithUserId(id);
         return ResponseUtil.wrapOrNotFound(personDTO);

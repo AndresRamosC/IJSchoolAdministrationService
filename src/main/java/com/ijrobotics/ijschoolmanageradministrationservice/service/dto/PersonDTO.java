@@ -33,10 +33,10 @@ public class PersonDTO implements Serializable {
     private byte[] photograph;
 
     private String photographContentType;
-    private Boolean assigned;
+    private Boolean enabled;
 
+    private String keycloakUserId;
 
-    private Long userExtendId;
 
     private Set<ContactDTO> contacts = new HashSet<>();
 
@@ -112,20 +112,20 @@ public class PersonDTO implements Serializable {
         this.photographContentType = photographContentType;
     }
 
-    public Boolean isAssigned() {
-        return assigned;
+    public Boolean isEnabled() {
+        return enabled;
     }
 
-    public void setAssigned(Boolean assigned) {
-        this.assigned = assigned;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
-    public Long getUserExtendId() {
-        return userExtendId;
+    public String getKeycloakUserId() {
+        return keycloakUserId;
     }
 
-    public void setUserExtendId(Long userExtendId) {
-        this.userExtendId = userExtendId;
+    public void setKeycloakUserId(String keycloakUserId) {
+        this.keycloakUserId = keycloakUserId;
     }
 
     public Set<ContactDTO> getContacts() {
@@ -168,8 +168,8 @@ public class PersonDTO implements Serializable {
             ", bloodGroup='" + getBloodGroup() + "'" +
             ", dateOfBirth='" + getDateOfBirth() + "'" +
             ", photograph='" + getPhotograph() + "'" +
-            ", assigned='" + isAssigned() + "'" +
-            ", userExtendId=" + getUserExtendId() +
+            ", enabled='" + isEnabled() + "'" +
+            ", keycloakUserId='" + getKeycloakUserId() + "'" +
             "}";
     }
 }
