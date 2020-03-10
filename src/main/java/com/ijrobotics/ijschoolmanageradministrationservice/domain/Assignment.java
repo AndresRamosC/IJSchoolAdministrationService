@@ -37,11 +37,9 @@ public class Assignment implements Serializable {
     @Column(name = "due_date")
     private ZonedDateTime dueDate;
 
-    @Column(name = "done")
-    private Boolean done;
-
-    @Column(name = "grade")
-    private Float grade;
+    @OneToMany(mappedBy = "assignment")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<AssignmentAssigned> assignmentAssigneds = new HashSet<>();
 
     @OneToMany(mappedBy = "assignment",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -50,10 +48,6 @@ public class Assignment implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties("assignments")
     private ClassGroup classGroup;
-
-    @ManyToOne
-    @JsonIgnoreProperties("assignments")
-    private Student student;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -116,30 +110,29 @@ public class Assignment implements Serializable {
         this.dueDate = dueDate;
     }
 
-    public Boolean isDone() {
-        return done;
+    public Set<AssignmentAssigned> getAssignmentAssigneds() {
+        return assignmentAssigneds;
     }
 
-    public Assignment done(Boolean done) {
-        this.done = done;
+    public Assignment assignmentAssigneds(Set<AssignmentAssigned> assignmentAssigneds) {
+        this.assignmentAssigneds = assignmentAssigneds;
         return this;
     }
 
-    public void setDone(Boolean done) {
-        this.done = done;
-    }
-
-    public Float getGrade() {
-        return grade;
-    }
-
-    public Assignment grade(Float grade) {
-        this.grade = grade;
+    public Assignment addAssignmentAssigned(AssignmentAssigned assignmentAssigned) {
+        this.assignmentAssigneds.add(assignmentAssigned);
+        assignmentAssigned.setAssignment(this);
         return this;
     }
 
-    public void setGrade(Float grade) {
-        this.grade = grade;
+    public Assignment removeAssignmentAssigned(AssignmentAssigned assignmentAssigned) {
+        this.assignmentAssigneds.remove(assignmentAssigned);
+        assignmentAssigned.setAssignment(null);
+        return this;
+    }
+
+    public void setAssignmentAssigneds(Set<AssignmentAssigned> assignmentAssigneds) {
+        this.assignmentAssigneds = assignmentAssigneds;
     }
 
     public Set<Attachments> getAttachments() {
@@ -179,19 +172,6 @@ public class Assignment implements Serializable {
     public void setClassGroup(ClassGroup classGroup) {
         this.classGroup = classGroup;
     }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public Assignment student(Student student) {
-        this.student = student;
-        return this;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -218,8 +198,6 @@ public class Assignment implements Serializable {
             ", title='" + getTitle() + "'" +
             ", description='" + getDescription() + "'" +
             ", dueDate='" + getDueDate() + "'" +
-            ", done='" + isDone() + "'" +
-            ", grade=" + getGrade() +
             "}";
     }
 }

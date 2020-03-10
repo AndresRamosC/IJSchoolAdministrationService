@@ -9,17 +9,17 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Assignment} and its DTO {@link AssignmentDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ClassGroupMapper.class, StudentMapper.class})
+@Mapper(componentModel = "spring", uses = {ClassGroupMapper.class})
 public interface AssignmentMapper extends EntityMapper<AssignmentDTO, Assignment> {
 
     @Mapping(source = "classGroup.id", target = "classGroupId")
-    @Mapping(source = "student.id", target = "studentId")
     AssignmentDTO toDto(Assignment assignment);
 
+    @Mapping(target = "assignmentAssigneds", ignore = true)
+    @Mapping(target = "removeAssignmentAssigned", ignore = true)
     @Mapping(target = "attachments", ignore = true)
     @Mapping(target = "removeAttachments", ignore = true)
     @Mapping(source = "classGroupId", target = "classGroup")
-    @Mapping(source = "studentId", target = "student")
     Assignment toEntity(AssignmentDTO assignmentDTO);
 
     default Assignment fromId(Long id) {

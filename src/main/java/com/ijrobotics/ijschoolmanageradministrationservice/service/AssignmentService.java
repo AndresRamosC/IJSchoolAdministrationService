@@ -1,9 +1,16 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.service;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.Assignment;
+import com.ijrobotics.ijschoolmanageradministrationservice.repository.AssignmentAssignedRepository;
 import com.ijrobotics.ijschoolmanageradministrationservice.repository.AssignmentRepository;
+import com.ijrobotics.ijschoolmanageradministrationservice.repository.AttachmentsRepository;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AssignmentAssignedDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AssignmentDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.AssignmentAndAttachmentsDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.AssignmentFullDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AssignmentAssignedMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AssignmentMapper;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentsMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -30,9 +38,21 @@ public class AssignmentService {
 
     private final AssignmentMapper assignmentMapper;
 
-    public AssignmentService(AssignmentRepository assignmentRepository, AssignmentMapper assignmentMapper) {
+
+    private final AssignmentAssignedRepository assignmentAssignedRepository;
+
+    private final AssignmentAssignedMapper assignmentAssignedMapper;
+    private final AttachmentsRepository attachmentsRepository;
+    private final AttachmentsMapper attachmentsMapper;
+
+    public AssignmentService(AssignmentRepository assignmentRepository, AssignmentMapper assignmentMapper,AssignmentAssignedRepository assignmentAssignedRepository,
+                             AssignmentAssignedMapper assignmentAssignedMapper,AttachmentsRepository attachmentsRepository,AttachmentsMapper attachmentsMapper) {
         this.assignmentRepository = assignmentRepository;
         this.assignmentMapper = assignmentMapper;
+        this.assignmentAssignedRepository=assignmentAssignedRepository;
+        this.assignmentAssignedMapper=assignmentAssignedMapper;
+        this.attachmentsRepository=attachmentsRepository;
+        this.attachmentsMapper=attachmentsMapper;
     }
 
     /**
@@ -66,11 +86,17 @@ public class AssignmentService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<AssignmentDTO> findAllWithClassGroupId(Long classGroupId) {
+    public List<AssignmentAndAttachmentsDto> findAllWithClassGroupId(Long classGroupId) {
         log.debug("Request to get all Assignments");
-        return assignmentRepository.findByClassGroupId(classGroupId).stream()
+        List<AssignmentDTO> assignmentDTOS=assignmentRepository.findByClassGroupId(classGroupId).stream()
             .map(assignmentMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
+
+        List<AssignmentAndAttachmentsDto> assignmentAndAttachmentsDtos=new ArrayList<>();
+        assignmentDTOS.forEach(assignmentDTO -> {
+            assignmentAndAttachmentsDtos.add(new AssignmentAndAttachmentsDto(assignmentDTO,attachmentsMapper.toDto(attachmentsRepository.findByAssignmentId(assignmentDTO.getId()))));
+        });
+        return assignmentAndAttachmentsDtos;
     }
     /**
      * Get all the assignments.
@@ -78,15 +104,22 @@ public class AssignmentService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<AssignmentDTO> findAllWithClassGroupIdAndMonth(long classGroupId,String month) {
+    public List<AssignmentAndAttachmentsDto> findAllWithClassGroupIdAndMonth(long classGroupId,String month) {
         log.debug("Request to get all Assignments");
         String[] formattedDate=month.split("-");
 
         ZonedDateTime zonedDateTimeRequest=ZonedDateTime.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),1,0,0,0,0, ZoneId.systemDefault());
         ZonedDateTime zonedDateTimeAfter=zonedDateTimeRequest.plusMonths(1);
-        return assignmentRepository.findByClassGroupIdAndDueDateBetween(classGroupId,zonedDateTimeRequest,zonedDateTimeAfter).stream()
+
+        List<AssignmentDTO> assignmentDTOS=assignmentRepository.findByClassGroupIdAndDueDateBetween(classGroupId,zonedDateTimeRequest,zonedDateTimeAfter).stream()
             .map(assignmentMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
+
+        List<AssignmentAndAttachmentsDto> assignmentAndAttachmentsDtos=new ArrayList<>();
+        assignmentDTOS.forEach(assignmentDTO -> {
+            assignmentAndAttachmentsDtos.add(new AssignmentAndAttachmentsDto(assignmentDTO,attachmentsMapper.toDto(attachmentsRepository.findByAssignmentId(assignmentDTO.getId()))));
+        });
+        return assignmentAndAttachmentsDtos;
     }
     /**
      * Get all the assignments.
@@ -94,11 +127,20 @@ public class AssignmentService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<AssignmentDTO> findAllWithClassAndStudentId(long studentId, long classGroupId) {
+    public List<AssignmentFullDto> findAllWithClassAndStudentId(long studentId, long classGroupId) {
         log.debug("Request to get all Assignments");
-        return assignmentRepository.findByStudentIdAndClassGroupId(studentId,classGroupId).stream()
-            .map(assignmentMapper::toDto)
+        List<AssignmentAssignedDTO> assignmentAssignedList= assignmentAssignedRepository.findByStudentId(studentId).stream()
+            .map(assignmentAssignedMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
+
+        List<AssignmentFullDto> assignmentFullDtos=new ArrayList<>();
+        assignmentAssignedList.forEach(assignmentAssignedDTO -> {
+            Optional<Assignment> assignmentOptional=assignmentRepository.findByIdAndClassGroupId(assignmentAssignedDTO.getAssignmentId(),classGroupId);
+            assignmentOptional.ifPresent(assignment -> {
+                assignmentFullDtos.add(new AssignmentFullDto(assignmentAssignedDTO, new AssignmentAndAttachmentsDto(assignmentMapper.toDto(assignment),attachmentsMapper.toDto(attachmentsRepository.findByAssignmentId(assignment.getId()))) ));
+            });
+        });
+        return assignmentFullDtos;
     }
     /**
      * Get all the assignments.
@@ -106,43 +148,63 @@ public class AssignmentService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<AssignmentDTO> findAllWithClassAndStudentIdAndMonth( long studentId,long classGroupId,String month) {
+    public List<AssignmentFullDto> findAllWithClassAndStudentIdAndMonth( long studentId,long classGroupId,String month) {
+        log.debug("Request to get all Assignments");
+        String[] formattedDate=month.split("-");
+        List<AssignmentAssignedDTO> assignmentAssignedList= assignmentAssignedRepository.findByStudentId(studentId).stream()
+            .map(assignmentAssignedMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+
+        ZonedDateTime zonedDateTimeRequest=ZonedDateTime.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),1,0,0,0,0, ZoneId.systemDefault());
+        ZonedDateTime zonedDateTimeAfter=zonedDateTimeRequest.plusMonths(1);
+        List<AssignmentFullDto> assignmentsFullDtoList=new ArrayList<>();
+        assignmentAssignedList.forEach(assignmentAssignedDTO -> {
+            Optional<Assignment> assignmentOptional=assignmentRepository.findByIdAndClassGroupIdAndDueDateBetween(assignmentAssignedDTO.getAssignmentId(),classGroupId,zonedDateTimeRequest,zonedDateTimeAfter);
+            assignmentOptional.ifPresent(assignment -> assignmentsFullDtoList.add(new AssignmentFullDto(assignmentAssignedDTO,new AssignmentAndAttachmentsDto(assignmentMapper.toDto(assignment),attachmentsMapper.toDto(attachmentsRepository.findByAssignmentId(assignment.getId()))))));
+        });
+        return assignmentsFullDtoList;
+    }
+    /**
+     * Get all the assignments.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<AssignmentFullDto> findAllWithStudentId(Long studentId) {
+        log.debug("Request to get all Assignments");
+       List<AssignmentAssignedDTO> assignmentAssignedList= assignmentAssignedRepository.findByStudentId(studentId).stream()
+            .map(assignmentAssignedMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+
+       List<AssignmentFullDto> assignmentsFullDtoList=new ArrayList<>();
+       assignmentAssignedList.forEach(assignmentAssignedDTO -> {
+           Optional<Assignment> assignmentOptional=assignmentRepository.findById(assignmentAssignedDTO.getAssignmentId());
+           assignmentOptional.ifPresent(assignment -> assignmentsFullDtoList.add(new AssignmentFullDto(assignmentAssignedDTO,new AssignmentAndAttachmentsDto(assignmentMapper.toDto(assignment),attachmentsMapper.toDto(attachmentsRepository.findByAssignmentId(assignment.getId()))))));
+       });
+        return assignmentsFullDtoList;
+    }
+    /**
+     * Get all the assignments.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<AssignmentFullDto> findAllWithStudentIdAndMonth(long studentId, String month) {
         log.debug("Request to get all Assignments");
         String[] formattedDate=month.split("-");
 
         ZonedDateTime zonedDateTimeRequest=ZonedDateTime.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),1,0,0,0,0, ZoneId.systemDefault());
         ZonedDateTime zonedDateTimeAfter=zonedDateTimeRequest.plusMonths(1);
-        return assignmentRepository.findByStudentIdAndClassGroupIdAndDueDateBetween(studentId,classGroupId,zonedDateTimeRequest,zonedDateTimeAfter).stream()
-            .map(assignmentMapper::toDto)
+        List<AssignmentAssignedDTO> assignmentAssignedList= assignmentAssignedRepository.findByStudentId(studentId).stream()
+            .map(assignmentAssignedMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
-    }
-    /**
-     * Get all the assignments.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<AssignmentDTO> findAllWithStudentId(Long studentId) {
-        log.debug("Request to get all Assignments");
-        return assignmentRepository.findByStudentId(studentId).stream()
-            .map(assignmentMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-    /**
-     * Get all the assignments.
-     *
-     * @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<AssignmentDTO> findAllWithStudentIdAndMonth(long studentId,String month) {
-        log.debug("Request to get all Assignments");
-        String[] formattedDate=month.split("-");
 
-        ZonedDateTime zonedDateTimeRequest=ZonedDateTime.of(Integer.parseInt(formattedDate[0]),Integer.parseInt(formattedDate[1]),1,0,0,0,0, ZoneId.systemDefault());
-        ZonedDateTime zonedDateTimeAfter=zonedDateTimeRequest.plusMonths(1);
-        return assignmentRepository.findByStudentIdAndDueDateBetween(studentId,zonedDateTimeRequest,zonedDateTimeAfter).stream()
-            .map(assignmentMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
+        List<AssignmentFullDto> assignmentsFullDtoList=new ArrayList<>();
+        assignmentAssignedList.forEach(assignmentAssignedDTO -> {
+            Optional<Assignment> assignmentOptional=assignmentRepository.findByIdAndDueDateBetween(assignmentAssignedDTO.getAssignmentId(),zonedDateTimeRequest,zonedDateTimeAfter);
+            assignmentOptional.ifPresent(assignment -> assignmentsFullDtoList.add(new AssignmentFullDto(assignmentAssignedDTO,new AssignmentAndAttachmentsDto(assignmentMapper.toDto(assignment),attachmentsMapper.toDto(attachmentsRepository.findByAssignmentId(assignment.getId()))))));
+        });
+        return assignmentsFullDtoList;
     }
 
     /**

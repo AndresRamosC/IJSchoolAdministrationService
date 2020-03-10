@@ -41,9 +41,9 @@
         },
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "assignment",
+            "otherEntityName": "assignmentAssigned",
             "otherEntityRelationshipName": "student",
-            "relationshipName": "assignment"
+            "relationshipName": "assignmentAssigned"
         },
         {
             "relationshipType": "one-to-many",

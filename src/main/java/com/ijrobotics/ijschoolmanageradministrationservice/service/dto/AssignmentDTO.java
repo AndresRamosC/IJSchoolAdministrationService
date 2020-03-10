@@ -19,14 +19,8 @@ public class AssignmentDTO implements Serializable {
 
     private ZonedDateTime dueDate;
 
-    private Boolean done;
-
-    private Float grade;
-
 
     private Long classGroupId;
-
-    private Long studentId;
 
     public Long getId() {
         return id;
@@ -68,36 +62,12 @@ public class AssignmentDTO implements Serializable {
         this.dueDate = dueDate;
     }
 
-    public Boolean isDone() {
-        return done;
-    }
-
-    public void setDone(Boolean done) {
-        this.done = done;
-    }
-
-    public Float getGrade() {
-        return grade;
-    }
-
-    public void setGrade(Float grade) {
-        this.grade = grade;
-    }
-
     public Long getClassGroupId() {
         return classGroupId;
     }
 
     public void setClassGroupId(Long classGroupId) {
         this.classGroupId = classGroupId;
-    }
-
-    public Long getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(Long studentId) {
-        this.studentId = studentId;
     }
 
     @Override
@@ -129,10 +99,7 @@ public class AssignmentDTO implements Serializable {
             ", title='" + getTitle() + "'" +
             ", description='" + getDescription() + "'" +
             ", dueDate='" + getDueDate() + "'" +
-            ", done='" + isDone() + "'" +
-            ", grade=" + getGrade() +
             ", classGroupId=" + getClassGroupId() +
-            ", studentId=" + getStudentId() +
             "}";
     }
 }

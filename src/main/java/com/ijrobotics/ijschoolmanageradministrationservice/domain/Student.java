@@ -52,7 +52,7 @@ public class Student implements Serializable {
 
     @OneToMany(mappedBy = "student")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<Assignment> assignments = new HashSet<>();
+    private Set<AssignmentAssigned> assignmentAssigneds = new HashSet<>();
 
     @OneToMany(mappedBy = "student")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -194,29 +194,29 @@ public class Student implements Serializable {
         this.grades = grades;
     }
 
-    public Set<Assignment> getAssignments() {
-        return assignments;
+    public Set<AssignmentAssigned> getAssignmentAssigneds() {
+        return assignmentAssigneds;
     }
 
-    public Student assignments(Set<Assignment> assignments) {
-        this.assignments = assignments;
+    public Student assignmentAssigneds(Set<AssignmentAssigned> assignmentAssigneds) {
+        this.assignmentAssigneds = assignmentAssigneds;
         return this;
     }
 
-    public Student addAssignment(Assignment assignment) {
-        this.assignments.add(assignment);
-        assignment.setStudent(this);
+    public Student addAssignmentAssigned(AssignmentAssigned assignmentAssigned) {
+        this.assignmentAssigneds.add(assignmentAssigned);
+        assignmentAssigned.setStudent(this);
         return this;
     }
 
-    public Student removeAssignment(Assignment assignment) {
-        this.assignments.remove(assignment);
-        assignment.setStudent(null);
+    public Student removeAssignmentAssigned(AssignmentAssigned assignmentAssigned) {
+        this.assignmentAssigneds.remove(assignmentAssigned);
+        assignmentAssigned.setStudent(null);
         return this;
     }
 
-    public void setAssignments(Set<Assignment> assignments) {
-        this.assignments = assignments;
+    public void setAssignmentAssigneds(Set<AssignmentAssigned> assignmentAssigneds) {
+        this.assignmentAssigneds = assignmentAssigneds;
     }
 
     public Set<Exculpatory> getExculpatories() {

@@ -16,17 +16,15 @@
         {
             "fieldName": "dueDate",
             "fieldType": "ZonedDateTime"
-        },
-        {
-            "fieldName": "done",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "grade",
-            "fieldType": "Float"
         }
     ],
     "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "assignmentAssigned",
+            "otherEntityRelationshipName": "assignment",
+            "relationshipName": "assignmentAssigned"
+        },
         {
             "relationshipType": "one-to-many",
             "otherEntityName": "attachments",
@@ -38,13 +36,6 @@
             "otherEntityName": "classGroup",
             "otherEntityRelationshipName": "assignment",
             "relationshipName": "classGroup",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "student",
-            "otherEntityRelationshipName": "assignment",
-            "relationshipName": "student",
             "otherEntityField": "id"
         }
     ],

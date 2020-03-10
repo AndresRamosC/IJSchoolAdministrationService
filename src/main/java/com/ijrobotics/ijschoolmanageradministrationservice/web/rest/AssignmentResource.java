@@ -3,6 +3,8 @@ package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.Assignment;
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.Attachments;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.AssignmentService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.AssignmentAndAttachmentsDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.AssignmentFullDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AssignmentMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentFileMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentsMapper;
@@ -106,14 +108,8 @@ public class AssignmentResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
 
-        if (assignmentDTO.getStudentId()!=null){
-            assignmentDTOUpdate.get().setStudentId(assignmentDTO.getStudentId());
-        }
         if (assignmentDTO.getClassGroupId()!=null){
             assignmentDTOUpdate.get().setClassGroupId(assignmentDTO.getClassGroupId());
-        }
-        if (assignmentDTO.getGrade()!=null){
-            assignmentDTOUpdate.get().setGrade(assignmentDTO.getGrade());
         }
         if (assignmentDTO.getDueDate()!=null){
             assignmentDTOUpdate.get().setDueDate(assignmentDTO.getDueDate());
@@ -123,9 +119,6 @@ public class AssignmentResource {
         }
         if (assignmentDTO.getTitle()!=null){
             assignmentDTOUpdate.get().setTitle(assignmentDTO.getTitle());
-        }
-        if (assignmentDTO.isDone()!=null){
-            assignmentDTOUpdate.get().setDone(assignmentDTO.isDone());
         }
         AssignmentDTO result = assignmentService.save(assignmentDTOUpdate.get());
         return ResponseEntity.ok()
@@ -149,7 +142,7 @@ public class AssignmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assignments in body.
      */
     @GetMapping("/assignments/classGroup/{classGroupId}")
-    public List<AssignmentDTO> getAllAssignmentsFromAClassGroup(@PathVariable Long classGroupId) {
+    public List<AssignmentAndAttachmentsDto> getAllAssignmentsFromAClassGroup(@PathVariable Long classGroupId) {
         log.debug("REST request to get all Assignments of one ClassGroup");
         return assignmentService.findAllWithClassGroupId(classGroupId);
     }
@@ -159,7 +152,7 @@ public class AssignmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assignments in body.
      */
     @GetMapping("/assignments/studentId/{studentId}")
-    public List<AssignmentDTO> getAllAssignmentsFromAStudentId(@PathVariable Long studentId) {
+    public List<AssignmentFullDto> getAllAssignmentsFromAStudentId(@PathVariable Long studentId) {
         log.debug("REST request to get all Assignments of one Student");
         return assignmentService.findAllWithStudentId(studentId);
     }
@@ -169,7 +162,7 @@ public class AssignmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assignments in body.
      */
     @GetMapping("/assignments/studentAndGroupId/{studentId}/{classGroupId}")
-    public List<AssignmentDTO> getAllAssignmentsFromAStudentId(@PathVariable Long studentId,@PathVariable Long classGroupId) {
+    public List<AssignmentFullDto> getAllAssignmentsFromAStudentId(@PathVariable Long studentId,@PathVariable Long classGroupId) {
         log.debug("REST request to get all Assignments of one Student");
         return assignmentService.findAllWithClassAndStudentId(studentId,classGroupId);
     }
@@ -179,7 +172,7 @@ public class AssignmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assignments in body.
      */
     @GetMapping("/assignments/classGroup/{classGroupId}/{month}")
-    public List<AssignmentDTO> getAllAssignmentsFromAClassGroupAndMonth(@PathVariable Long classGroupId,@PathVariable String month) {
+    public List<AssignmentAndAttachmentsDto> getAllAssignmentsFromAClassGroupAndMonth(@PathVariable Long classGroupId,@PathVariable String month) {
         log.debug("REST request to get all Assignments of one ClassGroup");
         return assignmentService.findAllWithClassGroupIdAndMonth(classGroupId,month);
     }
@@ -189,7 +182,7 @@ public class AssignmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assignments in body.
      */
     @GetMapping("/assignments/studentId/{studentId}/{month}")
-    public List<AssignmentDTO> getAllAssignmentsFromAStudentIdAndMonth(@PathVariable Long studentId,@PathVariable String month) {
+    public List<AssignmentFullDto> getAllAssignmentsFromAStudentIdAndMonth(@PathVariable Long studentId,@PathVariable String month) {
         log.debug("REST request to get all Assignments of one Student");
         return assignmentService.findAllWithStudentIdAndMonth(studentId,month);
     }
@@ -199,7 +192,7 @@ public class AssignmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assignments in body.
      */
     @GetMapping("/assignments/studentAndGroupId/{studentId}/{classGroupId}/{month}")
-    public List<AssignmentDTO> getAllAssignmentsFromAStudentIdAndMonth(@PathVariable Long studentId,@PathVariable Long classGroupId,@PathVariable String month) {
+    public List<AssignmentFullDto> getAllAssignmentsFromAStudentIdAndMonth(@PathVariable Long studentId,@PathVariable Long classGroupId,@PathVariable String month) {
         log.debug("REST request to get all Assignments of one Student");
         return assignmentService.findAllWithClassAndStudentIdAndMonth(studentId,classGroupId,month);
     }

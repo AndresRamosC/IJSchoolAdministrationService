@@ -55,12 +55,6 @@ public class AssignmentResourceIT {
     private static final ZonedDateTime DEFAULT_DUE_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
     private static final ZonedDateTime UPDATED_DUE_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
-    private static final Boolean DEFAULT_DONE = false;
-    private static final Boolean UPDATED_DONE = true;
-
-    private static final Float DEFAULT_GRADE = 1F;
-    private static final Float UPDATED_GRADE = 2F;
-
     @Autowired
     private AssignmentRepository assignmentRepository;
 
@@ -115,9 +109,7 @@ public class AssignmentResourceIT {
             .creationDate(DEFAULT_CREATION_DATE)
             .title(DEFAULT_TITLE)
             .description(DEFAULT_DESCRIPTION)
-            .dueDate(DEFAULT_DUE_DATE)
-            .done(DEFAULT_DONE)
-            .grade(DEFAULT_GRADE);
+            .dueDate(DEFAULT_DUE_DATE);
         return assignment;
     }
     /**
@@ -131,9 +123,7 @@ public class AssignmentResourceIT {
             .creationDate(UPDATED_CREATION_DATE)
             .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
-            .dueDate(UPDATED_DUE_DATE)
-            .done(UPDATED_DONE)
-            .grade(UPDATED_GRADE);
+            .dueDate(UPDATED_DUE_DATE);
         return assignment;
     }
 
@@ -162,8 +152,6 @@ public class AssignmentResourceIT {
         assertThat(testAssignment.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testAssignment.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testAssignment.getDueDate()).isEqualTo(DEFAULT_DUE_DATE);
-        assertThat(testAssignment.isDone()).isEqualTo(DEFAULT_DONE);
-        assertThat(testAssignment.getGrade()).isEqualTo(DEFAULT_GRADE);
     }
 
     @Test
@@ -201,9 +189,7 @@ public class AssignmentResourceIT {
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(sameInstant(DEFAULT_CREATION_DATE))))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].dueDate").value(hasItem(sameInstant(DEFAULT_DUE_DATE))))
-            .andExpect(jsonPath("$.[*].done").value(hasItem(DEFAULT_DONE.booleanValue())))
-            .andExpect(jsonPath("$.[*].grade").value(hasItem(DEFAULT_GRADE.doubleValue())));
+            .andExpect(jsonPath("$.[*].dueDate").value(hasItem(sameInstant(DEFAULT_DUE_DATE))));
     }
 
     @Test
@@ -220,9 +206,7 @@ public class AssignmentResourceIT {
             .andExpect(jsonPath("$.creationDate").value(sameInstant(DEFAULT_CREATION_DATE)))
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.dueDate").value(sameInstant(DEFAULT_DUE_DATE)))
-            .andExpect(jsonPath("$.done").value(DEFAULT_DONE.booleanValue()))
-            .andExpect(jsonPath("$.grade").value(DEFAULT_GRADE.doubleValue()));
+            .andExpect(jsonPath("$.dueDate").value(sameInstant(DEFAULT_DUE_DATE)));
     }
 
     @Test
@@ -249,9 +233,7 @@ public class AssignmentResourceIT {
             .creationDate(UPDATED_CREATION_DATE)
             .title(UPDATED_TITLE)
             .description(UPDATED_DESCRIPTION)
-            .dueDate(UPDATED_DUE_DATE)
-            .done(UPDATED_DONE)
-            .grade(UPDATED_GRADE);
+            .dueDate(UPDATED_DUE_DATE);
         AssignmentDTO assignmentDTO = assignmentMapper.toDto(updatedAssignment);
 
         restAssignmentMockMvc.perform(put("/api/assignments")
@@ -267,8 +249,6 @@ public class AssignmentResourceIT {
         assertThat(testAssignment.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testAssignment.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAssignment.getDueDate()).isEqualTo(UPDATED_DUE_DATE);
-        assertThat(testAssignment.isDone()).isEqualTo(UPDATED_DONE);
-        assertThat(testAssignment.getGrade()).isEqualTo(UPDATED_GRADE);
     }
 
     @Test

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Spring Data  repository for the Assignment entity.
@@ -15,10 +16,10 @@ import java.util.List;
 @SuppressWarnings("unused")
 @Repository
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
-    List<Assignment> findByStudentIdAndClassGroupId(@Param("studentId") Long studentId,@Param("classGroupId") Long classGroupId);
-    List<Assignment> findByStudentIdAndClassGroupIdAndDueDateBetween(@Param("studentId") Long studentId,@Param("classGroupId") Long classGroupId, ZonedDateTime CreationDate, ZonedDateTime endCreationDate);
+
     List<Assignment> findByClassGroupId(@Param("classGroupId") Long classGroupId);
     List<Assignment> findByClassGroupIdAndDueDateBetween(@Param("classGroupId") Long classGroupId, ZonedDateTime CreationDate, ZonedDateTime endCreationDate);
-    List<Assignment> findByStudentId(@Param("studentId") Long studentId);
-    List<Assignment> findByStudentIdAndDueDateBetween(@Param("studentId") Long studentId, ZonedDateTime CreationDate, ZonedDateTime endCreationDate);
+    Optional<Assignment> findByIdAndDueDateBetween(@Param("Id") Long Id, ZonedDateTime CreationDate, ZonedDateTime endCreationDate);
+    Optional<Assignment> findByIdAndClassGroupId(@Param("Id") Long Id,@Param("classGroupId") Long classGroupId);
+    Optional<Assignment> findByIdAndClassGroupIdAndDueDateBetween(@Param("Id") Long Id,@Param("classGroupId") Long classGroupId, ZonedDateTime CreationDate, ZonedDateTime endCreationDate);
 }
