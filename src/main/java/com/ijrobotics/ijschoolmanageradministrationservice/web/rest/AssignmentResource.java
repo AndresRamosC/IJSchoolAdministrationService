@@ -143,6 +143,67 @@ public class AssignmentResource {
         log.debug("REST request to get all Assignments");
         return assignmentService.findAll();
     }
+    /**
+     * {@code GET  /assignments} : get all the assignments for a teacher with a specific classId.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assignments in body.
+     */
+    @GetMapping("/assignments/classGroup/{classGroupId}")
+    public List<AssignmentDTO> getAllAssignmentsFromAClassGroup(@PathVariable Long classGroupId) {
+        log.debug("REST request to get all Assignments of one ClassGroup");
+        return assignmentService.findAllWithClassGroupId(classGroupId);
+    }
+    /**
+     * {@code GET  /assignments} : get all the assignments for a Guardian with a specific studentId.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assignments in body.
+     */
+    @GetMapping("/assignments/studentId/{studentId}")
+    public List<AssignmentDTO> getAllAssignmentsFromAStudentId(@PathVariable Long studentId) {
+        log.debug("REST request to get all Assignments of one Student");
+        return assignmentService.findAllWithStudentId(studentId);
+    }
+    /**
+     * {@code GET  /assignments} : get all the assignments for a Guardian with a specific studentId and a specific groupId.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assignments in body.
+     */
+    @GetMapping("/assignments/studentAndGroupId/{studentId}/{classGroupId}")
+    public List<AssignmentDTO> getAllAssignmentsFromAStudentId(@PathVariable Long studentId,@PathVariable Long classGroupId) {
+        log.debug("REST request to get all Assignments of one Student");
+        return assignmentService.findAllWithClassAndStudentId(studentId,classGroupId);
+    }
+    /**
+     * {@code GET  /assignments} : get all the assignments for a teacher with a specific classId.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assignments in body.
+     */
+    @GetMapping("/assignments/classGroup/{classGroupId}/{month}")
+    public List<AssignmentDTO> getAllAssignmentsFromAClassGroupAndMonth(@PathVariable Long classGroupId,@PathVariable String month) {
+        log.debug("REST request to get all Assignments of one ClassGroup");
+        return assignmentService.findAllWithClassGroupIdAndMonth(classGroupId,month);
+    }
+    /**
+     * {@code GET  /assignments} : get all the assignments for a Guardian with a specific studentId.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assignments in body.
+     */
+    @GetMapping("/assignments/studentId/{studentId}/{month}")
+    public List<AssignmentDTO> getAllAssignmentsFromAStudentIdAndMonth(@PathVariable Long studentId,@PathVariable String month) {
+        log.debug("REST request to get all Assignments of one Student");
+        return assignmentService.findAllWithStudentIdAndMonth(studentId,month);
+    }
+    /**
+     * {@code GET  /assignments} : get all the assignments for a Guardian with a specific studentId and a specific groupId.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of assignments in body.
+     */
+    @GetMapping("/assignments/studentAndGroupId/{studentId}/{classGroupId}/{month}")
+    public List<AssignmentDTO> getAllAssignmentsFromAStudentIdAndMonth(@PathVariable Long studentId,@PathVariable Long classGroupId,@PathVariable String month) {
+        log.debug("REST request to get all Assignments of one Student");
+        return assignmentService.findAllWithClassAndStudentIdAndMonth(studentId,classGroupId,month);
+    }
+
 
     /**
      * {@code GET  /assignments/:id} : get the "id" assignment.
