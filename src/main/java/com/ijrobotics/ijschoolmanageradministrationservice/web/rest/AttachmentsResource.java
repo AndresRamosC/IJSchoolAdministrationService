@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,7 +75,7 @@ public class AttachmentsResource {
      * or with status {@code 500 (Internal Server Error)} if the attachmentsDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/attachments")
+    @PutMapping("/attachments/{id}")
     public ResponseEntity<AttachmentsDTO> updateAttachments(@RequestBody AttachmentsDTO attachmentsDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update Attachments : {}", attachmentsDTO);
         Optional<AttachmentsDTO> attachmentsDTOUpdate = attachmentsService.findOne(id);
@@ -91,6 +93,9 @@ public class AttachmentsResource {
         }
         if (attachmentsDTO.getMimeType()!=null){
             attachmentsDTOUpdate.get().setMimeType(attachmentsDTO.getMimeType());
+        }
+        if (attachmentsDTO.getAttachmentsContentId()!=null){
+            attachmentsDTOUpdate.get().setAttachmentsContentId(attachmentsDTO.getAttachmentsContentId());
         }
         AttachmentsDTO result = attachmentsService.save(attachmentsDTOUpdate.get());
         return ResponseEntity.ok()
@@ -135,7 +140,7 @@ public class AttachmentsResource {
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 
-    @GetMapping("/documents/{id}/$content")
+    @GetMapping("/attachments/{id}/$content")
     @Timed
     public ResponseEntity<byte[]> getDocumentContent(@PathVariable Long id) {
         Attachments attachment = attachmentsMapper.toEntity(attachmentsService.findOne(id)
@@ -144,6 +149,6 @@ public class AttachmentsResource {
         return ResponseEntity.ok()
             .contentType(MediaType.parseMediaType(attachment.getMimeType()))
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + attachment.getTitle() + "\"")
-            .body(attachment.retrieveContent());
+            .body(attachment.getAttachmentsContent().getData());
     }
 }

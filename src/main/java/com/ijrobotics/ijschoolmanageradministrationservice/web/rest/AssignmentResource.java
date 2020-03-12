@@ -2,11 +2,16 @@ package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.Assignment;
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.Attachments;
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.AttachmentsContent;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.AssignmentService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.AttachmentsContentService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.AttachmentsService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AttachmentsContentDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AttachmentsDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.AssignmentAndAttachmentsDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.AssignmentFullDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AssignmentMapper;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentFileMapper;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentsContentMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentsMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AssignmentDTO;
@@ -16,6 +21,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +32,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -43,14 +50,21 @@ public class AssignmentResource {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
-
+    @Autowired
+    private
+    AttachmentsContentService attachmentsContentService;
+    @Autowired
+    private
+    AttachmentsContentMapper attachmentsContentMapper;
+    @Autowired
+    AttachmentsService attachmentsService;
+    @Autowired
+    AttachmentsMapper attachmentsMapper;
     private final AssignmentService assignmentService;
-    private final AttachmentFileMapper attachmentFileMapper;
     private final AssignmentMapper assignmentMapper;
 
-    public AssignmentResource(AssignmentService assignmentService,AttachmentFileMapper attachmentFileMapper,AssignmentMapper assignmentMapper) {
+    public AssignmentResource(AssignmentService assignmentService,AssignmentMapper assignmentMapper) {
         this.assignmentService = assignmentService;
-        this.attachmentFileMapper= attachmentFileMapper;
         this.assignmentMapper=assignmentMapper;
     }
 
@@ -80,12 +94,30 @@ public class AssignmentResource {
         if (assignmentDTO.getId() != null) {
             throw new BadRequestAlertException("A new Assignment cannot already have an ID", ENTITY_NAME, "idexists");
         }
-
-        Assignment assignment=assignmentMapper.toEntity(assignmentDTO);
-        Set<Attachments> documents = attachmentFileMapper.multiPartFilesToDocuments(files);
-        documents.forEach(assignment::addAttachments);
-
+        Set<Attachments> documents = new HashSet<>();
         AssignmentDTO result = assignmentService.save(assignmentDTO);
+        Assignment assignment=assignmentMapper.toEntity(assignmentDTO);
+        for (MultipartFile file : files) {
+            AttachmentsContent content= new AttachmentsContent();
+            content.setCreationDate(ZonedDateTime.now());
+            content.setData(file.getBytes());
+            AttachmentsContentDTO attachmentsContentDto=attachmentsContentService.save(attachmentsContentMapper.toDto(content));
+            log.info("ATTACHMENT CONTENT DTO SAVED: "+ attachmentsContentDto.toString() );
+
+
+            AttachmentsDTO document = new AttachmentsDTO();
+            document.setTitle(file.getOriginalFilename());
+            document.setSize(file.getSize());
+            document.setMimeType(file.getContentType());
+            document.setAttachmentsContentId(attachmentsContentDto.getId());
+            document.setAssignmentId(result.getId());
+            AttachmentsDTO attachmentsDTOSaved= attachmentsService.save(document);
+            log.info("ATTACHMENT  DTO SAVED: "+ attachmentsDTOSaved.toString() );
+            documents.add(attachmentsMapper.toEntity(attachmentsDTOSaved));
+        }
+
+//        documents.forEach(assignment::addAttachments);
+
         return ResponseEntity.created(new URI("/api/cars/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName,false,ENTITY_NAME, result.getId().toString()))
             .body(result);

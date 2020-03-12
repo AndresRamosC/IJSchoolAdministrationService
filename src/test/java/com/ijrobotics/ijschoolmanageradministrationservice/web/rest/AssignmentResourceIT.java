@@ -7,7 +7,6 @@ import com.ijrobotics.ijschoolmanageradministrationservice.repository.Assignment
 import com.ijrobotics.ijschoolmanageradministrationservice.service.AssignmentService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AssignmentDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AssignmentMapper;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentFileMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -79,8 +78,6 @@ public class AssignmentResourceIT {
     @Autowired
     private Validator validator;
 
-    @Autowired
-    private AttachmentFileMapper attachmentFileMapper;
 
     private MockMvc restAssignmentMockMvc;
 
@@ -89,7 +86,7 @@ public class AssignmentResourceIT {
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AssignmentResource assignmentResource = new AssignmentResource(assignmentService,attachmentFileMapper,assignmentMapper);
+        final AssignmentResource assignmentResource = new AssignmentResource(assignmentService,assignmentMapper);
         this.restAssignmentMockMvc = MockMvcBuilders.standaloneSetup(assignmentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
