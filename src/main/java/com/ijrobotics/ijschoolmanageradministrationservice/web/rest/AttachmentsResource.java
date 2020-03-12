@@ -1,7 +1,11 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.Attachments;
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.AttachmentsContent;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.AttachmentsContentService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.AttachmentsService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AttachmentsContentDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentsContentMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentsMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AttachmentsDTO;
@@ -12,6 +16,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -38,7 +43,12 @@ public class AttachmentsResource {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
-
+    @Autowired
+    private
+    AttachmentsContentService attachmentsContentService;
+    @Autowired
+    private
+    AttachmentsContentMapper attachmentsContentMapper;
     private final AttachmentsService attachmentsService;
     private final AttachmentsMapper attachmentsMapper;
 
@@ -146,9 +156,14 @@ public class AttachmentsResource {
         Attachments attachment = attachmentsMapper.toEntity(attachmentsService.findOne(id)
             .orElseThrow(DocumentNotFoundException::new));
 
-        return ResponseEntity.ok()
-            .contentType(MediaType.parseMediaType(attachment.getMimeType()))
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + attachment.getTitle() + "\"")
-            .body(attachment.getAttachmentsContent().getData());
+       Optional<AttachmentsContentDTO> attachmentsContent = attachmentsContentService.findOne(attachment.getAttachmentsContent().getId());
+       if (attachmentsContent.isPresent()){
+           return ResponseEntity.ok()
+               .contentType(MediaType.parseMediaType(attachment.getMimeType()))
+               .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + attachment.getTitle() + "\"")
+               .body(attachmentsContent.get().getData());
+       }else {
+        return    ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+       }
     }
 }
