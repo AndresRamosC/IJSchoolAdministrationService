@@ -92,6 +92,29 @@ public class AssignmentAssignedResource {
         }));
         return assignmentAssignedDTOS;
     }
+    /**
+     * {@code POST  /assignment-assigneds} : Create a new assignmentAssigned for each student in a classGroup.
+     *
+     * @param assignmentId the assignment to assign.
+     * @param studentsIds the students to assign.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new assignmentAssignedDTO, or with status {@code 400 (Bad Request)} if the assignmentAssigned has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/assignAssignmentToStudents/{assignmentId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<AssignmentAssignedDTO> assignAssignmentToGroup(@PathVariable Long assignmentId,@RequestBody List<Long> studentsIds) throws URISyntaxException {
+        List<AssignmentAssignedDTO> assignmentAssignedDTOS= new ArrayList<>();
+        studentsIds.forEach(studentId -> {
+            AssignmentAssignedDTO assignmentAssignedDTO = new AssignmentAssignedDTO();
+            assignmentAssignedDTO.setCreationDate(ZonedDateTime.now());
+            assignmentAssignedDTO.setAssignmentId(assignmentId);
+            assignmentAssignedDTO.setStudentId(studentId);
+            assignmentAssignedDTO.setDone(false);
+            assignmentAssignedDTO.setGrade((float) 0.0);
+            assignmentAssignedDTOS.add(assignmentAssignedService.save(assignmentAssignedDTO));
+        });
+        return assignmentAssignedDTOS;
+    }
 
     /**
      * {@code PUT  /assignment-assigneds} : Updates an existing assignmentAssigned.
