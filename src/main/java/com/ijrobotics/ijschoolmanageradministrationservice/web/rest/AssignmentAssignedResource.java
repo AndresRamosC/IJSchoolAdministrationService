@@ -1,6 +1,9 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.service.AssignmentAssignedService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.ClassGroupService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.StudentService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AssignmentAssignedDTO;
 
@@ -8,12 +11,17 @@ import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +38,11 @@ public class AssignmentAssignedResource {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
+
+    @Autowired
+    ClassGroupService classGroupService;
+    @Autowired
+    StudentService studentService;
 
     private final AssignmentAssignedService assignmentAssignedService;
 
@@ -54,6 +67,30 @@ public class AssignmentAssignedResource {
         return ResponseEntity.created(new URI("/api/assignment-assigneds/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+    /**
+     * {@code POST  /assignment-assigneds} : Create a new assignmentAssigned for each student in a classGroup.
+     *
+     * @param assignmentId the assignment to assign.
+     * @param classGroupId the classGroup to assign.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new assignmentAssignedDTO, or with status {@code 400 (Bad Request)} if the assignmentAssigned has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/assignAssignmentToGroup/{assignmentId}/{classGroupId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<AssignmentAssignedDTO> assignAssignmentToGroup(@PathVariable Long assignmentId,@PathVariable Long classGroupId) throws URISyntaxException {
+        Optional<ClassGroupDTO> classGroupDTO= classGroupService.findOne(classGroupId);
+        List<AssignmentAssignedDTO> assignmentAssignedDTOS= new ArrayList<>();
+        classGroupDTO.ifPresent(groupDTO -> groupDTO.getStudents().forEach(studentDTO -> {
+            AssignmentAssignedDTO assignmentAssignedDTO = new AssignmentAssignedDTO();
+            assignmentAssignedDTO.setCreationDate(ZonedDateTime.now());
+            assignmentAssignedDTO.setAssignmentId(assignmentId);
+            assignmentAssignedDTO.setStudentId(studentDTO.getId());
+            assignmentAssignedDTO.setDone(false);
+            assignmentAssignedDTO.setGrade((float) 0.0);
+            assignmentAssignedDTOS.add(assignmentAssignedService.save(assignmentAssignedDTO));
+        }));
+        return assignmentAssignedDTOS;
     }
 
     /**
