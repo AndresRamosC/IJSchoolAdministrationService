@@ -11,9 +11,12 @@ import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.Excep
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -27,12 +30,14 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.ijrobotics.ijschoolmanageradministrationservice.web.rest.TestUtil.sameInstant;
 import static com.ijrobotics.ijschoolmanageradministrationservice.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -48,26 +53,23 @@ public class ClassGroupResourceIT {
     private static final String DEFAULT_GROUP_CODE = "AAAAAAAAAA";
     private static final String UPDATED_GROUP_CODE = "BBBBBBBBBB";
 
-    private static final String DEFAULT_START_HOUR = "AAAAAAAAAA";
-    private static final String UPDATED_START_HOUR = "BBBBBBBBBB";
-
-    private static final String DEFAULT_END_HOUR = "AAAAAAAAAA";
-    private static final String UPDATED_END_HOUR = "BBBBBBBBBB";
-
     private static final String DEFAULT_CLASS_ROOM = "AAAAAAAAAA";
     private static final String UPDATED_CLASS_ROOM = "BBBBBBBBBB";
 
     private static final Integer DEFAULT_SIZE = 1;
     private static final Integer UPDATED_SIZE = 2;
 
-    private static final Integer DEFAULT_WEEK_DAYS = 1;
-    private static final Integer UPDATED_WEEK_DAYS = 2;
-
     @Autowired
     private ClassGroupRepository classGroupRepository;
 
+    @Mock
+    private ClassGroupRepository classGroupRepositoryMock;
+
     @Autowired
     private ClassGroupMapper classGroupMapper;
+
+    @Mock
+    private ClassGroupService classGroupServiceMock;
 
     @Autowired
     private ClassGroupService classGroupService;
@@ -113,11 +115,8 @@ public class ClassGroupResourceIT {
         ClassGroup classGroup = new ClassGroup()
             .creationDate(DEFAULT_CREATION_DATE)
             .groupCode(DEFAULT_GROUP_CODE)
-            .startHour(DEFAULT_START_HOUR)
-            .endHour(DEFAULT_END_HOUR)
             .classRoom(DEFAULT_CLASS_ROOM)
-            .size(DEFAULT_SIZE)
-            .weekDays(DEFAULT_WEEK_DAYS);
+            .size(DEFAULT_SIZE);
         return classGroup;
     }
     /**
@@ -130,11 +129,8 @@ public class ClassGroupResourceIT {
         ClassGroup classGroup = new ClassGroup()
             .creationDate(UPDATED_CREATION_DATE)
             .groupCode(UPDATED_GROUP_CODE)
-            .startHour(UPDATED_START_HOUR)
-            .endHour(UPDATED_END_HOUR)
             .classRoom(UPDATED_CLASS_ROOM)
-            .size(UPDATED_SIZE)
-            .weekDays(UPDATED_WEEK_DAYS);
+            .size(UPDATED_SIZE);
         return classGroup;
     }
 
@@ -161,11 +157,8 @@ public class ClassGroupResourceIT {
         ClassGroup testClassGroup = classGroupList.get(classGroupList.size() - 1);
         assertThat(testClassGroup.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
         assertThat(testClassGroup.getGroupCode()).isEqualTo(DEFAULT_GROUP_CODE);
-        assertThat(testClassGroup.getStartHour()).isEqualTo(DEFAULT_START_HOUR);
-        assertThat(testClassGroup.getEndHour()).isEqualTo(DEFAULT_END_HOUR);
         assertThat(testClassGroup.getClassRoom()).isEqualTo(DEFAULT_CLASS_ROOM);
         assertThat(testClassGroup.getSize()).isEqualTo(DEFAULT_SIZE);
-        assertThat(testClassGroup.getWeekDays()).isEqualTo(DEFAULT_WEEK_DAYS);
     }
 
     @Test
@@ -202,13 +195,43 @@ public class ClassGroupResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(classGroup.getId().intValue())))
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(sameInstant(DEFAULT_CREATION_DATE))))
             .andExpect(jsonPath("$.[*].groupCode").value(hasItem(DEFAULT_GROUP_CODE)))
-            .andExpect(jsonPath("$.[*].startHour").value(hasItem(DEFAULT_START_HOUR)))
-            .andExpect(jsonPath("$.[*].endHour").value(hasItem(DEFAULT_END_HOUR)))
             .andExpect(jsonPath("$.[*].classRoom").value(hasItem(DEFAULT_CLASS_ROOM)))
-            .andExpect(jsonPath("$.[*].size").value(hasItem(DEFAULT_SIZE)))
-            .andExpect(jsonPath("$.[*].weekDays").value(hasItem(DEFAULT_WEEK_DAYS)));
+            .andExpect(jsonPath("$.[*].size").value(hasItem(DEFAULT_SIZE)));
     }
     
+    @SuppressWarnings({"unchecked"})
+    public void getAllClassGroupsWithEagerRelationshipsIsEnabled() throws Exception {
+        ClassGroupResource classGroupResource = new ClassGroupResource(classGroupServiceMock);
+        when(classGroupServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        MockMvc restClassGroupMockMvc = MockMvcBuilders.standaloneSetup(classGroupResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restClassGroupMockMvc.perform(get("/api/class-groups?eagerload=true"))
+        .andExpect(status().isOk());
+
+        verify(classGroupServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void getAllClassGroupsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        ClassGroupResource classGroupResource = new ClassGroupResource(classGroupServiceMock);
+            when(classGroupServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+            MockMvc restClassGroupMockMvc = MockMvcBuilders.standaloneSetup(classGroupResource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setControllerAdvice(exceptionTranslator)
+            .setConversionService(createFormattingConversionService())
+            .setMessageConverters(jacksonMessageConverter).build();
+
+        restClassGroupMockMvc.perform(get("/api/class-groups?eagerload=true"))
+        .andExpect(status().isOk());
+
+            verify(classGroupServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
     @Test
     @Transactional
     public void getClassGroup() throws Exception {
@@ -222,11 +245,8 @@ public class ClassGroupResourceIT {
             .andExpect(jsonPath("$.id").value(classGroup.getId().intValue()))
             .andExpect(jsonPath("$.creationDate").value(sameInstant(DEFAULT_CREATION_DATE)))
             .andExpect(jsonPath("$.groupCode").value(DEFAULT_GROUP_CODE))
-            .andExpect(jsonPath("$.startHour").value(DEFAULT_START_HOUR))
-            .andExpect(jsonPath("$.endHour").value(DEFAULT_END_HOUR))
             .andExpect(jsonPath("$.classRoom").value(DEFAULT_CLASS_ROOM))
-            .andExpect(jsonPath("$.size").value(DEFAULT_SIZE))
-            .andExpect(jsonPath("$.weekDays").value(DEFAULT_WEEK_DAYS));
+            .andExpect(jsonPath("$.size").value(DEFAULT_SIZE));
     }
 
     @Test
@@ -252,11 +272,8 @@ public class ClassGroupResourceIT {
         updatedClassGroup
             .creationDate(UPDATED_CREATION_DATE)
             .groupCode(UPDATED_GROUP_CODE)
-            .startHour(UPDATED_START_HOUR)
-            .endHour(UPDATED_END_HOUR)
             .classRoom(UPDATED_CLASS_ROOM)
-            .size(UPDATED_SIZE)
-            .weekDays(UPDATED_WEEK_DAYS);
+            .size(UPDATED_SIZE);
         ClassGroupDTO classGroupDTO = classGroupMapper.toDto(updatedClassGroup);
 
         restClassGroupMockMvc.perform(put("/api/class-groups")
@@ -270,11 +287,8 @@ public class ClassGroupResourceIT {
         ClassGroup testClassGroup = classGroupList.get(classGroupList.size() - 1);
         assertThat(testClassGroup.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);
         assertThat(testClassGroup.getGroupCode()).isEqualTo(UPDATED_GROUP_CODE);
-        assertThat(testClassGroup.getStartHour()).isEqualTo(UPDATED_START_HOUR);
-        assertThat(testClassGroup.getEndHour()).isEqualTo(UPDATED_END_HOUR);
         assertThat(testClassGroup.getClassRoom()).isEqualTo(UPDATED_CLASS_ROOM);
         assertThat(testClassGroup.getSize()).isEqualTo(UPDATED_SIZE);
-        assertThat(testClassGroup.getWeekDays()).isEqualTo(UPDATED_WEEK_DAYS);
     }
 
     @Test

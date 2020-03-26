@@ -16,19 +16,19 @@ import java.util.Optional;
  */
 @Repository
 public interface ClassGroupRepository extends JpaRepository<ClassGroup, Long> {
-    List<ClassGroup> findByTeacherIdOrderBySubjectIdAscStartHourAsc(@Param("teacherId") Long id);
+    List<ClassGroup> findByTeacherIdOrderBySubjectIdAsc(@Param("teacherId") Long id);
 
-    List<ClassGroup> findByTeacherIdOrderByStartHourAsc(@Param("teacherId") Long id);
+    List<ClassGroup> findByTeacherId(@Param("teacherId") Long id);
 
-    List<ClassGroup> findByStudentsIdOrderByStartHourAsc(@Param("teacherId") Long id);
+    List<ClassGroup> findByStudentsId(@Param("teacherId") Long id);
 
-    @Query(value = "select distinct classGroup from ClassGroup classGroup left join fetch classGroup.students",
+    @Query(value = "select distinct classGroup from ClassGroup classGroup left join fetch classGroup.students left join fetch classGroup.classSchedules",
         countQuery = "select count(distinct classGroup) from ClassGroup classGroup")
     Page<ClassGroup> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct classGroup from ClassGroup classGroup left join fetch classGroup.students")
+    @Query("select distinct classGroup from ClassGroup classGroup left join fetch classGroup.students left join fetch classGroup.classSchedules")
     List<ClassGroup> findAllWithEagerRelationships();
 
-    @Query("select classGroup from ClassGroup classGroup left join fetch classGroup.students where classGroup.id =:id")
+    @Query("select classGroup from ClassGroup classGroup left join fetch classGroup.students left join fetch classGroup.classSchedules where classGroup.id =:id")
     Optional<ClassGroup> findOneWithEagerRelationships(@Param("id") Long id);
 }

@@ -1,0 +1,49 @@
+{
+    "name": "ExculpatoryAttachments",
+    "fields": [
+        {
+            "fieldName": "creationDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "title",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "size",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "mimeType",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "exculpatoryAttContent",
+            "otherEntityRelationshipName": "exculpatoryAttachments",
+            "relationshipName": "exculpatoryAttContent",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "exculpatory",
+            "otherEntityRelationshipName": "exculpatoryAttachments",
+            "relationshipName": "exculpatory",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200323182600",
+    "entityTableName": "exculpatory_attachments",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "IJSchoolManagerAdministrationService",
+    "applications": "*",
+    "microserviceName": "IJSchoolManagerAdministrationService"
+}

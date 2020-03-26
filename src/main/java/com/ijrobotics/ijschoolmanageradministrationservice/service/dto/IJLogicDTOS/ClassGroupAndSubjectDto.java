@@ -1,17 +1,17 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassScheduleDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.SubjectDTO;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 public class ClassGroupAndSubjectDto implements Serializable {
     private Long classGroupId;
     private String groupCode;
-    private String startHour;
-    private String endHour;
     private String classRoom;
-    private Integer weekDays;
     private Long subjectId;
     private String courseName;
     private String courseCode;
@@ -19,14 +19,13 @@ public class ClassGroupAndSubjectDto implements Serializable {
     private String colorCode;
     private String iconCode;
     private Long teacherId;
+    private Set<ClassScheduleDTO> classScheduleDTOS;
 
     public ClassGroupAndSubjectDto(ClassGroupDTO classGroupDTO,SubjectDTO subjectDTO) {
         this.classGroupId=classGroupDTO.getId();
         this.groupCode = classGroupDTO.getGroupCode();
-        this.startHour = classGroupDTO.getStartHour();
-        this.endHour = classGroupDTO.getEndHour();
+        this.classScheduleDTOS= classGroupDTO.getClassSchedules();
         this.classRoom = classGroupDTO.getClassRoom();
-        this.weekDays = classGroupDTO.getWeekDays();
         this.subjectId = subjectDTO.getId();
         this.courseName = subjectDTO.getCourseName();
         this.courseCode = subjectDTO.getCourseCode();
@@ -44,21 +43,6 @@ public class ClassGroupAndSubjectDto implements Serializable {
         this.groupCode = groupCode;
     }
 
-    public String getStartHour() {
-        return startHour;
-    }
-
-    public void setStartHour(String startHour) {
-        this.startHour = startHour;
-    }
-
-    public String getEndHour() {
-        return endHour;
-    }
-
-    public void setEndHour(String endHour) {
-        this.endHour = endHour;
-    }
 
     public String getClassRoom() {
         return classRoom;
@@ -66,14 +50,6 @@ public class ClassGroupAndSubjectDto implements Serializable {
 
     public void setClassRoom(String classRoom) {
         this.classRoom = classRoom;
-    }
-
-    public Integer getWeekDays() {
-        return weekDays;
-    }
-
-    public void setWeekDays(Integer weekDays) {
-        this.weekDays = weekDays;
     }
 
 
@@ -141,14 +117,20 @@ public class ClassGroupAndSubjectDto implements Serializable {
         this.teacherId = teacherId;
     }
 
+    public Set<ClassScheduleDTO> getClassScheduleDTOS() {
+        return classScheduleDTOS;
+    }
+
+    public void setClassScheduleDTOS(Set<ClassScheduleDTO> classScheduleDTOS) {
+        this.classScheduleDTOS = classScheduleDTOS;
+    }
+
     @Override
     public String toString() {
         return "ClassGroupAndSubjectDto{" +
-            "groupCode='" + groupCode + '\'' +
-            ", startHour='" + startHour + '\'' +
-            ", endHour='" + endHour + '\'' +
+            "classGroupId=" + classGroupId +
+            ", groupCode='" + groupCode + '\'' +
             ", classRoom='" + classRoom + '\'' +
-            ", weekDays=" + weekDays +
             ", subjectId=" + subjectId +
             ", courseName='" + courseName + '\'' +
             ", courseCode='" + courseCode + '\'' +
@@ -156,6 +138,7 @@ public class ClassGroupAndSubjectDto implements Serializable {
             ", colorCode='" + colorCode + '\'' +
             ", iconCode='" + iconCode + '\'' +
             ", teacherId=" + teacherId +
+            ", classScheduleDTOS=" + classScheduleDTOS +
             '}';
     }
 }

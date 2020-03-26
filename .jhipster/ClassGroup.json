@@ -10,23 +10,11 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "startHour",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "endHour",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "classRoom",
             "fieldType": "String"
         },
         {
             "fieldName": "size",
-            "fieldType": "Integer"
-        },
-        {
-            "fieldName": "weekDays",
             "fieldType": "Integer"
         }
     ],
@@ -54,6 +42,14 @@
             "otherEntityName": "student",
             "otherEntityRelationshipName": "classGroup",
             "relationshipName": "student",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "classSchedule",
+            "otherEntityRelationshipName": "classGroup",
+            "relationshipName": "classSchedule",
             "otherEntityField": "id",
             "ownerSide": true
         },

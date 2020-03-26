@@ -20,6 +20,18 @@
                                  referencedColumnNames="id"
                                  referencedTableName="student"/>
 
+        <addForeignKeyConstraint baseColumnNames="class_group_id"
+                                 baseTableName="class_group_class_schedule"
+                                 constraintName="fk_class_group_class_schedule_class_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="class_group"/>
+
+        <addForeignKeyConstraint baseColumnNames="class_schedule_id"
+                                 baseTableName="class_group_class_schedule"
+                                 constraintName="fk_class_group_class_schedule_class_schedule_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="class_schedule"/>
+
         <addForeignKeyConstraint baseColumnNames="subject_id"
                                  baseTableName="class_group"
                                  constraintName="fk_class_group_subject_id"
@@ -36,6 +48,13 @@
             separator=";"
             tableName="class_group_student">
             <column name="student_id" type="numeric"/>
+            <column name="class_group_id" type="numeric"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/fake-data/class_group_class_schedule.csv"
+            separator=";"
+            tableName="class_group_class_schedule">
+            <column name="class_schedule_id" type="numeric"/>
             <column name="class_group_id" type="numeric"/>
         </loadData>
     </changeSet>

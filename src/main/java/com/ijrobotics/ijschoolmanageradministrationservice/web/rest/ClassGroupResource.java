@@ -150,13 +150,15 @@ public class ClassGroupResource {
         int weekDay=localDate.getDayOfWeek().getValue()-1;
 
         classGroupService.findAllWhereStudentIdOrderedByStartHour(studentId).forEach(classGroupDTO -> {
-            boolean[] bits = new boolean[7];
-            for (int i = 6; i >= 0; i--) {
-                bits[i] = (classGroupDTO.getWeekDays() & (1 << i)) != 0;
-            }
-            if (bits[weekDay]){
-                classGroupAndSubjectDtoList.add(new ClassGroupAndSubjectDto(classGroupDTO,subjectService.findOne(classGroupDTO.getSubjectId()).get()));
-            }
+            classGroupDTO.getClassSchedules().forEach(classScheduleDTO -> {
+                boolean[] bits = new boolean[7];
+                for (int i = 6; i >= 0; i--) {
+                    bits[i] = (classScheduleDTO.getWeekDays() & (1 << i)) != 0;
+                }
+                if (bits[weekDay]){
+                    classGroupAndSubjectDtoList.add(new ClassGroupAndSubjectDto(classGroupDTO,subjectService.findOne(classGroupDTO.getSubjectId()).get()));
+                }
+            });
         });
         return classGroupAndSubjectDtoList;
     }
@@ -180,13 +182,15 @@ public class ClassGroupResource {
             //Monday 1, sunday 7
             int weekDay=localDate.getDayOfWeek().getValue()-1;
             classGroupDTOList1.forEach(classGroupDTO -> {
-                boolean[] bits = new boolean[7];
-                for (int i = 6; i >= 0; i--) {
-                    bits[i] = (classGroupDTO.getWeekDays() & (1 << i)) != 0;
-                }
-                if (bits[weekDay]){
-                    classGroupDTOList.add(classGroupDTO);
-                }
+                classGroupDTO.getClassSchedules().forEach(classScheduleDTO -> {
+                    boolean[] bits = new boolean[7];
+                    for (int i = 6; i >= 0; i--) {
+                        bits[i] = (classScheduleDTO.getWeekDays() & (1 << i)) != 0;
+                    }
+                    if (bits[weekDay]){
+                        classGroupDTOList.add(classGroupDTO);
+                    }
+                });
             });
             List<ClassGroupAndSubjectDto> classGroupAndSubjectDtoList=new ArrayList<>();
             classGroupDTOList.forEach(classGroupDTO -> {

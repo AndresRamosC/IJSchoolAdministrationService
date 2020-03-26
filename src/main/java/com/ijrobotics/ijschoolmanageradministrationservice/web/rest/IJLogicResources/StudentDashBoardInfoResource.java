@@ -1,8 +1,10 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest.IJLogicResources;
 
 
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.ClassSchedule;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.*;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassScheduleDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.ClassGroupAndSubjectDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.StudentAndPersonDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.StudentDashBoardInfoDto;
@@ -18,9 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -46,7 +46,6 @@ public class StudentDashBoardInfoResource {
      */
     @GetMapping("/StudentDashBoard/{userName}")
     public StudentDashBoardInfoDto findInfo(@PathVariable String userName) { //GuardianDashBoardInfoDto findInfo() {
-
             //get the person from the user extend id (the person has the contacts)
             Optional<PersonDTO> personDTO=personService.findOneWithUserId(userName);
             if (personDTO.isPresent()){
@@ -54,14 +53,10 @@ public class StudentDashBoardInfoResource {
                 Optional<StudentDTO> studentDTO=studentService.findOneByPersonId(personDTO.get().getId());
                     if (studentDTO.isPresent()){
                         List<ClassGroupDTO>  classGroupDTOList=classGroupService.findAllWhereStudentIdOrderedByStartHour(studentDTO.get().getId());
-
                         List<ClassGroupAndSubjectDto> classGroupAndSubjectDtoList=new ArrayList<>();
                         classGroupDTOList.forEach(classGroupDTO -> {
                             classGroupAndSubjectDtoList.add(new ClassGroupAndSubjectDto(classGroupDTO,subjectService.findOne(classGroupDTO.getSubjectId()).get()));
                         });
-
-
-
                         return new StudentDashBoardInfoDto(new StudentAndPersonDto(studentDTO.get(),personService.findOne(studentDTO.get().getPersonId()).get(),classGroupAndSubjectDtoList));
                     }else{
                         throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");

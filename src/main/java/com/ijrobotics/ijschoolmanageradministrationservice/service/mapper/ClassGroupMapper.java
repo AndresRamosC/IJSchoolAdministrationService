@@ -9,7 +9,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ClassGroup} and its DTO {@link ClassGroupDTO}.
  */
-@Mapper(componentModel = "spring", uses = {StudentMapper.class, SubjectMapper.class, TeacherMapper.class})
+@Mapper(componentModel = "spring", uses = {StudentMapper.class, ClassScheduleMapper.class, SubjectMapper.class, TeacherMapper.class})
 public interface ClassGroupMapper extends EntityMapper<ClassGroupDTO, ClassGroup> {
 
     @Mapping(source = "subject.id", target = "subjectId")
@@ -23,6 +23,7 @@ public interface ClassGroupMapper extends EntityMapper<ClassGroupDTO, ClassGroup
     @Mapping(target = "groupNotices", ignore = true)
     @Mapping(target = "removeGroupNotices", ignore = true)
     @Mapping(target = "removeStudent", ignore = true)
+    @Mapping(target = "removeClassSchedule", ignore = true)
     @Mapping(target = "grade", ignore = true)
     @Mapping(source = "subjectId", target = "subject")
     @Mapping(source = "teacherId", target = "teacher")

@@ -7,6 +7,8 @@ import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.ClassG
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,9 +57,18 @@ public class ClassGroupService {
     @Transactional(readOnly = true)
     public List<ClassGroupDTO> findAll() {
         log.debug("Request to get all ClassGroups");
-        return classGroupRepository.findAll().stream()
+        return classGroupRepository.findAllWithEagerRelationships().stream()
             .map(classGroupMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    /**
+     * Get all the classGroups with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<ClassGroupDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return classGroupRepository.findAllWithEagerRelationships(pageable).map(classGroupMapper::toDto);
     }
 
 
@@ -81,7 +92,7 @@ public class ClassGroupService {
     @Transactional(readOnly = true)
     public List<ClassGroupDTO> findAllWhereTeacherIdOrderedBySubjectIdAndStartHour(Long id) {
         log.debug("Request to get all classGroups where Teacher id ");
-        return classGroupRepository.findByTeacherIdOrderBySubjectIdAscStartHourAsc(id).stream()
+        return classGroupRepository.findByTeacherIdOrderBySubjectIdAsc(id).stream()
             .map(classGroupMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
@@ -92,7 +103,7 @@ public class ClassGroupService {
     @Transactional(readOnly = true)
     public List<ClassGroupDTO> findAllWhereTeacherIdOrderedByStartHour(Long id) {
         log.debug("Request to get all classGroups where Teacher id ");
-        return classGroupRepository.findByTeacherIdOrderByStartHourAsc(id).stream()
+        return classGroupRepository.findByTeacherId(id).stream()
             .map(classGroupMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
@@ -103,7 +114,7 @@ public class ClassGroupService {
     @Transactional(readOnly = true)
     public List<ClassGroupDTO> findAllWhereStudentIdOrderedByStartHour(Long id) {
         log.debug("Request to get all classGroups where student id ");
-        return classGroupRepository.findByStudentsIdOrderByStartHourAsc(id).stream()
+        return classGroupRepository.findByStudentsId(id).stream()
             .map(classGroupMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
     }
@@ -117,7 +128,7 @@ public class ClassGroupService {
     @Transactional(readOnly = true)
     public Optional<ClassGroupDTO> findOne(Long id) {
         log.debug("Request to get ClassGroup : {}", id);
-        return classGroupRepository.findById(id)
+        return classGroupRepository.findOneWithEagerRelationships(id)
             .map(classGroupMapper::toDto);
     }
     /**

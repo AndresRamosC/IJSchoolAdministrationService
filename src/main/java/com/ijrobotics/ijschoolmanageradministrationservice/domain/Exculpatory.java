@@ -8,6 +8,8 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Exculpatory.
@@ -34,6 +36,10 @@ public class Exculpatory implements Serializable {
 
     @Column(name = "description")
     private String description;
+
+    @OneToMany(mappedBy = "exculpatory")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ExculpatoryAttachments> exculpatoryAttachments = new HashSet<>();
 
     @ManyToOne
     @JsonIgnoreProperties("exculpatories")
@@ -102,6 +108,31 @@ public class Exculpatory implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<ExculpatoryAttachments> getExculpatoryAttachments() {
+        return exculpatoryAttachments;
+    }
+
+    public Exculpatory exculpatoryAttachments(Set<ExculpatoryAttachments> exculpatoryAttachments) {
+        this.exculpatoryAttachments = exculpatoryAttachments;
+        return this;
+    }
+
+    public Exculpatory addExculpatoryAttachments(ExculpatoryAttachments exculpatoryAttachments) {
+        this.exculpatoryAttachments.add(exculpatoryAttachments);
+        exculpatoryAttachments.setExculpatory(this);
+        return this;
+    }
+
+    public Exculpatory removeExculpatoryAttachments(ExculpatoryAttachments exculpatoryAttachments) {
+        this.exculpatoryAttachments.remove(exculpatoryAttachments);
+        exculpatoryAttachments.setExculpatory(null);
+        return this;
+    }
+
+    public void setExculpatoryAttachments(Set<ExculpatoryAttachments> exculpatoryAttachments) {
+        this.exculpatoryAttachments = exculpatoryAttachments;
     }
 
     public Guardian getGuardian() {

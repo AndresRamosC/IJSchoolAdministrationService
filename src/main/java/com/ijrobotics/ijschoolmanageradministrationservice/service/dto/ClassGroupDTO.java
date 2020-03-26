@@ -17,27 +17,16 @@ public class ClassGroupDTO implements Serializable {
 
     private String groupCode;
 
-    private String startHour;
-
-    private String endHour;
-
     private String classRoom;
 
     private Integer size;
 
-    private Integer weekDays;
+
+    private Set<StudentDTO> students = new HashSet<>();
+
+    private Set<ClassScheduleDTO> classSchedules = new HashSet<>();
 
     private Long subjectId;
-
-    private Set<StudentDTO> students;
-
-    public Set<StudentDTO> getStudents() {
-        return students;
-    }
-
-    public void setStudents(Set<StudentDTO> students) {
-        this.students = students;
-    }
 
     private Long teacherId;
 
@@ -65,22 +54,6 @@ public class ClassGroupDTO implements Serializable {
         this.groupCode = groupCode;
     }
 
-    public String getStartHour() {
-        return startHour;
-    }
-
-    public void setStartHour(String startHour) {
-        this.startHour = startHour;
-    }
-
-    public String getEndHour() {
-        return endHour;
-    }
-
-    public void setEndHour(String endHour) {
-        this.endHour = endHour;
-    }
-
     public String getClassRoom() {
         return classRoom;
     }
@@ -97,12 +70,20 @@ public class ClassGroupDTO implements Serializable {
         this.size = size;
     }
 
-    public Integer getWeekDays() {
-        return weekDays;
+    public Set<StudentDTO> getStudents() {
+        return students;
     }
 
-    public void setWeekDays(Integer weekDays) {
-        this.weekDays = weekDays;
+    public void setStudents(Set<StudentDTO> students) {
+        this.students = students;
+    }
+
+    public Set<ClassScheduleDTO> getClassSchedules() {
+        return classSchedules;
+    }
+
+    public void setClassSchedules(Set<ClassScheduleDTO> classSchedules) {
+        this.classSchedules = classSchedules;
     }
 
     public Long getSubjectId() {
@@ -148,11 +129,8 @@ public class ClassGroupDTO implements Serializable {
             "id=" + getId() +
             ", creationDate='" + getCreationDate() + "'" +
             ", groupCode='" + getGroupCode() + "'" +
-            ", startHour='" + getStartHour() + "'" +
-            ", endHour='" + getEndHour() + "'" +
             ", classRoom='" + getClassRoom() + "'" +
             ", size=" + getSize() +
-            ", weekDays=" + getWeekDays() +
             ", subjectId=" + getSubjectId() +
             ", teacherId=" + getTeacherId() +
             "}";

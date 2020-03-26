@@ -32,20 +32,11 @@ public class ClassGroup implements Serializable {
     @Column(name = "group_code")
     private String groupCode;
 
-    @Column(name = "start_hour")
-    private String startHour;
-
-    @Column(name = "end_hour")
-    private String endHour;
-
     @Column(name = "class_room")
     private String classRoom;
 
     @Column(name = "size")
     private Integer size;
-
-    @Column(name = "week_days")
-    private Integer weekDays;
 
     @OneToMany(mappedBy = "classGroup")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -65,6 +56,13 @@ public class ClassGroup implements Serializable {
                joinColumns = @JoinColumn(name = "class_group_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
     private Set<Student> students = new HashSet<>();
+
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JoinTable(name = "class_group_class_schedule",
+               joinColumns = @JoinColumn(name = "class_group_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "class_schedule_id", referencedColumnName = "id"))
+    private Set<ClassSchedule> classSchedules = new HashSet<>();
 
     @OneToOne(mappedBy = "classGroup")
     @JsonIgnore
@@ -113,32 +111,6 @@ public class ClassGroup implements Serializable {
         this.groupCode = groupCode;
     }
 
-    public String getStartHour() {
-        return startHour;
-    }
-
-    public ClassGroup startHour(String startHour) {
-        this.startHour = startHour;
-        return this;
-    }
-
-    public void setStartHour(String startHour) {
-        this.startHour = startHour;
-    }
-
-    public String getEndHour() {
-        return endHour;
-    }
-
-    public ClassGroup endHour(String endHour) {
-        this.endHour = endHour;
-        return this;
-    }
-
-    public void setEndHour(String endHour) {
-        this.endHour = endHour;
-    }
-
     public String getClassRoom() {
         return classRoom;
     }
@@ -163,19 +135,6 @@ public class ClassGroup implements Serializable {
 
     public void setSize(Integer size) {
         this.size = size;
-    }
-
-    public Integer getWeekDays() {
-        return weekDays;
-    }
-
-    public ClassGroup weekDays(Integer weekDays) {
-        this.weekDays = weekDays;
-        return this;
-    }
-
-    public void setWeekDays(Integer weekDays) {
-        this.weekDays = weekDays;
     }
 
     public Set<Attendance> getAttendances() {
@@ -278,6 +237,31 @@ public class ClassGroup implements Serializable {
         this.students = students;
     }
 
+    public Set<ClassSchedule> getClassSchedules() {
+        return classSchedules;
+    }
+
+    public ClassGroup classSchedules(Set<ClassSchedule> classSchedules) {
+        this.classSchedules = classSchedules;
+        return this;
+    }
+
+    public ClassGroup addClassSchedule(ClassSchedule classSchedule) {
+        this.classSchedules.add(classSchedule);
+        classSchedule.getClassGroups().add(this);
+        return this;
+    }
+
+    public ClassGroup removeClassSchedule(ClassSchedule classSchedule) {
+        this.classSchedules.remove(classSchedule);
+        classSchedule.getClassGroups().remove(this);
+        return this;
+    }
+
+    public void setClassSchedules(Set<ClassSchedule> classSchedules) {
+        this.classSchedules = classSchedules;
+    }
+
     public Grade getGrade() {
         return grade;
     }
@@ -340,11 +324,8 @@ public class ClassGroup implements Serializable {
             "id=" + getId() +
             ", creationDate='" + getCreationDate() + "'" +
             ", groupCode='" + getGroupCode() + "'" +
-            ", startHour='" + getStartHour() + "'" +
-            ", endHour='" + getEndHour() + "'" +
             ", classRoom='" + getClassRoom() + "'" +
             ", size=" + getSize() +
-            ", weekDays=" + getWeekDays() +
             "}";
     }
 }

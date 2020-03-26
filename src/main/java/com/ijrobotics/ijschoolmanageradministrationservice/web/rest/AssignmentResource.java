@@ -87,9 +87,9 @@ public class AssignmentResource {
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
-    @PostMapping("/v2/assignments")
+    @PostMapping("/assignmentsWithAttachment")
     @Timed
-    public ResponseEntity<AssignmentDTO> createAssignment2(@Valid @RequestPart AssignmentDTO assignmentDTO, @RequestPart List<MultipartFile> files) throws URISyntaxException, IOException {
+    public ResponseEntity<AssignmentDTO> createAssignmentWithAttachment(@Valid @RequestPart AssignmentDTO assignmentDTO, @RequestPart List<MultipartFile> files) throws URISyntaxException, IOException {
         log.debug("REST request to save Assignment : {}", assignmentDTO);
         if (assignmentDTO.getId() != null) {
             throw new BadRequestAlertException("A new Assignment cannot already have an ID", ENTITY_NAME, "idexists");

@@ -1,7 +1,6 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.Attachments;
-import com.ijrobotics.ijschoolmanageradministrationservice.domain.AttachmentsContent;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.AttachmentsContentService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.AttachmentsService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AttachmentsContentDTO;

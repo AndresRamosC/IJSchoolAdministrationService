@@ -1,0 +1,34 @@
+{
+    "name": "ExculpatoryAttContent",
+    "fields": [
+        {
+            "fieldName": "creationDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "data",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "exculpatoryAttachments",
+            "otherEntityRelationshipName": "exculpatoryAttContent",
+            "relationshipName": "exculpatoryAttachments",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20200323182700",
+    "entityTableName": "exculpatory_att_content",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "IJSchoolManagerAdministrationService",
+    "applications": "*",
+    "microserviceName": "IJSchoolManagerAdministrationService"
+}

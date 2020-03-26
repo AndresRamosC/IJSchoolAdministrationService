@@ -1,0 +1,42 @@
+{
+    "name": "ClassSchedule",
+    "fields": [
+        {
+            "fieldName": "creationDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "startHour",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "endHour",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "weekDays",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "classGroup",
+            "otherEntityRelationshipName": "classSchedule",
+            "relationshipName": "classGroup",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20200323181800",
+    "entityTableName": "class_schedule",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "IJSchoolManagerAdministrationService",
+    "applications": "*",
+    "microserviceName": "IJSchoolManagerAdministrationService"
+}

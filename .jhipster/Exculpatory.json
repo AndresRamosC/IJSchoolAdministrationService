@@ -20,6 +20,12 @@
     ],
     "relationships": [
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "exculpatoryAttachments",
+            "otherEntityRelationshipName": "exculpatory",
+            "relationshipName": "exculpatoryAttachments"
+        },
+        {
             "relationshipType": "many-to-one",
             "otherEntityName": "guardian",
             "otherEntityRelationshipName": "exculpatory",

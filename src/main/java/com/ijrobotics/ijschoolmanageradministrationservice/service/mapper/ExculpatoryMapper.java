@@ -16,6 +16,8 @@ public interface ExculpatoryMapper extends EntityMapper<ExculpatoryDTO, Exculpat
     @Mapping(source = "student.id", target = "studentId")
     ExculpatoryDTO toDto(Exculpatory exculpatory);
 
+    @Mapping(target = "exculpatoryAttachments", ignore = true)
+    @Mapping(target = "removeExculpatoryAttachments", ignore = true)
     @Mapping(source = "guardianId", target = "guardian")
     @Mapping(source = "studentId", target = "student")
     Exculpatory toEntity(ExculpatoryDTO exculpatoryDTO);

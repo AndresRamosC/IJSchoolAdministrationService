@@ -1,22 +1,39 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.AttachmentsContent;
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.Exculpatory;
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.ExculpatoryAttContent;
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.ExculpatoryAttachments;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.ExculpatoryAttContentService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.ExculpatoryAttachmentsService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.ExculpatoryService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ExculpatoryAttContentDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ExculpatoryAttachmentsDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.ExculpatoryAttContentMapper;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.ExculpatoryAttachmentsMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ExculpatoryDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing {@link com.ijrobotics.ijschoolmanageradministrationservice.domain.Exculpatory}.
@@ -31,6 +48,16 @@ public class ExculpatoryResource {
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
+    @Autowired
+    private
+    ExculpatoryAttContentService attachmentsContentService;
+    @Autowired
+    private
+    ExculpatoryAttContentMapper attachmentsContentMapper;
+    @Autowired
+    ExculpatoryAttachmentsService attachmentsService;
+    @Autowired
+    ExculpatoryAttachmentsMapper attachmentsMapper;
 
     private final ExculpatoryService exculpatoryService;
 
@@ -67,7 +94,7 @@ public class ExculpatoryResource {
      * or with status {@code 500 (Internal Server Error)} if the exculpatoryDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/exculpatories")
+    @PutMapping("/exculpatories/{id}")
     public ResponseEntity<ExculpatoryDTO> updateExculpatory(@RequestBody ExculpatoryDTO exculpatoryDTO,@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to update Exculpatory : {}", exculpatoryDTO);
         Optional<ExculpatoryDTO> exculpatoryDTOUpdate = exculpatoryService.findOne(id);
@@ -127,5 +154,40 @@ public class ExculpatoryResource {
         log.debug("REST request to delete Exculpatory : {}", id);
         exculpatoryService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+    @PostMapping("/ExculpatoryWithAttachment")
+    @Timed
+    public ResponseEntity<ExculpatoryDTO> createExculpatoryWithAttachment(@Valid @RequestPart ExculpatoryDTO exculpatoryDTO, @RequestPart List<MultipartFile> files) throws URISyntaxException, IOException {
+        log.debug("REST request to save Assignment : {}", exculpatoryDTO);
+        if (exculpatoryDTO.getId() != null) {
+            throw new BadRequestAlertException("A new Exculpatory cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        Set<ExculpatoryAttachments> documents = new HashSet<>();
+        ExculpatoryDTO result = exculpatoryService.save(exculpatoryDTO);
+//        Exculpatory assignment=assignmentMapper.toEntity(exculpatoryDTO);
+        for (MultipartFile file : files) {
+            ExculpatoryAttContent content= new ExculpatoryAttContent();
+            content.setCreationDate(ZonedDateTime.now());
+            content.setData(file.getBytes());
+            ExculpatoryAttContentDTO attachmentsContentDto=attachmentsContentService.save(attachmentsContentMapper.toDto(content));
+            log.info("ATTACHMENT CONTENT DTO SAVED: "+ attachmentsContentDto.toString() );
+
+
+            ExculpatoryAttachmentsDTO document = new ExculpatoryAttachmentsDTO();
+            document.setTitle(file.getOriginalFilename());
+            document.setSize(file.getSize());
+            document.setMimeType(file.getContentType());
+            document.setExculpatoryAttContentId(attachmentsContentDto.getId());
+            document.setExculpatoryId(result.getId());
+            ExculpatoryAttachmentsDTO attachmentsDTOSaved= attachmentsService.save(document);
+            log.info("ATTACHMENT  DTO SAVED: "+ attachmentsDTOSaved.toString() );
+            documents.add(attachmentsMapper.toEntity(attachmentsDTOSaved));
+        }
+
+//        documents.forEach(assignment::addAttachments);
+
+        return ResponseEntity.created(new URI("/api/cars/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName,false,ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
 }
