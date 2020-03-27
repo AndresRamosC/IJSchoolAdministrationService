@@ -1,6 +1,7 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.service.TeacherService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.teacherDtos.TeacherFullInfoDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.TeacherDTO;
 
@@ -89,7 +90,7 @@ public class TeacherResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of teachers in body.
      */
     @GetMapping("/teachers")
-    public List<TeacherDTO> getAllTeachers() {
+    public List<TeacherFullInfoDto> getAllTeachers() {
         log.debug("REST request to get all Teachers");
         return teacherService.findAll();
     }

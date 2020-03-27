@@ -1,6 +1,12 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
+import com.ijrobotics.ijschoolmanageradministrationservice.service.ContactService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.GuardianService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.PersonService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ContactDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.guardianDtos.GuardianDashBoardInfoDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.guardianDtos.NewGuardianDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.PersonDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.GuardianDTO;
 
@@ -46,13 +52,8 @@ public class GuardianResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/guardians")
-    public ResponseEntity<GuardianDTO> createGuardian(@RequestBody GuardianDTO guardianDTO) throws URISyntaxException {
-        log.debug("REST request to save Guardian : {}", guardianDTO);
-        if (guardianDTO.getId() != null) {
-            throw new BadRequestAlertException("A new guardian cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        guardianDTO.setCreationDate(ZonedDateTime.now());
-        GuardianDTO result = guardianService.save(guardianDTO);
+    public ResponseEntity<GuardianDTO> createGuardian(@RequestBody NewGuardianDto newGuardianDto) throws URISyntaxException {
+        GuardianDTO result = guardianService.saveFullGuardian(newGuardianDto);
         return ResponseEntity.created(new URI("/api/guardians/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);

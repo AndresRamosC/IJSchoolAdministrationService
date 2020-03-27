@@ -1,6 +1,8 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.service.StudentService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.NewStudentDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.StudentInfoWithGuardianPhotoAndName;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.StudentDTO;
 
@@ -45,14 +47,10 @@ public class StudentResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new studentDTO, or with status {@code 400 (Bad Request)} if the student has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/students")
-    public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO studentDTO) throws URISyntaxException {
-        log.debug("REST request to save Student : {}", studentDTO);
-        if (studentDTO.getId() != null) {
-            throw new BadRequestAlertException("A new student cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        studentDTO.setCreationDate(ZonedDateTime.now());
-        StudentDTO result = studentService.save(studentDTO);
+    @PostMapping("/studentToGuardian/{guardianId}")
+    public ResponseEntity<StudentDTO> createStudent(@RequestBody NewStudentDto studentDTO,@PathVariable long guardianId) throws URISyntaxException {
+        log.debug("REST request to save Student : {}", studentDTO.getStudentDTO());
+        StudentDTO result = studentService.saveFullStudent(studentDTO,guardianId);
         return ResponseEntity.created(new URI("/api/students/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -99,11 +97,11 @@ public class StudentResource {
     /**
      * {@code GET  /students} : get all the students.
      *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of students in body.
      */
     @GetMapping("/students")
-    public List<StudentDTO> getAllStudents(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<StudentInfoWithGuardianPhotoAndName> getAllStudents() {
         log.debug("REST request to get all Students");
         return studentService.findAll();
     }

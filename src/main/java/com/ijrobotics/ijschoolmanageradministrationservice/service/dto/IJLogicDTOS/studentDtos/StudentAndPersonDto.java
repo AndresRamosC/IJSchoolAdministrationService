@@ -1,9 +1,9 @@
-package com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS;
+package com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.enumeration.BlodTypes;
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.enumeration.Genders;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ContactDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.ClassGroupAndSubjectDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.PersonDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.StudentDTO;
 

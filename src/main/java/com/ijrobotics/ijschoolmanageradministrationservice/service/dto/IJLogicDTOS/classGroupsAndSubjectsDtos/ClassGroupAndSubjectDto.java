@@ -1,4 +1,4 @@
-package com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS;
+package com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassScheduleDTO;

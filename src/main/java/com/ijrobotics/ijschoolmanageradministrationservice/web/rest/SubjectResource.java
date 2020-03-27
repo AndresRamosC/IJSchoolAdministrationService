@@ -1,6 +1,7 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.service.SubjectService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.SubjectAdminDashBoardDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.SubjectDTO;
 
@@ -48,10 +49,6 @@ public class SubjectResource {
     @PostMapping("/subjects")
     public ResponseEntity<SubjectDTO> createSubject(@RequestBody SubjectDTO subjectDTO) throws URISyntaxException {
         log.debug("REST request to save Subject : {}", subjectDTO);
-        if (subjectDTO.getId() != null) {
-            throw new BadRequestAlertException("A new subject cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        subjectDTO.setCreationDate(ZonedDateTime.now());
         SubjectDTO result = subjectService.save(subjectDTO);
         return ResponseEntity.created(new URI("/api/subjects/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -101,7 +98,7 @@ public class SubjectResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of subjects in body.
      */
     @GetMapping("/subjects")
-    public List<SubjectDTO> getAllSubjects() {
+    public List<SubjectAdminDashBoardDto> getAllSubjects() {
         log.debug("REST request to get all Subjects");
         return subjectService.findAll();
     }

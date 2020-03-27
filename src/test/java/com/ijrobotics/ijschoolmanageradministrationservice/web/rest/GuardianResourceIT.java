@@ -4,7 +4,9 @@ import com.ijrobotics.ijschoolmanageradministrationservice.IjSchoolManagerAdmini
 import com.ijrobotics.ijschoolmanageradministrationservice.config.TestSecurityConfiguration;
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.Guardian;
 import com.ijrobotics.ijschoolmanageradministrationservice.repository.GuardianRepository;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.ContactService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.GuardianService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.PersonService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.GuardianDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.GuardianMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.ExceptionTranslator;
@@ -188,7 +190,7 @@ public class GuardianResourceIT {
             .andExpect(jsonPath("$.[*].occupation").value(hasItem(DEFAULT_OCCUPATION)))
             .andExpect(jsonPath("$.[*].workAdress").value(hasItem(DEFAULT_WORK_ADRESS)));
     }
-    
+
     @Test
     @Transactional
     public void getGuardian() throws Exception {

@@ -1,6 +1,7 @@
-package com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS;
+package com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.guardianDtos;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.GuardianDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.StudentAndPersonDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.PersonDTO;
 
 import java.io.Serializable;

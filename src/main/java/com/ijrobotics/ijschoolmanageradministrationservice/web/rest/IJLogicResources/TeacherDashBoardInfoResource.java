@@ -3,9 +3,9 @@ package com.ijrobotics.ijschoolmanageradministrationservice.web.rest.IJLogicReso
 
 import com.ijrobotics.ijschoolmanageradministrationservice.service.*;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.*;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.ClassGroupAndSubjectDto;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.SubjectAmountDto;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.TeacherDashBoardInfoDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.ClassGroupAndSubjectDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.SubjectAmountDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.teacherDtos.TeacherDashBoardInfoDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS;
+package com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos;
 
 import java.io.Serializable;
 

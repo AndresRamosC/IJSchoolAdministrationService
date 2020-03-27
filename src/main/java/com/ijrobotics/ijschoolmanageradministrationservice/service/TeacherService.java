@@ -1,8 +1,15 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.service;
 
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.ClassGroup;
+import com.ijrobotics.ijschoolmanageradministrationservice.domain.Subject;
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.Teacher;
 import com.ijrobotics.ijschoolmanageradministrationservice.repository.TeacherRepository;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.SubjectAmountDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.teacherDtos.TeacherFullInfoDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.TeacherDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.EmployeeMapper;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.PersonMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.TeacherMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,10 +32,14 @@ public class TeacherService {
     private final TeacherRepository teacherRepository;
 
     private final TeacherMapper teacherMapper;
+    private  PersonMapper personMapper;
+    private EmployeeMapper employeeMapper;
 
-    public TeacherService(TeacherRepository teacherRepository, TeacherMapper teacherMapper) {
+    public TeacherService(TeacherRepository teacherRepository, TeacherMapper teacherMapper,PersonMapper personMapper,EmployeeMapper employeeMapper) {
         this.teacherRepository = teacherRepository;
         this.teacherMapper = teacherMapper;
+        this.personMapper=personMapper;
+        this.employeeMapper=employeeMapper;
     }
 
     /**
@@ -52,11 +61,14 @@ public class TeacherService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<TeacherDTO> findAll() {
+    public List<TeacherFullInfoDto> findAll() {
         log.debug("Request to get all Teachers");
-        return teacherRepository.findAll().stream()
-            .map(teacherMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
+        List<TeacherFullInfoDto> teacherFullInfoDtosList=new ArrayList<>();
+        teacherRepository.findAll().forEach(teacher -> {
+            teacherFullInfoDtosList.add(new TeacherFullInfoDto(teacherMapper.toDto(teacher),employeeMapper.toDto(teacher.getEmployee()),personMapper.toDto(teacher.getEmployee().getPerson()),getAmountOfSubjects(teacher.getClassGroups()),teacher.getClassGroups().size()));
+        });
+
+        return teacherFullInfoDtosList;
     }
 
     /**
@@ -92,5 +104,14 @@ public class TeacherService {
     public void delete(Long id) {
         log.debug("Request to delete Teacher : {}", id);
         teacherRepository.deleteById(id);
+    }
+    static long getAmountOfSubjects(Set<ClassGroup> classGroupDTOList){
+        List<Subject> subjectAmountDtoList=new ArrayList<>();
+        classGroupDTOList.forEach(classGroup -> {
+            if (!subjectAmountDtoList.contains(classGroup.getSubject())){
+                subjectAmountDtoList.add(classGroup.getSubject());
+            }
+        });
+        return subjectAmountDtoList.size();
     }
 }

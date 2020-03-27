@@ -135,6 +135,9 @@ public class PersonDTO implements Serializable {
     public void setContacts(Set<ContactDTO> contacts) {
         this.contacts = contacts;
     }
+    public void addContacts(ContactDTO contacts) {
+        this.contacts.add(contacts);
+    }
 
     @Override
     public boolean equals(Object o) {

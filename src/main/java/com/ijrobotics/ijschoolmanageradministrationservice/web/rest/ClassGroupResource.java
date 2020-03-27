@@ -1,11 +1,11 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
-import com.ijrobotics.ijschoolmanageradministrationservice.domain.ClassGroup;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.*;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.*;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.ClassGroupAndSubjectDto;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.StudentAndPersonDto;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.StudentsInClassRoomDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.ClassGroupAndSubjectDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.NewClassGroupDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.StudentAndPersonDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.StudentsInClassRoomDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
 
@@ -69,13 +69,9 @@ public class ClassGroupResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/class-groups")
-    public ResponseEntity<ClassGroupDTO> createClassGroup(@RequestBody ClassGroupDTO classGroupDTO) throws URISyntaxException {
-        log.debug("REST request to save ClassGroup : {}", classGroupDTO);
-        if (classGroupDTO.getId() != null) {
-            throw new BadRequestAlertException("A new classGroup cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        classGroupDTO.setCreationDate(ZonedDateTime.now());
-        ClassGroupDTO result = classGroupService.save(classGroupDTO);
+    public ResponseEntity<ClassGroupDTO> createClassGroup(@RequestBody NewClassGroupDto classGroupDTO) throws URISyntaxException {
+        log.debug("REST request to save ClassGroup : {}", classGroupDTO.getClassGroupDTO());
+        ClassGroupDTO result = classGroupService.saveNewClassRoom(classGroupDTO);
         return ResponseEntity.created(new URI("/api/class-groups/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);

@@ -1,13 +1,11 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest.IJLogicResources;
 
 
-import com.ijrobotics.ijschoolmanageradministrationservice.domain.ClassSchedule;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.*;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassScheduleDTO;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.ClassGroupAndSubjectDto;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.StudentAndPersonDto;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.StudentDashBoardInfoDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.ClassGroupAndSubjectDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.StudentAndPersonDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.StudentDashBoardInfoDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.PersonDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.StudentDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;

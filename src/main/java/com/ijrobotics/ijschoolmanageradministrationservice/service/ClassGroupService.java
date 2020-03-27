@@ -3,6 +3,9 @@ package com.ijrobotics.ijschoolmanageradministrationservice.service;
 import com.ijrobotics.ijschoolmanageradministrationservice.domain.ClassGroup;
 import com.ijrobotics.ijschoolmanageradministrationservice.repository.ClassGroupRepository;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassScheduleDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.NewClassGroupDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.StudentDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.ClassGroupMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -31,9 +32,15 @@ public class ClassGroupService {
 
     private final ClassGroupMapper classGroupMapper;
 
-    public ClassGroupService(ClassGroupRepository classGroupRepository, ClassGroupMapper classGroupMapper) {
+    private ClassScheduleService classScheduleService;
+
+    private StudentService studentService;
+
+    public ClassGroupService(ClassGroupRepository classGroupRepository, ClassGroupMapper classGroupMapper,ClassScheduleService classScheduleService,StudentService studentService) {
         this.classGroupRepository = classGroupRepository;
         this.classGroupMapper = classGroupMapper;
+        this.classScheduleService = classScheduleService;
+        this.studentService=studentService;
     }
 
     /**
@@ -45,6 +52,50 @@ public class ClassGroupService {
     public ClassGroupDTO save(ClassGroupDTO classGroupDTO) {
         log.debug("Request to save ClassGroup : {}", classGroupDTO);
         ClassGroup classGroup = classGroupMapper.toEntity(classGroupDTO);
+        classGroup = classGroupRepository.save(classGroup);
+        return classGroupMapper.toDto(classGroup);
+    }
+    /**
+     * Save a classGroup.
+     *
+     * @param newClassGroupDto the entity to save.
+     * @return the persisted entity.
+     */
+    public ClassGroupDTO saveNewClassRoom(NewClassGroupDto newClassGroupDto) {
+        log.debug("Request to save ClassGroup : {}", newClassGroupDto.getClassGroupDTO());
+        //receive a list with all the class schedules for this classGroup
+
+        List<ClassScheduleDTO> classScheduleDTOList=classScheduleService.findAll(); //get all the classSchedules Already Created
+        List<ClassScheduleDTO> classScheduleDTOListToInsert=new ArrayList<>(); //get all the classSchedules Already Created
+        newClassGroupDto.getClassScheduleDTOS().forEach(classScheduleDTO -> {
+            //verify each group if it already exist
+            boolean exist=false;
+            for (ClassScheduleDTO classScheduleDTO1:classScheduleDTOList) {
+                if (classScheduleDTO1.getWeekDays().equals(classScheduleDTO.getWeekDays())){
+                    if (classScheduleDTO1.getStartHour().equals(classScheduleDTO.getStartHour())){
+                        if (classScheduleDTO1.getEndHour().equals(classScheduleDTO.getEndHour())){
+                            exist=true;
+                            classScheduleDTOListToInsert.add(classScheduleDTO1);
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!exist){
+               classScheduleDTOListToInsert.add(classScheduleService.save(classScheduleDTO));
+            }
+        });
+        //Get all the students that will be added
+        List<StudentDTO> studentDTOListToInsert=new ArrayList<>();
+        newClassGroupDto.getStudentsIds().forEach(studentId->{
+            studentService.findOne(studentId).ifPresent(studentDTOListToInsert::add);
+        });
+        newClassGroupDto.getClassGroupDTO().setSize(studentDTOListToInsert.size());
+        newClassGroupDto.getClassGroupDTO().addSchedules(classScheduleDTOListToInsert);
+        newClassGroupDto.getClassGroupDTO().addStudents(studentDTOListToInsert);
+        newClassGroupDto.getClassGroupDTO().setSubjectId(newClassGroupDto.getSubjectId());
+        newClassGroupDto.getClassGroupDTO().setTeacherId(newClassGroupDto.getTeacherId());
+        ClassGroup classGroup = classGroupMapper.toEntity(newClassGroupDto.getClassGroupDTO());
         classGroup = classGroupRepository.save(classGroup);
         return classGroupMapper.toDto(classGroup);
     }

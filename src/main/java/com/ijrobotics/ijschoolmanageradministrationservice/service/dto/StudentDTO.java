@@ -82,6 +82,9 @@ public class StudentDTO implements Serializable {
     public void setGuardians(Set<GuardianDTO> guardians) {
         this.guardians = guardians;
     }
+    public void addGuardian(GuardianDTO guardian) {
+        this.guardians.add(guardian) ;
+    }
 
     @Override
     public boolean equals(Object o) {

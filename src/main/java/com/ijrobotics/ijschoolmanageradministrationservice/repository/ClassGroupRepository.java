@@ -22,6 +22,8 @@ public interface ClassGroupRepository extends JpaRepository<ClassGroup, Long> {
 
     List<ClassGroup> findByStudentsId(@Param("teacherId") Long id);
 
+    long countBySubjectId(Long subjectId);
+
     @Query(value = "select distinct classGroup from ClassGroup classGroup left join fetch classGroup.students left join fetch classGroup.classSchedules",
         countQuery = "select count(distinct classGroup) from ClassGroup classGroup")
     Page<ClassGroup> findAllWithEagerRelationships(Pageable pageable);

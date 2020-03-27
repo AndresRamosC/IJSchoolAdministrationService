@@ -3,6 +3,7 @@ package com.ijrobotics.ijschoolmanageradministrationservice.service.dto;
 import java.time.ZonedDateTime;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Objects;
 
@@ -77,6 +78,9 @@ public class ClassGroupDTO implements Serializable {
     public void setStudents(Set<StudentDTO> students) {
         this.students = students;
     }
+    public void addStudents(List<StudentDTO> studentDTOList){
+        this.students.addAll(studentDTOList);
+    }
 
     public Set<ClassScheduleDTO> getClassSchedules() {
         return classSchedules;
@@ -84,6 +88,9 @@ public class ClassGroupDTO implements Serializable {
 
     public void setClassSchedules(Set<ClassScheduleDTO> classSchedules) {
         this.classSchedules = classSchedules;
+    }
+    public void addSchedules(List<ClassScheduleDTO> classScheduleDTOList){
+        this.classSchedules.addAll(classScheduleDTOList);
     }
 
     public Long getSubjectId() {
