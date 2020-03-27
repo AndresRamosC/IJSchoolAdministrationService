@@ -81,7 +81,7 @@ public class GuardianDashBoardInfoResource {
      *
      * @return the list of entities.
      */
-    @GetMapping("/GuardianDashBoard/Administration")
+    @GetMapping("/GuardianDashBoardAdministration")
     public List<GuardianPhotoAndName> findAllGuardiansInfo() { //GuardianDashBoardInfoDto findInfo() {
         List<GuardianPhotoAndName> allGuardianInfo = new ArrayList<>();
         List<GuardianDTO> guardianDTOS=guardianService.findAll();
