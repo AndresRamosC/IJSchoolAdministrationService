@@ -38,7 +38,7 @@ public class Guardian implements Serializable {
     private String occupation;
 
     @Column(name = "work_adress")
-    private String workAdress;
+    private String workAddress;
 
     @OneToOne
     @JoinColumn(unique = true)
@@ -101,17 +101,17 @@ public class Guardian implements Serializable {
         this.occupation = occupation;
     }
 
-    public String getWorkAdress() {
-        return workAdress;
+    public String getWorkAddress() {
+        return workAddress;
     }
 
-    public Guardian workAdress(String workAdress) {
-        this.workAdress = workAdress;
+    public Guardian workAddress(String workAddress) {
+        this.workAddress = workAddress;
         return this;
     }
 
-    public void setWorkAdress(String workAdress) {
-        this.workAdress = workAdress;
+    public void setWorkAddress(String workAddress) {
+        this.workAddress = workAddress;
     }
 
     public Person getPerson() {
@@ -201,7 +201,7 @@ public class Guardian implements Serializable {
             ", creationDate='" + getCreationDate() + "'" +
             ", educationLevel='" + getEducationLevel() + "'" +
             ", occupation='" + getOccupation() + "'" +
-            ", workAdress='" + getWorkAdress() + "'" +
+            ", workAddress='" + getWorkAddress() + "'" +
             "}";
     }
 }

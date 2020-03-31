@@ -81,8 +81,8 @@ public class GuardianResource {
         if (guardianDTO.getOccupation()!=null){
             guardianDTOUpdate.get().setOccupation(guardianDTO.getOccupation());
         }
-        if (guardianDTO.getWorkAdress()!=null){
-            guardianDTOUpdate.get().setWorkAdress(guardianDTO.getWorkAdress());
+        if (guardianDTO.getWorkAddress()!=null){
+            guardianDTOUpdate.get().setWorkAddress(guardianDTO.getWorkAddress());
         }
         if (guardianDTO.getPersonId()!=null){
             guardianDTOUpdate.get().setPersonId(guardianDTO.getPersonId());

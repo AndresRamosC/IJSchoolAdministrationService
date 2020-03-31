@@ -108,7 +108,7 @@ public class GuardianResourceIT {
             .creationDate(DEFAULT_CREATION_DATE)
             .educationLevel(DEFAULT_EDUCATION_LEVEL)
             .occupation(DEFAULT_OCCUPATION)
-            .workAdress(DEFAULT_WORK_ADRESS);
+            .workAddress(DEFAULT_WORK_ADRESS);
         return guardian;
     }
     /**
@@ -122,7 +122,7 @@ public class GuardianResourceIT {
             .creationDate(UPDATED_CREATION_DATE)
             .educationLevel(UPDATED_EDUCATION_LEVEL)
             .occupation(UPDATED_OCCUPATION)
-            .workAdress(UPDATED_WORK_ADRESS);
+            .workAddress(UPDATED_WORK_ADRESS);
         return guardian;
     }
 
@@ -150,7 +150,7 @@ public class GuardianResourceIT {
         assertThat(testGuardian.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
         assertThat(testGuardian.getEducationLevel()).isEqualTo(DEFAULT_EDUCATION_LEVEL);
         assertThat(testGuardian.getOccupation()).isEqualTo(DEFAULT_OCCUPATION);
-        assertThat(testGuardian.getWorkAdress()).isEqualTo(DEFAULT_WORK_ADRESS);
+        assertThat(testGuardian.getWorkAddress()).isEqualTo(DEFAULT_WORK_ADRESS);
     }
 
     @Test
@@ -188,7 +188,7 @@ public class GuardianResourceIT {
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(sameInstant(DEFAULT_CREATION_DATE))))
             .andExpect(jsonPath("$.[*].educationLevel").value(hasItem(DEFAULT_EDUCATION_LEVEL.toString())))
             .andExpect(jsonPath("$.[*].occupation").value(hasItem(DEFAULT_OCCUPATION)))
-            .andExpect(jsonPath("$.[*].workAdress").value(hasItem(DEFAULT_WORK_ADRESS)));
+            .andExpect(jsonPath("$.[*].workAddress").value(hasItem(DEFAULT_WORK_ADRESS)));
     }
 
     @Test
@@ -205,7 +205,7 @@ public class GuardianResourceIT {
             .andExpect(jsonPath("$.creationDate").value(sameInstant(DEFAULT_CREATION_DATE)))
             .andExpect(jsonPath("$.educationLevel").value(DEFAULT_EDUCATION_LEVEL.toString()))
             .andExpect(jsonPath("$.occupation").value(DEFAULT_OCCUPATION))
-            .andExpect(jsonPath("$.workAdress").value(DEFAULT_WORK_ADRESS));
+            .andExpect(jsonPath("$.workAddress").value(DEFAULT_WORK_ADRESS));
     }
 
     @Test
@@ -232,7 +232,7 @@ public class GuardianResourceIT {
             .creationDate(UPDATED_CREATION_DATE)
             .educationLevel(UPDATED_EDUCATION_LEVEL)
             .occupation(UPDATED_OCCUPATION)
-            .workAdress(UPDATED_WORK_ADRESS);
+            .workAddress(UPDATED_WORK_ADRESS);
         GuardianDTO guardianDTO = guardianMapper.toDto(updatedGuardian);
 
         restGuardianMockMvc.perform(put("/api/guardians")
@@ -247,7 +247,7 @@ public class GuardianResourceIT {
         assertThat(testGuardian.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);
         assertThat(testGuardian.getEducationLevel()).isEqualTo(UPDATED_EDUCATION_LEVEL);
         assertThat(testGuardian.getOccupation()).isEqualTo(UPDATED_OCCUPATION);
-        assertThat(testGuardian.getWorkAdress()).isEqualTo(UPDATED_WORK_ADRESS);
+        assertThat(testGuardian.getWorkAddress()).isEqualTo(UPDATED_WORK_ADRESS);
     }
 
     @Test

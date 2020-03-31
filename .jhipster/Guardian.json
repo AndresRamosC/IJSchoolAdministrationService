@@ -15,7 +15,7 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "workAdress",
+            "fieldName": "workAddress",
             "fieldType": "String"
         }
     ],

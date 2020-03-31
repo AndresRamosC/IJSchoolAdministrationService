@@ -18,7 +18,7 @@ public class GuardianDTO implements Serializable {
 
     private String occupation;
 
-    private String workAdress;
+    private String workAddress;
 
 
     private Long personId;
@@ -55,12 +55,12 @@ public class GuardianDTO implements Serializable {
         this.occupation = occupation;
     }
 
-    public String getWorkAdress() {
-        return workAdress;
+    public String getWorkAddress() {
+        return workAddress;
     }
 
-    public void setWorkAdress(String workAdress) {
-        this.workAdress = workAdress;
+    public void setWorkAddress(String workAddress) {
+        this.workAddress = workAddress;
     }
 
     public Long getPersonId() {
@@ -99,7 +99,7 @@ public class GuardianDTO implements Serializable {
             ", creationDate='" + getCreationDate() + "'" +
             ", educationLevel='" + getEducationLevel() + "'" +
             ", occupation='" + getOccupation() + "'" +
-            ", workAdress='" + getWorkAdress() + "'" +
+            ", workAddress='" + getWorkAddress() + "'" +
             ", personId=" + getPersonId() +
             "}";
     }
