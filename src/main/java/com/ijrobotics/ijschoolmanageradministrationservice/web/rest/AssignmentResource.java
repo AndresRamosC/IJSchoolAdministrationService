@@ -8,8 +8,8 @@ import com.ijrobotics.ijschoolmanageradministrationservice.service.AttachmentsCo
 import com.ijrobotics.ijschoolmanageradministrationservice.service.AttachmentsService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AttachmentsContentDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AttachmentsDTO;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.AssignmentAndAttachmentsDto;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.AssignmentFullDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.assignmentDtos.AssignmentAndAttachmentsDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.assignmentDtos.AssignmentFullDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AssignmentMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentsContentMapper;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.AttachmentsMapper;

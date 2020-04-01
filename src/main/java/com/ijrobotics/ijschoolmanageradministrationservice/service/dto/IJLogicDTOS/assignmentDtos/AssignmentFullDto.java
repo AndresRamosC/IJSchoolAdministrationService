@@ -1,12 +1,8 @@
-package com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS;
+package com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.assignmentDtos;
 
-import com.ijrobotics.ijschoolmanageradministrationservice.domain.Assignment;
-import com.ijrobotics.ijschoolmanageradministrationservice.domain.AssignmentAssigned;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AssignmentAssignedDTO;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.AssignmentDTO;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 
 public class AssignmentFullDto implements Serializable {
 

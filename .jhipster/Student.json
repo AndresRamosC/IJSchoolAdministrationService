@@ -6,7 +6,7 @@
             "fieldType": "ZonedDateTime"
         },
         {
-            "fieldName": "admissinDate",
+            "fieldName": "admissionDate",
             "fieldType": "LocalDate"
         },
         {

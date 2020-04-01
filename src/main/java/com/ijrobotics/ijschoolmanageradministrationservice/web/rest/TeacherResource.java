@@ -1,6 +1,7 @@
 package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 
 import com.ijrobotics.ijschoolmanageradministrationservice.service.TeacherService;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.teacherDtos.NewTeacherDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.teacherDtos.TeacherFullInfoDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.TeacherDTO;
@@ -47,13 +48,9 @@ public class TeacherResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/teachers")
-    public ResponseEntity<TeacherDTO> createTeacher(@RequestBody TeacherDTO teacherDTO) throws URISyntaxException {
+    public ResponseEntity<TeacherDTO> createTeacher(@RequestBody NewTeacherDto teacherDTO) throws URISyntaxException {
         log.debug("REST request to save Teacher : {}", teacherDTO);
-        if (teacherDTO.getId() != null) {
-            throw new BadRequestAlertException("A new teacher cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        teacherDTO.setCreationDate(ZonedDateTime.now());
-        TeacherDTO result = teacherService.save(teacherDTO);
+        TeacherDTO result = teacherService.saveFullTeacher(teacherDTO);
         return ResponseEntity.created(new URI("/api/teachers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);

@@ -3,6 +3,7 @@ package com.ijrobotics.ijschoolmanageradministrationservice.web.rest;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.StudentService;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.NewStudentDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.StudentInfoWithGuardianPhotoAndName;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.StudentPhotoAndName;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.StudentDTO;
 
@@ -72,8 +73,8 @@ public class StudentResource {
         if ( !studentDTOUpdate.isPresent()) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (studentDTO.getAdmissinDate()!=null){
-            studentDTOUpdate.get().setAdmissinDate(studentDTO.getAdmissinDate());
+        if (studentDTO.getAdmissionDate()!=null){
+            studentDTOUpdate.get().setAdmissionDate(studentDTO.getAdmissionDate());
         }
         if (studentDTO.getAcademicYear()!=null){
             studentDTOUpdate.get().setAcademicYear(studentDTO.getAcademicYear());
@@ -120,7 +121,7 @@ public class StudentResource {
     }
 
     /**
-     * {@code DELETE  /students/:id} : delete the "id" student.
+     * {@code GET  /students/:id} : delete the "id" student.
      *
      * @param id the id of the studentDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
@@ -130,6 +131,7 @@ public class StudentResource {
         log.debug("REST request to get Student with guardian : {}", id);
         return  studentService.findStudentsWithGuardian(id);
     }
+
 
     /**
      * {@code DELETE  /students/:id} : delete the "id" student.

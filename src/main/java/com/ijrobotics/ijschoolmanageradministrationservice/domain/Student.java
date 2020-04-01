@@ -30,7 +30,7 @@ public class Student implements Serializable {
     private ZonedDateTime creationDate;
 
     @Column(name = "admissin_date")
-    private LocalDate admissinDate;
+    private LocalDate admissionDate;
 
     @Column(name = "academic_year")
     private Integer academicYear;
@@ -92,17 +92,17 @@ public class Student implements Serializable {
         this.creationDate = creationDate;
     }
 
-    public LocalDate getAdmissinDate() {
-        return admissinDate;
+    public LocalDate getAdmissionDate() {
+        return admissionDate;
     }
 
-    public Student admissinDate(LocalDate admissinDate) {
-        this.admissinDate = admissinDate;
+    public Student admissionDate(LocalDate admissionDate) {
+        this.admissionDate = admissionDate;
         return this;
     }
 
-    public void setAdmissinDate(LocalDate admissinDate) {
-        this.admissinDate = admissinDate;
+    public void setAdmissionDate(LocalDate admissionDate) {
+        this.admissionDate = admissionDate;
     }
 
     public Integer getAcademicYear() {
@@ -316,7 +316,7 @@ public class Student implements Serializable {
         return "Student{" +
             "id=" + getId() +
             ", creationDate='" + getCreationDate() + "'" +
-            ", admissinDate='" + getAdmissinDate() + "'" +
+            ", admissionDate='" + getAdmissionDate() + "'" +
             ", academicYear=" + getAcademicYear() +
             ", controlNumber=" + getControlNumber() +
             "}";

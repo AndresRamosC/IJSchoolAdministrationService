@@ -12,6 +12,7 @@ public class StudentPhotoAndName implements Serializable {
     private String lastName;
     private byte[] photograph;
     private String photographContentType;
+    private Integer academicYear;
 
     public StudentPhotoAndName(StudentDTO studentDTO, PersonDTO personDTO) {
         this.studentId=studentDTO.getId();
@@ -19,6 +20,7 @@ public class StudentPhotoAndName implements Serializable {
         this.lastName = personDTO.getLastName();
         this.photograph = personDTO.getPhotograph();
         this.photographContentType = personDTO.getPhotographContentType();
+        this.academicYear=studentDTO.getAcademicYear();
     }
 
     public Long getStudentId() {
@@ -61,6 +63,14 @@ public class StudentPhotoAndName implements Serializable {
         this.photographContentType = photographContentType;
     }
 
+    public Integer getAcademicYear() {
+        return academicYear;
+    }
+
+    public void setAcademicYear(Integer academicYear) {
+        this.academicYear = academicYear;
+    }
+
     @Override
     public String toString() {
         return "StudentPhotoAndName{" +
@@ -69,6 +79,7 @@ public class StudentPhotoAndName implements Serializable {
             ", lastName='" + lastName + '\'' +
             ", photograph=" + Arrays.toString(photograph) +
             ", photographContentType='" + photographContentType + '\'' +
+            ", academicYear=" + academicYear +
             '}';
     }
 }

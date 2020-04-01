@@ -115,6 +115,18 @@ public class SubjectResource {
         Optional<SubjectDTO> subjectDTO = subjectService.findOne(id);
         return ResponseUtil.wrapOrNotFound(subjectDTO);
     }
+    /**
+     * {@code GET  /subjects/getClassGroups/:id} : get the "id" subject.
+     *
+     * @param id the id of the subjectDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the subjectDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/subjects/getClassGroups/{id}")
+    public ResponseEntity<SubjectDTO> getSubjectClassGroups(@PathVariable Long id) {
+        log.debug("REST request to get Subject : {}", id);
+        Optional<SubjectDTO> subjectDTO = subjectService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(subjectDTO);
+    }
 
     /**
      * {@code DELETE  /subjects/:id} : delete the "id" subject.

@@ -115,7 +115,7 @@ public class StudentResourceIT {
     public static Student createEntity(EntityManager em) {
         Student student = new Student()
             .creationDate(DEFAULT_CREATION_DATE)
-            .admissinDate(DEFAULT_ADMISSIN_DATE)
+            .admissionDate(DEFAULT_ADMISSIN_DATE)
             .academicYear(DEFAULT_ACADEMIC_YEAR)
             .controlNumber(DEFAULT_CONTROL_NUMBER);
         return student;
@@ -129,7 +129,7 @@ public class StudentResourceIT {
     public static Student createUpdatedEntity(EntityManager em) {
         Student student = new Student()
             .creationDate(UPDATED_CREATION_DATE)
-            .admissinDate(UPDATED_ADMISSIN_DATE)
+            .admissionDate(UPDATED_ADMISSIN_DATE)
             .academicYear(UPDATED_ACADEMIC_YEAR)
             .controlNumber(UPDATED_CONTROL_NUMBER);
         return student;
@@ -157,7 +157,7 @@ public class StudentResourceIT {
         assertThat(studentList).hasSize(databaseSizeBeforeCreate + 1);
         Student testStudent = studentList.get(studentList.size() - 1);
         assertThat(testStudent.getCreationDate()).isEqualTo(DEFAULT_CREATION_DATE);
-        assertThat(testStudent.getAdmissinDate()).isEqualTo(DEFAULT_ADMISSIN_DATE);
+        assertThat(testStudent.getAdmissionDate()).isEqualTo(DEFAULT_ADMISSIN_DATE);
         assertThat(testStudent.getAcademicYear()).isEqualTo(DEFAULT_ACADEMIC_YEAR);
         assertThat(testStudent.getControlNumber()).isEqualTo(DEFAULT_CONTROL_NUMBER);
     }
@@ -195,11 +195,11 @@ public class StudentResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(student.getId().intValue())))
             .andExpect(jsonPath("$.[*].creationDate").value(hasItem(sameInstant(DEFAULT_CREATION_DATE))))
-            .andExpect(jsonPath("$.[*].admissinDate").value(hasItem(DEFAULT_ADMISSIN_DATE.toString())))
+            .andExpect(jsonPath("$.[*].admissionDate").value(hasItem(DEFAULT_ADMISSIN_DATE.toString())))
             .andExpect(jsonPath("$.[*].academicYear").value(hasItem(DEFAULT_ACADEMIC_YEAR)))
             .andExpect(jsonPath("$.[*].controlNumber").value(hasItem(DEFAULT_CONTROL_NUMBER.intValue())));
     }
-    
+
     @SuppressWarnings({"unchecked"})
     public void getAllStudentsWithEagerRelationshipsIsEnabled() throws Exception {
         StudentResource studentResource = new StudentResource(studentServiceMock);
@@ -245,7 +245,7 @@ public class StudentResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(student.getId().intValue()))
             .andExpect(jsonPath("$.creationDate").value(sameInstant(DEFAULT_CREATION_DATE)))
-            .andExpect(jsonPath("$.admissinDate").value(DEFAULT_ADMISSIN_DATE.toString()))
+            .andExpect(jsonPath("$.admissionDate").value(DEFAULT_ADMISSIN_DATE.toString()))
             .andExpect(jsonPath("$.academicYear").value(DEFAULT_ACADEMIC_YEAR))
             .andExpect(jsonPath("$.controlNumber").value(DEFAULT_CONTROL_NUMBER.intValue()));
     }
@@ -272,7 +272,7 @@ public class StudentResourceIT {
         em.detach(updatedStudent);
         updatedStudent
             .creationDate(UPDATED_CREATION_DATE)
-            .admissinDate(UPDATED_ADMISSIN_DATE)
+            .admissionDate(UPDATED_ADMISSIN_DATE)
             .academicYear(UPDATED_ACADEMIC_YEAR)
             .controlNumber(UPDATED_CONTROL_NUMBER);
         StudentDTO studentDTO = studentMapper.toDto(updatedStudent);
@@ -287,7 +287,7 @@ public class StudentResourceIT {
         assertThat(studentList).hasSize(databaseSizeBeforeUpdate);
         Student testStudent = studentList.get(studentList.size() - 1);
         assertThat(testStudent.getCreationDate()).isEqualTo(UPDATED_CREATION_DATE);
-        assertThat(testStudent.getAdmissinDate()).isEqualTo(UPDATED_ADMISSIN_DATE);
+        assertThat(testStudent.getAdmissionDate()).isEqualTo(UPDATED_ADMISSIN_DATE);
         assertThat(testStudent.getAcademicYear()).isEqualTo(UPDATED_ACADEMIC_YEAR);
         assertThat(testStudent.getControlNumber()).isEqualTo(UPDATED_CONTROL_NUMBER);
     }

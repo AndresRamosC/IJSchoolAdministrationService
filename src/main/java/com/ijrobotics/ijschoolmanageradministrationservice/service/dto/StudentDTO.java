@@ -14,7 +14,7 @@ public class StudentDTO implements Serializable {
 
     private ZonedDateTime creationDate;
 
-    private LocalDate admissinDate;
+    private LocalDate admissionDate;
 
     private Integer academicYear;
 
@@ -43,12 +43,12 @@ public class StudentDTO implements Serializable {
         this.creationDate = creationDate;
     }
 
-    public LocalDate getAdmissinDate() {
-        return admissinDate;
+    public LocalDate getAdmissionDate() {
+        return admissionDate;
     }
 
-    public void setAdmissinDate(LocalDate admissinDate) {
-        this.admissinDate = admissinDate;
+    public void setAdmissionDate(LocalDate admissionDate) {
+        this.admissionDate = admissionDate;
     }
 
     public Integer getAcademicYear() {
@@ -112,7 +112,7 @@ public class StudentDTO implements Serializable {
         return "StudentDTO{" +
             "id=" + getId() +
             ", creationDate='" + getCreationDate() + "'" +
-            ", admissinDate='" + getAdmissinDate() + "'" +
+            ", admissionDate='" + getAdmissionDate() + "'" +
             ", academicYear=" + getAcademicYear() +
             ", controlNumber=" + getControlNumber() +
             ", personId=" + getPersonId() +

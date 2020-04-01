@@ -7,6 +7,7 @@ import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.GuardianD
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.guardianDtos.GuardianPhotoAndName;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.NewStudentDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.StudentInfoWithGuardianPhotoAndName;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.StudentPhotoAndName;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.PersonDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.StudentDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.GuardianMapper;
@@ -150,6 +151,22 @@ public class StudentService {
         log.debug("Request to get Student with guardian: {}", id);
         return studentRepository.findByGuardiansId(id).stream()
             .map(studentMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+    }
+    /**
+     * Get students by Guardian id.
+     *
+     * @param id the id of the Guardian.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public List<StudentPhotoAndName> findStudentsBasicInfoWithGuardian(Long id) {
+        log.debug("Request to get Student with guardian: {}", id);
+        List<Student> studentList=studentRepository.findByGuardiansId(id);
+        List<StudentPhotoAndName> studentBasicInfo = new ArrayList<>();
+        studentList.forEach(student -> {
+            studentBasicInfo.add(new StudentPhotoAndName(studentMapper.toDto(student),personMapper.toDto(student.getPerson())));
+        });
+        return studentBasicInfo;
     }
     /**
      * Get one guardian by person id.
