@@ -19,6 +19,7 @@ public class ClassGroupAndSubjectDto implements Serializable {
     private String colorCode;
     private String iconCode;
     private Long teacherId;
+    private Integer classGroupSize;
     private Set<ClassScheduleDTO> classScheduleDTOS;
 
     public ClassGroupAndSubjectDto(ClassGroupDTO classGroupDTO,SubjectDTO subjectDTO) {
@@ -33,6 +34,7 @@ public class ClassGroupAndSubjectDto implements Serializable {
         this.colorCode = subjectDTO.getColorCode();
         this.iconCode = subjectDTO.getIconCode();
         this.teacherId = classGroupDTO.getTeacherId();
+        this.classGroupSize = classGroupDTO.getSize();
     }
 
     public String getGroupCode() {
@@ -125,6 +127,14 @@ public class ClassGroupAndSubjectDto implements Serializable {
         this.classScheduleDTOS = classScheduleDTOS;
     }
 
+    public Integer getClassGroupSize() {
+        return classGroupSize;
+    }
+
+    public void setClassGroupSize(Integer classGroupSize) {
+        this.classGroupSize = classGroupSize;
+    }
+
     @Override
     public String toString() {
         return "ClassGroupAndSubjectDto{" +
@@ -138,6 +148,7 @@ public class ClassGroupAndSubjectDto implements Serializable {
             ", colorCode='" + colorCode + '\'' +
             ", iconCode='" + iconCode + '\'' +
             ", teacherId=" + teacherId +
+            ", classGroupSize=" + classGroupSize +
             ", classScheduleDTOS=" + classScheduleDTOS +
             '}';
     }
