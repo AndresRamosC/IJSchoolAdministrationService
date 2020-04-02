@@ -180,6 +180,17 @@ public class StudentService {
         return studentRepository.findByPersonId(id)
             .map(studentMapper::toDto);
     }
+    /**
+     * Get one guardian by person id.
+     *
+     * @param controlNumber the id of the person.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Boolean verifyControlNumber(Long controlNumber) {
+        log.debug("Request to verify the control number : {}", controlNumber);
+        return studentRepository.findByControlNumber(controlNumber).isPresent();
+    }
 
     /**
      * Delete the student by id.

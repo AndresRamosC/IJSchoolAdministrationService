@@ -31,4 +31,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     Optional<Student> findByPersonId(@Param("personId") Long id);
 
+    Optional<Student> findByControlNumber( Long controlNumber);
+
 }

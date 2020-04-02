@@ -4,6 +4,7 @@ import com.ijrobotics.ijschoolmanageradministrationservice.service.*;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.*;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.ClassGroupAndSubjectDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.NewClassGroupDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.SubjectDashBoardInfo;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.StudentAndPersonDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.studentDtos.StudentsInClassRoomDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.web.rest.errors.BadRequestAlertException;
@@ -244,6 +245,17 @@ public class ClassGroupResource {
             }
         });
         return studentsInClassRoomDTOList;
+    }
+    /**
+     * {@code GET  /class-groups/subjectId/:ClassGroupID} : get the ClassGroups of a subjectId.
+     *
+     * @param subjectId the id of the subject to retrieve the students.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the List of Students, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/class-groups/whereSubject/{subjectId}")
+    @Transactional
+    public List<SubjectDashBoardInfo> getClassGroupFromSubject(@PathVariable Long subjectId) {
+        return classGroupService.findAllClassGroupWhereSubjectId(subjectId);
     }
 
     /**

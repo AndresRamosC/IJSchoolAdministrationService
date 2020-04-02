@@ -4,9 +4,13 @@ import com.ijrobotics.ijschoolmanageradministrationservice.domain.ClassGroup;
 import com.ijrobotics.ijschoolmanageradministrationservice.repository.ClassGroupRepository;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassGroupDTO;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.ClassScheduleDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.ClassGroupAndSubjectDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.NewClassGroupDto;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.classGroupsAndSubjectsDtos.SubjectDashBoardInfo;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.IJLogicDTOS.teacherDtos.TeacherFullInfoDto;
 import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.StudentDTO;
-import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.ClassGroupMapper;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.dto.SubjectDTO;
+import com.ijrobotics.ijschoolmanageradministrationservice.service.mapper.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,12 +39,26 @@ public class ClassGroupService {
     private ClassScheduleService classScheduleService;
 
     private StudentService studentService;
+    private SubjectService subjectService;
+    private ClassScheduleMapper classScheduleMapper;
 
-    public ClassGroupService(ClassGroupRepository classGroupRepository, ClassGroupMapper classGroupMapper,ClassScheduleService classScheduleService,StudentService studentService) {
+    private TeacherMapper teacherMapper;
+    private EmployeeMapper employeeMapper;
+    private PersonMapper personMapper;
+    private SubjectMapper subjectMapper;
+
+    public ClassGroupService(ClassGroupRepository classGroupRepository, ClassGroupMapper classGroupMapper,ClassScheduleService classScheduleService,StudentService studentService,
+                             SubjectService subjectService,ClassScheduleMapper classScheduleMapper,TeacherMapper teacherMapper,EmployeeMapper employeeMapper,PersonMapper personMapper,SubjectMapper subjectMapper) {
         this.classGroupRepository = classGroupRepository;
         this.classGroupMapper = classGroupMapper;
         this.classScheduleService = classScheduleService;
         this.studentService=studentService;
+        this.subjectService=subjectService;
+        this.classScheduleMapper=classScheduleMapper;
+        this.teacherMapper=teacherMapper;
+        this.employeeMapper=employeeMapper;
+        this.personMapper=personMapper;
+        this.subjectMapper=subjectMapper;
     }
 
     /**
@@ -168,6 +186,21 @@ public class ClassGroupService {
         return classGroupRepository.findByStudentsId(id).stream()
             .map(classGroupMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
+    }
+    /**
+     *  Get all the classGroups where subject ID.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<SubjectDashBoardInfo> findAllClassGroupWhereSubjectId(Long id) {
+        log.debug("Request to get all classGroups where Teacher id ");
+        List<SubjectDashBoardInfo> subjectDashBoardInfoList=new ArrayList<>();
+        List<ClassGroup> classGroupDTOList= classGroupRepository.findBySubjectId(id);
+        classGroupDTOList.forEach(classGroup -> {
+            subjectDashBoardInfoList.add(new SubjectDashBoardInfo(new ClassGroupAndSubjectDto(classGroupMapper.toDto(classGroup),subjectMapper.toDto(classGroup.getSubject())),
+                new TeacherFullInfoDto(teacherMapper.toDto(classGroup.getTeacher()),employeeMapper.toDto(classGroup.getTeacher().getEmployee()),personMapper.toDto(classGroup.getTeacher().getEmployee().getPerson()),0,0)));
+        });
+        return subjectDashBoardInfoList;
     }
 
     /**

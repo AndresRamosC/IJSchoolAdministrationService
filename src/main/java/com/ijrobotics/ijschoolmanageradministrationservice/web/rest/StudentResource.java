@@ -121,10 +121,10 @@ public class StudentResource {
     }
 
     /**
-     * {@code GET  /students/:id} : delete the "id" student.
+     * {@code GET  /students/:id} : get the student with the "id" of the guardian.
      *
      * @param id the id of the studentDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OKAY)}.
      */
     @GetMapping("/students/withGuardian/{id}")
     public List<StudentDTO> getStudentFromGuadianID(@PathVariable Long id) {
@@ -132,21 +132,32 @@ public class StudentResource {
         return  studentService.findStudentsWithGuardian(id);
     }
     /**
-     * {@code DELETE  /students/:id} : delete the "id" student.
+     * {@code GET  /students/:id} : get the student basic information with the "id" of the guardian.
      *
-     * @param id the id of the studentDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
+     * @param id the id of the guardianDto to get the students.
+     * @return the {@link ResponseEntity} with status {@code 200 (OKAY)}.
      */
     @GetMapping("/students/basicInfo/withGuardian/{id}")
     public List<StudentPhotoAndName> getStudentBasicInfoFromGuardianID(@PathVariable Long id) {
         log.debug("REST request to get Student with guardian : {}", id);
         return  studentService.findStudentsBasicInfoWithGuardian(id);
     }
+    /**
+     * {@code GET  /students/:id} : get the student basic information with the "id" of the guardian.
+     *
+     * @param controlNumber the id of the guardianDto to get the students.
+     * @return the {@link ResponseEntity} with status {@code 200 (OKAY)}.
+     */
+    @GetMapping("/students/verifyControlNumber/{controlNumber}")
+    public Boolean verifyStudentControlNumber(@PathVariable Long controlNumber) {
+        log.debug("REST request to get Student with guardian : {}", controlNumber);
+        return  studentService.verifyControlNumber(controlNumber);
+    }
 
     /**
      * {@code DELETE  /students/:id} : delete the "id" student.
      *
-     * @param id the id of the studentDTO to delete.
+     * @param  id the id of the guardianDto to get the students.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/students/{id}")
