@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -88,18 +89,21 @@ public class ClassGroupService {
         newClassGroupDto.getClassScheduleDTOS().forEach(classScheduleDTO -> {
             //verify each group if it already exist
             boolean exist=false;
-            for (ClassScheduleDTO classScheduleDTO1:classScheduleDTOList) {
-                if (classScheduleDTO1.getWeekDays().equals(classScheduleDTO.getWeekDays())){
-                    if (classScheduleDTO1.getStartHour().equals(classScheduleDTO.getStartHour())){
-                        if (classScheduleDTO1.getEndHour().equals(classScheduleDTO.getEndHour())){
-                            exist=true;
-                            classScheduleDTOListToInsert.add(classScheduleDTO1);
-                            break;
+            if (!classScheduleDTOList.isEmpty()){
+                for (ClassScheduleDTO classScheduleDTO1:classScheduleDTOList) {
+                    if (classScheduleDTO1.getWeekDays().equals(classScheduleDTO.getWeekDays())){
+                        if (classScheduleDTO1.getStartHour().equals(classScheduleDTO.getStartHour())){
+                            if (classScheduleDTO1.getEndHour().equals(classScheduleDTO.getEndHour())){
+                                exist=true;
+                                classScheduleDTOListToInsert.add(classScheduleDTO1);
+                                break;
+                            }
                         }
                     }
                 }
             }
             if (!exist){
+                classScheduleDTO.setCreationDate(ZonedDateTime.now());
                classScheduleDTOListToInsert.add(classScheduleService.save(classScheduleDTO));
             }
         });

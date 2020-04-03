@@ -59,8 +59,7 @@ public class TeacherDashBoardInfoResource {
                     classGroupDTOList.forEach(classGroupDTO -> {
                         classGroupAndSubjectDtoList.add(new ClassGroupAndSubjectDto(classGroupDTO,subjectService.findOne(classGroupDTO.getSubjectId()).get()));
                     });
-                    TeacherDashBoardInfoDTO fulldto= new TeacherDashBoardInfoDTO(personDTO.get(),employeeDTO.get(),teacherDTO.get(),classGroupAndSubjectDtoList,getAmountOfGroups(classGroupDTOList));
-                    return fulldto;
+                    return new TeacherDashBoardInfoDTO(personDTO.get(),employeeDTO.get(),teacherDTO.get(),classGroupAndSubjectDtoList,getAmountOfGroups(classGroupDTOList));
                 }else {
                     throw new BadRequestAlertException("Invalid id", ENTITY_NAME, " ");
                 }
